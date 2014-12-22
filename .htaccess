@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+RewriteEngine on
+#只是简单的重定向处理，没有做安全处理
+
+#no need rewrite
+RewriteRule ^(test|statics|uploadfile)/(.*) $1/$2 [L]
+
+#index
+RewriteRule ^/(.*)$ /index.php?_rewurl=/$2 [L]

@@ -1,0 +1,53 @@
+{
+  "name": "awen",
+  "description": "前端工程自动化",
+  "version": "3.6.2",
+  "homepage": "http://gulpjs.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gulpjs/gulp"
+  },
+  "author": {
+    "name": "awen",
+    "email": "71752352@qq.com",
+    "url": "http://www.cnblogs.com/cczw/"
+  },
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "~3.6.2"
+    },
+  "devDependencies": {
+    "gulp-jsonminify": "0.0.1",
+    "gulp-htmlmin": "^0.1.2",
+    "gulp-util": "^2.2.0",
+    "gulp-zip": "~0.1.2",
+    "gulp-compass": "~1.1.4",
+    "gulp-jshint": "~1.5.0",
+    "gulp-concat": "~2.1.7",
+    "gulp-imagemin": "~0.1.5",
+    "gulp-uglify": "~0.2.1",
+    "gulp-rename": "~1.1.0",
+    "gulp-livereload": "~1.2.0",
+    "gulp-gzip": "~0.0.5",
+    "gulp-htmlhint": "~0.0.7",
+    "gulp-cleanhtml": "0.0.2",
+    "shelljs": "^0.2.6",
+    "gulp-minify-css": "^0.3.4",
+    "clean-css": "^2.1.8",
+    "uglify-js": "^2.4.13"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 0.9"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "readme": "",
+  "readmeFilename": "README.md"
+}

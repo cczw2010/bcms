@@ -1,0 +1,171 @@
+<?php
+/*
+	sqlite 数据库访问操作类  by awen
+	配置文件:
+	array(
+		dbpath=>''		 （*）数据库文件地址
+		dbname=>,		  默认库
+ 	)
+*/
+class Db_sqlite implements Db{
+    private static $instance;
+    private $db;
+    private $result;
+    private $dbpath;
+    private $dbname;
+    private $sql;
+    private $rowstmp;
+
+    function __construct($config)
+    {
+    	if (!isset(self::$instance)) {
+        	
+        	self::$instance=$this;
+    	}
+    	if (isset($config)) {
+    		$this->dbpath=isset($config['dbpath'])?$config['dbpath']:'./';
+    		$this->dbname=isset($config['dbname'])?$config['dbname']:'ssms.db';
+
+            //建立连接
+            $this->connect();
+            if (strlen($this->dbname)>0) {
+                $this->select_db($this->dbname);
+            }
+    	}
+    }
+    public function connect(){
+    	$this->db=new Sqlite3($this->dbpath.'/'.$this->dbname);
+    }
+    public function close(){
+    	$this->db->close();
+    }
+    public function select_db($dbname){
+    	$this->db=new Sqlite3($this->dbpath.'/'.$dbname);
+    }
+    public function create_db($dbname){
+    	$this->db=new Sqlite3($this->dbpath.'/'.$dbname);
+    }
+    public function get_db_info(){
+    	return $this->db->version();
+    }
+    public function getlastsql(){
+	   return $this->sql;
+    }
+    public function query($sql){
+        $this->sql=$sql;
+        $this->rowstmp=null;
+        if (stripos($sql,'select')!==FALSE) {
+            return $this->result=$this->db->query($sql);
+        }else{
+            return $this->db->exec($sql);
+        }
+    }
+    public function free($result){
+    	$result->finalize();
+    }
+    public function insert_id(){
+    	return $this->db->lastInsertRowID();
+    }
+    public function affected_rows(){
+    	return $this->db->changes();
+    }
+    public function num_rows($result){
+    	$this->rowstmp=$this->fetch_all($result);
+    	$result->reset();
+    	return count($this->rowstmp);
+    }
+    public function fetch_array($result){
+    	return $result->fetchArray(SQLITE3_ASSOC);
+    }
+    public function fetch_assoc($result){
+    	return $result->fetchArray(SQLITE3_NUM);
+    }
+    public function fetch_all($result,$index=''){
+        if (isset($this->rowstmp)) {
+            return $this->rowstmp;
+        }
+        $result->reset();
+        $ret=array();
+        $index=trim($index);
+        while ($row=$this->fetch_array($result)) {
+            if (strlen($index)>0 && isset($row[$index])) {
+            	$ret[$row[$index]]=$row;
+            }else{
+            	$ret[]=$row;
+            }
+        }
+        return $ret;
+    }
+    /*简化select*/
+    public function select($table,$condition=array(),$index=''){
+        $sql='SELECT * from `'.$table.'` ';
+        if (isset($condition)) {
+            $sql.=$this->build_where($condition);
+        }
+        // dump($sql);exit;
+        $result=$this->query($sql);
+        return $this->fetch_all($result,$index);
+    }
+    public function insert($table,$arr){
+        $sql = 'INSERT INTO `'.$table.'`';  
+        if(!is_array($arr)||empty($arr)){  
+            throw new Exception("sqlite->insert: 请输入参数数组！");  
+        }else{  
+            $k = "";  
+            $v = "";  
+            foreach($arr as $key => $value){  
+                $k .= "`$key`,";  
+                $v .= "'".$value."',";  
+            }  
+        }  
+        $sql = $sql." (".substr($k,0,-1).") VALUES (".substr($v,0,-1).")";
+        $this->query($sql);
+        return $this->insert_id();
+    }
+    public function update($table,$arr,$condition=''){
+        $sql = "UPDATE `$table` SET ";  
+        if(!is_array($arr)||empty($arr)){  
+            throw new Exception("sqlite->update: 请输入参数数组！");  
+        }
+
+        foreach($arr as $key => $value){  
+            $sql .= " `".$key."` = '".$value."' ,";  
+        }  
+        $sql = substr($sql,0,-1);
+        $sql.=$this->build_where($condition);
+        $this->query($sql);  
+    }
+    public function delete($table,$condition=''){
+        $where=$this->build_where($condition);
+        $sql = "DELETE FROM $table ".$where;
+        $this->query($sql);
+    }
+
+    public function build_where($cond){
+        $where="";
+        if (isset($cond)) {
+            if (is_array($cond) && !empty($cond)) {
+                $where=" where ";
+                for ($i=0,$l=count($cond); $i < $l; $i++) {
+                    $key = key($cond);
+                    $val=trim(current($cond));
+                    if (is_numeric($key)) {
+                        $where.=" ".$val;
+                    }else{
+                        //排除值中带有条件表达式的
+                        if(preg_match('/^(>|=|<|!|like|in|not|rlike)/',$val)){
+                            $where.= " `".$key."` ".$val." ";
+                        }else{
+                            $where.= " `".$key."` = '".$val."' ";
+                        }
+                    }
+                    $where.=($i==$l-1)?'':' and';
+                    next($cond);
+                }  
+            }elseif (is_string($cond) && !empty($cond)) {
+                $where=" where ".$cond;
+            }
+        }
+        return $where;
+    }
+}

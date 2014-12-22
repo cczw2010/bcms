@@ -1,0 +1,23 @@
+{
+  "access_token":"0e63c03dfb66c4172b2b40b9f2344c45",
+  "expires_in":3920,
+  "refresh_token":"84406d40cc58e0ae8cc147c2650aa20a",
+  "douban_user_id":"1000"
+}
+
+
+Array
+(
+    [name] => awen
+    [created] => 2014-02-11 17:18:58
+    [is_banned] => 
+    [is_suicide] => 
+    [avatar] => http://img3.douban.com/icon/user_normal.jpg
+    [signature] => 
+    [uid] => 83435554
+    [alt] => http://www.douban.com/people/83435554/
+    [desc] => 
+    [type] => user
+    [id] => 83435554
+    [large_avatar] => http://img3.douban.com/icon/user_large.jpg
+)
