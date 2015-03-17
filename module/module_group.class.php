@@ -13,7 +13,7 @@ final class Module_Group{
 	// 分组类型 0 管理员分组， 1 普通用户分组
 	const TYPE_MANAGER = 0;
 	const TYPE_USER = 1;
-	public static $types = array('管理员分组','用户分组（等级）');
+	public static $types = array('管理员分组','用户分组');
 	/**
 	 * 判断是否管理员（注意超级管理员组GROUP_SUPER不在检测之列）
 	 * @param int $groupid  用户的分组id

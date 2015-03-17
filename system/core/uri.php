@@ -134,12 +134,13 @@ Class Uri{
 			}else{
 				$ret = trim($_GET[$key]);
 				$ret = filter_var($ret, FILTER_SANITIZE_STRING);
+				$ret= strlen($ret)==0?$default:$ret;
 			}
 			// $ret = addslashes(strip_tags($ret));
 		}else{
 			$ret = null;
 		}
-		$ret= (is_null($ret)||strlen($ret)==0)?$default:$ret;
+		$ret= is_null($ret)?$default:$ret;
 		return $ret;
 	}
 
@@ -156,11 +157,12 @@ Class Uri{
 			}else{
 				$ret = trim($_POST[$key]);
 				$ret = filter_var($ret, FILTER_SANITIZE_STRING);
+				$ret= strlen($ret)==0?$default:$ret;
 			}
 		}else{
 			$ret = null;
 		}
-		$ret= (is_null($ret)||strlen($ret)==0)?$default:$ret;
+		$ret= is_null($ret)?$default:$ret;
 		return $ret;
 	}
 	/**
@@ -176,11 +178,12 @@ Class Uri{
 			}else{
 				$ret = trim($_REQUEST[$key]);
 				$ret = filter_var($ret, FILTER_SANITIZE_STRING);
+				$ret= strlen($ret)==0?$default:$ret;
 			}
 		}else{
 			$ret = null;
 		}
-		$ret= (is_null($ret)||strlen($ret)==0)?$default:$ret;
+		$ret= is_null($ret)?$default:$ret;
 		return $ret;
 	}
 
