@@ -4,6 +4,7 @@
 Class Home{
 	// 首页打印一些测试数据
 	public function index(){
+		// dump($GLOBALS);
 		// $ret = Module_Notify::setItem(array('userid'=>3,'objid'=>1,'objtype'=>'test','msg'=>'这是测试'));
 		
 		// $ret = Module_Notify::setItem(array('status'=>1),30);
@@ -12,12 +13,11 @@ Class Home{
 		// $items = Module_Notify::getItems();
 		// dump($items);
 		// $ret = Module_User::addFollow(3,22);
-		$ret = Module_User::delFollow(3,22);
+		// $ret = Module_User::delFollow(3,22);
+		// dump($ret);
 
-		dump($ret);
-
-		$ret = Module_User::getFollowsCnt(array('uid=3'));
-		dump($ret);
+		// $ret = Module_User::getFollowsCnt(array('uid=3'));
+		// dump($ret);
 		$datas = array('STYLES'=>array('/datas/uploadify/uploadify.css',
 																		'/datas/datepicker/css/default.css'),
 									'SCRIPTS'=>array('/datas/uploadify/jquery.uploadify.min.js',
@@ -41,7 +41,6 @@ Class Home{
 		// dump($datas);
 
  		// $this->view->load('homeindex',$datas);
- 		
 	}
 
 	public function test(){

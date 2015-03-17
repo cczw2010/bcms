@@ -36,7 +36,7 @@ require(SYSDIR.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'uri.php');
 //会从system/libs和aspps/model两个目录加载类文件，文件名为类名的小写
 function autoload($classname) {
 	$_cname=strtolower($classname);
- 	foreach (array(BASEPATH.'/module',BASEPATH.'/library') as $path)
+ 	foreach (array(BASEPATH.DIRECTORY_SEPARATOR.'module',BASEPATH.DIRECTORY_SEPARATOR.'library') as $path)
 	{
 		$path=$path.DIRECTORY_SEPARATOR.$_cname.'.class.php';
  		if (file_exists($path))

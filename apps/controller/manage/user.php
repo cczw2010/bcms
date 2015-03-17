@@ -2,6 +2,10 @@
 // 用户管理类
 class MUser{
 	const ERRNAME = '_x_errmsg';
+	//登陆
+	public function login(){
+		die('okokokok');
+	}
 	// 用户列表
 	public function users(){
 		$datas = array();

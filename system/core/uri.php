@@ -1,6 +1,7 @@
 <?php
 //-----------------------------url 解析
 Class Uri{
+	const key_p = "_p";				//controller的二级目录
 	const key_c = "_c";				//controller的key
 	const key_m = "_m";				//method的key
 	public static $uritype;
@@ -21,7 +22,7 @@ Class Uri{
 		$ret = array('params'=>array());
 		$ret[self::key_c] = self::$def_c;
 		$ret[self::key_m] = self::$def_m;
-		// 友好url的链接第一个GET参数干掉，因为是是rewrite后的uri
+		// 友好url的链接第一个GET参数取出并干掉，因为是是rewrite后的uri
 		$uri = array_shift($_GET);
 		if($pos = strpos($uri,'?')){
 			$uri = substr($uri,0,$pos);
@@ -29,15 +30,28 @@ Class Uri{
 		$uri = trim($uri,'/');
 		$uparams = empty($uri)?array():explode(self::$uritype,$uri);
 		$uricount = count($uparams);
-		if ($uricount>0) {
-			$ret[self::key_c] = $uparams[0];
+		$idx= 0;
+		if ($uricount>$idx) {
+			// 增加二级control目录判断
+			$_f = $GLOBALS['path_app'].DIRECTORY_SEPARATOR.$GLOBALS['config']['folder_c'].DIRECTORY_SEPARATOR.$uparams[$idx];
+			if (is_dir($_f)) {
+				$ret[self::key_p] = $uparams[$idx];
+				$idx++;
+			}else{
+				$ret[self::key_p] = '.';
+			}
 			// unset($_GET['_rewurl']);
 		}
-		if ($uricount>1) {
-			$ret[self::key_m] = $uparams[1];
+		if ($uricount>$idx) {
+			$ret[self::key_c] = $uparams[$idx];
+			$idx++;
+		}
+		if ($uricount>$idx) {
+			$ret[self::key_m] = $uparams[$idx];
+			$idx++;
 		}
 		// params
-		$ret['params'] = array_splice($uparams, 2);
+		$ret['params'] = array_splice($uparams, $idx);
 		// 解析$_GET		
 		if (isset($_GET[self::key_c])) {
 			$ret[self::key_c] = $_GET[self::key_c];

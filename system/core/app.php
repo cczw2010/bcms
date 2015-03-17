@@ -9,12 +9,13 @@ Class Core_App{
 		$applibs = self::resolveConfig($GLOBALS['config']);
 		Uri::init();
 		$params = Uri::getParams();
-		// dump($params);
+		// dump($params);die();
+		$subpath = $params[Uri::key_p];
 		$GLOBALS['cur_controller'] = $c = $params[Uri::key_c];
 		$GLOBALS['cur_method'] = $m = $params[Uri::key_m];
 		
 		// 生成实际的controller实例
-		$refc = $this->_refcontroller($c);
+		$refc = $this->_refcontroller($subpath,$c);
 		// $$uri,$applibs;
 		if ($refc->hasMethod($m)) {
 			$instance = $refc->newInstanceWithoutConstructor();
@@ -37,8 +38,8 @@ Class Core_App{
 	/**
 	 * 反射生成对应的controller类
 	 */
-	private function _refcontroller($name){
-		$path = $GLOBALS['path_app'].DIRECTORY_SEPARATOR.$GLOBALS['config']['folder_c'].DIRECTORY_SEPARATOR.$name.'.php';
+	private function _refcontroller($subpath,$name){
+		$path = $GLOBALS['path_app'].DIRECTORY_SEPARATOR.$GLOBALS['config']['folder_c'].DIRECTORY_SEPARATOR.$subpath.DIRECTORY_SEPARATOR.$name.'.php';
 		if (file_exists($path)) {
 			include_once($path);
 			$c = ucfirst($name);//首字母大写
