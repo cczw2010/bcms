@@ -8,7 +8,7 @@ class Manage{
 		if (empty($this->user)) {
 			// 直接设置前一个页面为当前页
 			Uri::setPrevPage();
-			Uri::build('manage/admins','login',false,true);
+			Uri::build('manage/user','login',false,true);
 		}
 		/////////////////// 切入权限管理模块,根据权限来展示树
 		$this->rights = Module_Group::isManager($this->user['group']);
