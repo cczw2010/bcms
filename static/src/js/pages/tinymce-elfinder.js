@@ -1,7 +1,10 @@
+var __finderhtml = '/datas/elfinder/elfinder.html';
+		
 // elFinderBrowser 提供的正对于tinymce的文件点击回调
+// m 是否管理员，决定了目标用户的调用
 function elFinderBrowser (field_name, url, type, win) {
 	var setting = {
-    file: '/datas/elfinder/elfinder.html',// use an absolute path!
+    file: __finderhtml,// use an absolute path!
     title: 'elfinder文件管理器',
     onlyMimes:['image'],
     width: 900,
@@ -21,8 +24,12 @@ function elFinderBrowser (field_name, url, type, win) {
  * 初始化tinymce,ajax时请注意，如果id相同，可能造成内容缓存
  * @param string sel 选择器
  * @param string styles 将注入编辑器中的样式，很重要，这里可以确保编辑器中的展示和目标页面展示效果相同,多个用,隔开
+ * @param m 是否管理员
  */
-function initTinymce(sel,styles){
+function initTinymce(sel,styles,m){
+	if (m) {
+		__finderhtml = '/datas/elfinder/melfinder.html';
+	}
 	tinymce.init({
 	    selector: sel,
 	    theme: "modern",

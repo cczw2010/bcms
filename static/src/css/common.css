@@ -130,6 +130,15 @@ a:hover{
 .pb5{
 	padding-bottom: 5px;
 }
+.line30{
+	line-height: 30px;
+}
+.line40{
+	line-height: 40px;
+}
+.line50{
+	line-height: 50px;
+}
 .fleft{
 	float: left;
 }

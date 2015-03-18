@@ -1,10 +1,65 @@
 <?php
 // 用户管理类
-class MUser{
+class User{
 	const ERRNAME = '_x_errmsg';
+	function __construct(){
+		$this->loginuser = Module_User::getloginUser(true);
+		if (empty($this->loginuser)) {
+			if ($GLOBALS['cur_method']!='login') {
+				Uri::build('manage/user','login',false,true);
+			}
+		}else{
+			if ($GLOBALS['cur_method']=='login') {
+				Uri::build('manage/home','index',false,true);
+			}
+			/////////////////// 切入权限管理模块,根据权限来展示树
+			$this->rights = Module_Group::isManager($this->loginuser['group']);
+			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
+					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			}
+			$this->view->data(array('user'=>$this->loginuser));
+		}
+	}
 	//登陆
 	public function login(){
-		die('okokokok');
+		$datas = array('error'=>'');
+		if (isset($_POST['subbtn'])) {
+			$username = trim($_POST['username']);
+			$password = trim($_POST['password']);
+			$captcha = trim($_POST['captcha']);
+			if (!empty($username) && !empty($password) && !empty($captcha)) {
+				// 检查验证码
+		 		if (Captcha::check($captcha)) {
+		 			// 登陆
+					$ret = Module_User::login($username,$password,true);
+					if ($ret['code']>0) {
+						Uri::build('manage/home','index',false,true);
+						// Uri::redirect('/');
+					}
+					$datas['error'] = $ret['msg'];
+		 		}else{
+		 			$datas['error'] = '验证码错误，请重新输入';
+		 		}
+			}else{
+				$datas['error'] = '必填项不能为空';				
+			}
+		}else{
+			// 记录进入当前页的页面.方便登陆成功后跳转, 并判断排除前一页是否也是当前页
+			if (isset($_SERVER['HTTP_REFERER'])) {
+				if (strripos($_SERVER['HTTP_REFERER'], '/user')>=0) {
+					Uri::setPrevPage($_SERVER['HTTP_REFERER']);
+				}
+			}
+		}
+		// $datas['thirdapp'] = Module_ThirdLogin::getThirdLoginHTML();
+		// dump($GLOBALS['db']->getlastsql());
+		$this->view->load('manage/m_ulogin',$datas);
+	}
+	// 退出登陆
+	public function logout(){
+		Module_User::logout(true);
+		Uri::build('manage/user','login',false,true);
 	}
 	// 用户列表
 	public function users(){
@@ -39,10 +94,10 @@ class MUser{
 		$datas['groups'] = $ret['list'];
 		$datas['pages'] = multiPages($page,$psize,$datas['users']['total'],$pageParams,true);
 
-		return $datas;
+		$this->view->load('manage/m_users',$datas);
 	}
 	// 用户编辑
-	public function uedit(){
+	public function edit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
@@ -64,7 +119,7 @@ class MUser{
 			}else{
 				Helper::setSession(self::ERRNAME,'用户名不能为空！');
 			}
-			Uri::build('manage','pusers',false,true);
+			Uri::build('manage/user','users',false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
@@ -76,16 +131,16 @@ class MUser{
 				$datas['user'] = $ret['data'];
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户信息');
-				Uri::build('manage','pusers',false,true);
+				Uri::build('manage/user','users',false,true);
 			}
 		}
 
 		$ret = Module_Group::getGroups();
 		$datas['groups'] = $ret['list'];
-		return $datas;
+		$this->view->load('manage/m_useredit',$datas);
 	}
 	// 个人信息修改
-	public function ueditinfo(){
+	public function editinfo(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$ret = array('code'=>-1,'msg'=>'');
@@ -122,13 +177,13 @@ class MUser{
 				$datas['user'] = $ret['data'];
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户信息');
-				Uri::build('manage','pusers',false,true);
+				Uri::build('manage/user','users',false,true);
 			}
 		}
 
 		$ret = Module_Group::getGroups();
 		$datas['groups'] = $ret['list'];
-		return $datas;
+		$this->view->load('manage/m_userinfoedit',$datas);
 	}
 	// 修改当前用户密码
 	public function repass(){
@@ -152,10 +207,10 @@ class MUser{
 			die(json_encode($ret));
 		}
 		$datas =array('user'=>Module_User::getloginUser());
-		return $datas;
+		$this->view->load('manage/m_urepass',$datas);
 	}
 	// 删除用户
-	public function udel(){
+	public function del(){
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$datas = array();
@@ -171,15 +226,15 @@ class MUser{
 			}
 		}
 		// 不管删除成功与否直接跳转
-		Uri::build('manage','pusers',false,true);
+		Uri::build('manage/user','users',false,true);
 	}
 	// 用户收货地址
-	public function uaddress(){
+	public function address(){
 		$uid = Uri::get('id',0);
 		$address = Module_User::getAdresss($uid);
 
 		$datas=array('items'=>$address);
-		return $datas;
+		$this->view->load('manage/m_address',$datas);
 	}
 	// 用户登录日志
 	public function ulogs(){
@@ -208,16 +263,27 @@ class MUser{
 		// 检索
 		$datas['logs'] = Module_User::getUserLog($conds,$page,$psize);
 		$datas['pages'] = multiPages($page,$psize,$datas['logs']['total'],$pageParams,true);		
-		return $datas;
+		$this->view->load('manage/m_ulogs',$datas);
 	}
-	// 用户组
-	// $type 分组类型
-	public function groups($type=0){
+	// 管理员分组组
+	public function mgroup(){
 		$datas = array();
-		$datas['groups'] = Module_Group::getGroups(array('types'=>$type));
+		$datas['groups'] = Module_Group::getGroups(array('types'=>0));
 		$datas['modules'] = $this->getModules1();
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
-		return $datas;
+		$datas['types'] = 0;
+		Uri::setPrevPage();
+		$this->view->load('manage/m_group',$datas);
+	}
+	// 用户分组
+	public function ugroup(){
+		$datas = array();
+		$datas['groups'] = Module_Group::getGroups(array('types'=>1));
+		$datas['modules'] = $this->getModules1();
+		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
+		$datas['types'] = 1;
+		Uri::setPrevPage();
+		$this->view->load('manage/m_group',$datas);
 	}
 	// 编辑用户组
 	public function gedit(){
@@ -241,8 +307,8 @@ class MUser{
 						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Group::TNAME
 						));
 			}
-			$page = $types ==0?'pugroup':'pusergroup';
-			Uri::build('manage',$page,false,true);
+			$page = $types ==0?'mgroup':'ugroup';
+			Uri::build('manage/user',$page,false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
@@ -254,11 +320,11 @@ class MUser{
 				$datas['group'] = current($ret['list']);
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户组信息'.$GLOBALS['db']->getlastsql());
-				Uri::build('manage','pugroup',false,true);
+				Uri::build('manage/user','ugroup',false,true);
 			}
 		}
 		$datas['modules'] = $this->getModules1();
-		return $datas;
+		$this->view->load('manage/m_groupedit',$datas);
 	}
 	// 删除用户组
 	public function gdel(){

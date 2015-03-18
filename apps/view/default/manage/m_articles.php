@@ -6,13 +6,13 @@
 	?>
 	<ul class="boxs">
 		<li class="tablabel active">文章列表</li>
-		<li class="tablabel"><span class="xicon">g</span><span data-url="<?php echo Uri::build('manage','particleedit'); ?>" class="ajaxbtn">新增</span></li>
+		<li class="tablabel"><span class="xicon">g</span><span data-url="/manage/article/edit/" class="ajaxbtn">新增</span></li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','particles'); ?>">
+				<form action="/manage/article/lists/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">分类：</label>
 				<select name="cateid" id="">
@@ -79,9 +79,9 @@
 									<td>'.date('Y-m-d H:i',$item['createdate']).'</td>
 									<td>'.Module_Article::$statuss[$item['status']].'</td>
 									<td>
-									<span data-url="'.Uri::build('manage','particlecomm').'?objid='.$item['id'].'"  class="ajaxbtn">评论</span>
-									<span data-url="'.Uri::build('manage','particleedit',array($item['id'])).'"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','particledel',array($item['id'])).'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
+									<span data-url="/manage/article/comm/?objid='.$item['id'].'"  class="ajaxbtn">评论</span>
+									<span data-url="/manage/article/edit/'.$item['id'].'"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/article/del/'.$item['id'].'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
 									</td>';
 						}
 					}

@@ -46,7 +46,7 @@
 		</div>
 		<div class="tabbody">
 			<div class="info"><span class="xicon mr10">R</span> tips:首先数据库的配置不能是空密码哦，另外导出的sql文件里可能会有一条警告信息，去掉就可以正常使用了</div>
-			<form action="<?php echo Uri::build('manage','pdbback') ;?>">
+			<form action="<?php echo Uri::build('manage/setting','dbback') ;?>">
 			<table class="tablebox" width="400" border="0" cellpadding="5" cellspacing="1" >
 				<thead>
 					<tr>

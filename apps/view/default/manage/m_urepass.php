@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','purepass'); ?>">
+<form action="/manage/user/repass/">
 <table class="tablebox formtable" width="300" border="0" cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>

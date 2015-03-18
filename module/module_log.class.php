@@ -36,9 +36,10 @@ class Module_Log{
 	/**
 	 * 新增日志 不可编辑
 	 * @param array $arrs 编辑的键值对,不能包含id;
+	 * @param boolean $ismanager 是否管理员日志;
 	 * @return 返回$id
 	 */
-	static public function setItem($arrs){
+	static public function setItem($arrs,$ismanager=true){
 		$ret = array('code'=> -1,'msg'=>'');
 		// 必填项，判断
 		$check = FormVerify::rule(
@@ -50,11 +51,21 @@ class Module_Log{
 			$ret['msg'] = $check;
 			return $ret;
 		}
-		$user = Module_User::getLoginUser();
+		if (!isset($arrs['userid'])) {
+			$user = Module_User::getLoginUser($ismanager);
+			if (!empty($user)) {
+				$arrs['userid'] = $user['id'];
+				$arrs['username'] = $user['username'];
+			}else{
+				$arrs['userid'] = 0;
+				$arrs['username'] = '';
+			}
+		}
+		if (!isset($arrs['username'])) {
+			$arrs['username'] = '';
+		}
 		$arrs['message'] = addslashes(stripslashes($arrs['message']));
 		$arrs['createdate'] = $_SERVER['REQUEST_TIME'];
-		$arrs['userid'] = $user['id'];
-		$arrs['username'] = $user['username'];
 		$arrs['ip'] = Helper::getClientIp();
 
 		$id = $GLOBALS['db']->insert(self::TNAME,$arrs);

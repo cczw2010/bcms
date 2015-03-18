@@ -30,8 +30,8 @@
 										<td>'.$group['name'].'</td>
 										<td>'.$group['desc'].'</td>';
 							echo	'<td class="">'.($id>0?
-											'<span data-url="'.Uri::build('manage','pgroupedit',array($group['id'])).'" data-flusharea=".tabbody.active"  class="ajaxbtn">编辑</span>
-											<span data-url="'.Uri::build('manage','pgroupdel',array($group['id'])).'" data-confirm="确认删除吗？如果该组下已经有了用户，其权限信息将丢失，请慎重！" class="ajaxbtn">删除</span>':'').
+											'<span data-url="/manage/user/gedit/'.$group['id'].'" data-flusharea=".tabbody.active"  class="ajaxbtn">编辑</span>
+											<span data-url="/manage/user/gdel/'.$group['id'].'" data-confirm="确认删除吗？如果该组下已经有了用户，其权限信息将丢失，请慎重！" class="ajaxbtn">删除</span>':'').
 										'</td></tr>';
 						}
 					?>
@@ -39,7 +39,7 @@
 			</table>			
 		</div>
 		<div class="tabbody">
-			<form action="<?php echo Uri::build('manage','pgroupedit') ;?>">
+			<form action="/manage/user/gedit/">
 				<table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
 					<thead>
 						<tr>

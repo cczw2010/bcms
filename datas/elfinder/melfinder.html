@@ -28,7 +28,7 @@
 		<script type="text/javascript" charset="utf-8">
 			var setting = {
 		      lang : 'zh_CN',
-		      url: 'php/connector.php',  // connector URL
+		      url: 'php/mconnector.php',  // connector URL
 		      getFileCallback: function(file) { // editor callback
 		        FileBrowserDialogue.mySubmit(file); // pass selected file path to TinyMCE 
 		      }
@@ -46,23 +46,6 @@
 			  };
 			// 判断是否直接访问和是否跨域访问(可以跨端口|否则改用location.origin)
 			if (window.top != this && window.top.document.domain == document.domain) {
-
-				// 用户禁止编辑操作
-				setting.commands = [
-			    'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
-			    'download',  'upload',  'edit',  'search', 'info', 'view', 'help',
-			    'resize', 'sort'
-				];
-				setting.contextmenu = {
-			    // navbarfolder menu
-			    navbar : ['open', '|', 'info'],
-			    // current directory menu
-			    cwd    : ['reload', 'back', '|', 'upload','|', 'info'],
-			    // current directory file menu
-			    files  : [
-			        'getfile', '|','open', 'quicklook', '|', 'download', '|', 'resize', '|', 'info'
-			    ]
-				};
 		    var elf = $('#elfinder').elfinder(setting).elfinder('instance');      
 			}else{
 				// console.log(window.top.document.domain,document.domain);

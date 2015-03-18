@@ -12,7 +12,7 @@
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','plogs'); ?>">
+				<form action="/manage/setting/logs/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20"  for="">用户名：</label>
 				<input type="text" name="username" size="10" value="<?php echo isset($_REQUEST['username'])?$_REQUEST['username']:'' ?>">

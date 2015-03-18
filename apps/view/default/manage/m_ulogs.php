@@ -11,7 +11,7 @@
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','puserlog'); ?>">
+				<form action="/manage/user/ulogs/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20"  for="">用户id：</label>
 				<input type="text" name="userid" size="10" value="<?php echo isset($_REQUEST['userid'])?$_REQUEST['userid']:'' ?>">

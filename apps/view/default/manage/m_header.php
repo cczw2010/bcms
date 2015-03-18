@@ -8,33 +8,36 @@
     <meta name="Author" content="awen" />
     <meta name="Version" content="1.0" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- 360极速浏览器 -->
+    <meta name="renderer" content="webkit" />
 		<link type="image/x-icon" rel="shortcut icon" href="/static/dist/img/favicon.ico">
 		<!-- basic styles-->
 		<link rel="stylesheet" href="/static/dist/css/common.min.css" />
-		<link rel="stylesheet" href="/static/dist/css/manager.min.css" />
+		<link rel="stylesheet" href="/static/dist/css/manager.min.css?t=<?php echo time(); ?>" />
 		<link rel="stylesheet" href="/static/dist/css/normalize.min.css" />
 		<link rel="stylesheet" href="/datas/uploadify/uploadify.css">
 		<link rel="stylesheet" href="/datas/datepicker/css/default.css">
+		<link rel="stylesheet" href="/datas/zebra_dialog/css/flat/zebra_dialog.css">
 		<!-- basic scripts -->
 		<script src='/static/dist/js/jquery-1.8.3.min.js'></script>
 		<script src="/static/dist/js/main.min.js"></script>
 		<script src="/datas/tinymce/tinymce.min.js"></script>
 		<script src="/datas/uploadify/jquery.uploadify.min.js"></script>
 		<script src="/datas/datepicker/javascript/zebra_datepicker.min.js"></script>
+		<script src="/datas/zebra_dialog/javascript/zebra_dialog.js"></script>
 	</head>
-	<body class="boxs boxorientv">
+	<body>
 		<!-- 顶部 -->
-		<div class="topbar boxs">
-			<div class="flex6 f20 pl10">
-				 后台管理系统(html5版本)
+		<div class="topbar posrel clearfix p10">
+			<div class="shbox-l f20 ">
+				 SSMS后台管理系统
 			</div>
-			<div class="flex"><?php  echo date('Y-m-d H:i');?></div>
-			<div class="flex">
+			<div class="shbox-flex cright">
 				<?php 
-				if ($user) {
+				if (isset($user)) {
 					echo '欢迎您！'.$user['username'].' |
-					 <span class="ajaxbtn" data-url="'.Uri::build('manage','pueditinfo',array($user['id'])).'">修改个人信息</span> | 
-					 <span class="ajaxbtn" data-url="'.Uri::build('manage','purepass').'">修改密码</span> | <a href="'.Uri::build('user','logout').'" title="退出">退出</a>';
+					 <span class="ajaxbtn dialogbtn"  data-url="'.Uri::build('manage/user','editinfo',array($user['id'])).'">修改个人信息</span> | 
+					 <span class="ajaxbtn dialogbtn"  data-url="'.Uri::build('manage/user','repass').'">修改密码</span> | <a href="'.Uri::build('manage/user','logout').'" title="退出">退出</a>';
 				}else{
 					echo '未登录！';
 				}

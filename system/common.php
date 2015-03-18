@@ -102,7 +102,7 @@ function multiPages($curpage,$psize,$itemcount,$params=false,$isajax=false){
 	if (empty($itemcount)) {
 		return '';
 	}
-	$url = '/'.$GLOBALS['cur_controller'].Uri::$uritype.$GLOBALS['cur_method'].Uri::$uritype;
+	$url = '/'.$GLOBALS['cur_cpath'].Uri::$uritype.$GLOBALS['cur_controller'].Uri::$uritype.$GLOBALS['cur_method'].Uri::$uritype;
 	$query = http_build_query($params);
 	$tag = $isajax?'span':'a';
 	$urlattr = $isajax?'data-url':'href';

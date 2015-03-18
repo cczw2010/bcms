@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','pueditinfo'); ?>">
+<form action="/manage/user/editinfo/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>

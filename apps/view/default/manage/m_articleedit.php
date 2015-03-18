@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','particleedit'); ?>">
+<form action="/manage/article/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="1000" >
 	<thead>
 		<tr>
@@ -69,7 +69,7 @@
 </form>
 <script>
 	$(function(){
-		initTinymce("#articlecontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css');
+		initTinymce("#articlecontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
 		// 上传
 		var jsons = <?=isset($oitem)?json_encode($oitem['covers']):'[]';?>,
 			objtype = "<?=Module_Article::ATTACHTYPE;?>",idx=0;
@@ -78,13 +78,13 @@
 			addUpload('#coverarea',{
 				objtype:objtype,
 				json:jsons[k],
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload/"
 			});
 		}
 		if (idx==0) {
 			addUpload('#coverarea',{
 				objtype:objtype,
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload/"
 			});
 		}
 	});

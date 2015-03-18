@@ -20,7 +20,11 @@
 * 应用路径
 
 		$GLOBALS['path_app']
+		
+* 当前controller的二级目录
 
+		$GLOBALS['cur_cpath']
+		
 * 当前controller
 
 		$GLOBALS['cur_controller']
@@ -68,7 +72,7 @@
 
 		// 手动的增加模板中的提供的数据数组，load中传入的数据也是通过这个方法来组合数据的
 		// 重名变量将以最后一次为准
-		this->view->adta($datas=array());
+		this->view->data($datas=array());
 
 * controller中调用 view（模板） 
 		

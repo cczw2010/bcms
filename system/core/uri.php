@@ -20,6 +20,7 @@ Class Uri{
 	//将url解析并将返回结果并,不包括解析?后面 除了controller和method以外的参数,
 	private function resolve(){
 		$ret = array('params'=>array());
+		$ret[self::key_p] = '.';
 		$ret[self::key_c] = self::$def_c;
 		$ret[self::key_m] = self::$def_m;
 		// 友好url的链接第一个GET参数取出并干掉，因为是是rewrite后的uri
@@ -37,8 +38,6 @@ Class Uri{
 			if (is_dir($_f)) {
 				$ret[self::key_p] = $uparams[$idx];
 				$idx++;
-			}else{
-				$ret[self::key_p] = '.';
 			}
 			// unset($_GET['_rewurl']);
 		}
@@ -75,7 +74,7 @@ Class Uri{
 	}
 	/**
 	 * 根据当前url类型，构建reaet url(或者参数query)
-	 * @param  string $c 			controller,如果$c为空那么就不是完整url,只是拼接参数
+	 * @param  string $c 			controller（或相对路径）,如果$c为空那么就不是完整url,只是拼接参数
 	 * @param  string $m     	页面对应的方法
 	 * @param  array $params  参数值数组
 	 * @param  boolean $redirect 	是否直接跳转

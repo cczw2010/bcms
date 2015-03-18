@@ -33,15 +33,20 @@ function addUpload(wraper,cfg,callback) {
     fieldpath = cfg.fieldpath||'uplodify_fpaths';
     fieldname = cfg.fieldname||'uplodify_fnames';
     px1png = '/static/dist/img/1opicity.png';
-    json = cfg.json||false;
+    if (cfg.json) {
+        json = cfg.json;
+        cfg.json = null;    //去掉数据防止每次新建的时候都会调用旧json
+    }
     uploadurl = cfg.uploadurl||'';
     fileexts = cfg.fileexts||picexts;
-    getholderpic = function(json){
+    getholderpic = function(data){
         // 整理显示的图片（如果有）
         var replacepic =  '',index,fext,
-            fpath = json.fpath||'',
-            fname = json.fname||'';
-        if (json) {
+            fpath ='',
+            fname ='';
+        if (data) {
+            fpath = data.fpath;
+            fname = data.fname;
             index =fname.lastIndexOf('.');
             if (index>=0) {
                 fext = fname.slice(index).toLowerCase();
@@ -168,10 +173,10 @@ function addUpload(wraper,cfg,callback) {
         },
         'onUploadSuccess': function(file,ret) {
             // console.log('onUploadSuccess',arguments,this);
-            var json =$.parseJSON(ret),
-                pdata = json.data,
+            var ret =$.parseJSON(ret),
+                pdata = ret.data,
                 uploadifyli = this.wrapper.parent();
-            if (json.code>0) {
+            if (ret.code>0) {
                 var replacepic = getholderpic(pdata);
                 uploadifyli.find('.uploadify_showpic').css('background-image','url('+replacepic+')');
                 uploadifyli.find('.uploadify_showname').html(pdata.oname);
@@ -180,10 +185,11 @@ function addUpload(wraper,cfg,callback) {
             }
             this.wrapper.uploadify('settings','buttonText','选择文件');
             // 删除队列中的fileid,防止选择相同文件的时候提示已经在队列中，考虑后期自己缓存
-            delete this.queueData.files[file.id];
+            // delete this.queueData.files[file.id];
+            this.queueData.files[file.id] = null;
             // 执行回调
             if (callback) {
-                callback(uploadifyli,json);
+                callback(uploadifyli,ret);
             }
         },
         'onUploadError': function(file) {

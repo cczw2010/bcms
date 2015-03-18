@@ -35,7 +35,7 @@ $spath = $sconfig['elfinder']['path'];
 $surl = $sconfig['elfinder']['url'];
 
 require('../../../module/module_user.class.php');
-$suser = Module_User::getLoginUser();
+$suser = Module_User::getLoginUser(true);
 $ufolder = Module_User::getAlbumBase($suser['id']);
 $uppath = $spath.'/'.$ufolder.'/';
 if (is_dir($spath) && !file_exists($uppath)) {

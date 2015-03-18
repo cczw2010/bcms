@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','pgroupedit') ;?>">
+<form action="/manage/user/gedit/">
 	<table width="100%" class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
 		<thead>
 			<tr>

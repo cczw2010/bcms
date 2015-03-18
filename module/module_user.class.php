@@ -16,9 +16,10 @@ final class Module_User{
 	 * 登录,并更新登录信息
 	 * @param  string $username 用户名
 	 * @param  string $password 密码
+	 * @param  boolean $ismanager 是否以管理员身份登陆
 	 * @return array
 	 */
-	static public function login($username,$password){
+	static public function login($username,$password,$ismanager=false){
 		$ret=array('code'=>-1,'msg'=>'');
 		if (!empty($username) && !empty($password)) {
 			// 过滤禁止注册的用户名包含的字符串,暂时为实现！！！！！后期必须加
@@ -33,8 +34,17 @@ final class Module_User{
 					$ret['code'] = -2;
 					$ret['msg'] = '用户被锁定.';
 				}else{
-					// 缓存到session中
-					Helper::setSession('_s_user',$user);
+					// 判断是否管理员,缓存到session中
+					if ($ismanager) {
+						if ($user['types'] == Module_Group::TYPE_MANAGER) {
+							Helper::setSession('_s_manager',$user);
+						}else{
+							$ret['msg'] = '您不是管理员，请不要随便尝试.';
+							return $ret;
+						}
+					}else{
+						Helper::setSession('_s_user',$user);
+					}
 					// 更新最新登陆信息
 					$cip = Helper::getClientIp();
 					$param = array(
@@ -78,8 +88,12 @@ final class Module_User{
 			if ($user['status']==0) {
 				$ret['msg'] = '用户被锁定.';
 			}else{
-				// 缓存到session中
-				Helper::setSession('_s_user',$user);
+				// 判断是否管理员,缓存到session中
+				if ($user['types'] = Module_Group::TYPE_MANAGER) {
+					Helper::setSession('_s_manager',$user);
+				}else{
+					Helper::setSession('_s_user',$user);
+				}
 				// 更新最新登陆信息
 				$param = array(
 						'lastip'=>Helper::getClientIp(),
@@ -140,31 +154,36 @@ final class Module_User{
 	/**
 	 * 获取当前登陆的用户
 	 */
-	static public function getLoginUser(){
-		// return Helper::getSession('_s_user');
-		// 为了方便应用框架外部其他模块调用，就不集成Helper调用了
-		return isset($_SESSION['_s_user'])?$_SESSION['_s_user']:false;
+	static public function getLoginUser($ismanager=false){
+		$session = $ismanager?'_s_manager':'_s_user';
+		return isset($_SESSION[$session])?$_SESSION[$session]:false;
 	}
 	/**
 	 *刷新登陆用户缓存,比如修改用户密码，签名等的时候还是很有必要的
 	 */
-	static public function refreshLoginUser(){
-		if (!empty($_SESSION['_s_user'])) {
-			$ret = Module_User::getUser($_SESSION['_s_user']['id']);
+	static public function refreshLoginUser($ismanager=false){
+		$session = $ismanager?'_s_manager':'_s_user';
+		if (!empty($_SESSION[$session])) {
+			$ret = Module_User::getUser($_SESSION[$session]['id']);
 			if ($ret['code']>0) {
-				$_SESSION['_s_user'] = $ret['data'];
+				$_SESSION[$session] = $ret['data'];
 			}else{
-				Module_User::logout();
+				Module_User::logout($ismanager);
 			}
 		}
 	}
 	/**
 	 * 退出登陆
 	 */
-	static public function logout(){
+	static public function logout($ismanager=false){
 		// Helper::getSession('_s_user',true);
-		unset($_SESSION['_s_user']);
+		if ($ismanager) {
+			unset($_SESSION['_s_manager']);
+		}else{
+			unset($_SESSION['_s_user']);
+		}
 	}
+
 	/**
 	 * 检查符合某条件的信息被注册的次数，可用来校验信息是否已经被注册
 	 * @return int 

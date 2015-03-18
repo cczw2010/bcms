@@ -5,9 +5,9 @@
 	}
 	?>
 	<div class="mt20">
-		<span data-url="<?php echo Uri::build('manage','pcache').'?op='.$GLOBALS['config']['view']['group'];?>" class="xicon ajaxbtn cacherbox">清空模板缓存</span>
-		<span data-url="<?php echo Uri::build('manage','pcache').'?op='.$GLOBALS['config']['db']['group'];?>" class="xicon ajaxbtn cacherbox">清空数据缓存</span>
-		<span data-url="<?php echo Uri::build('manage','pcache').'?op=all';?>" class="xicon ajaxbtn cacherbox">清空所有缓存</span>
+		<span data-url="/manage/setting/cache?op=<?php echo $GLOBALS['config']['view']['group'];?>" class="xicon ajaxbtn cacherbox">清空模板缓存</span>
+		<span data-url="/manage/setting/cache?op=<?php echo $GLOBALS['config']['db']['group'];?>" class="xicon ajaxbtn cacherbox">清空数据缓存</span>
+		<span data-url="/manage/setting/cache?op=all" class="xicon ajaxbtn cacherbox">清空所有缓存</span>
 	</div>
 	<hr class="mt20">
 	<div class="info"><span class="xicon mr10">R</span> tips: <br>

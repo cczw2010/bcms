@@ -2,6 +2,15 @@
 	// 一些配置信息和系统级页面的综合处理
 	class Setting{
 		const ERRNAME = '_x_errmsg';
+
+		public function info(){
+			$datas = array();
+			$datas['sinfo'] = Helper::getSystemInfo();
+			$datas['winfo'] = Helper::getSiteInfo();
+			$datas['dbinfo'] = $GLOBALS['db']->get_db_info();
+			$datas['uainfo'] = new Useragent();
+			$this->view->load('manage/m_info',$datas);
+		}
 		// 缓存处理
 		public function cache(){
 			$datas = array();
@@ -16,7 +25,7 @@
 				}
 				$datas['msg'] = '操作成功 > '.$group.'>'.date('Y-m-d H:i:s');
 			}
-			return $datas;
+			$this->view->load('manage/m_cache',$datas);
 		}
 		// log列表
 		public function logs(){
@@ -53,11 +62,10 @@
 			// 检索
 			$datas['logs'] = Module_Log::getItems($conds,'order by id desc',$page,$psize);
 			$datas['pages'] = multiPages($page,$psize,$datas['logs']['total'],$pageParams,true);		
-			return $datas;
+			$this->view->load('manage/m_logs',$datas);
 		}
 		// 数据库备份
 		public function dbback(){
-			$datas = array('code'=>-1,'msg'=>'');
 			if (isset($_POST['dumppath'])) {
 				$mysqldump = Uri::post('mysqldump','mysqldump');
 				$savepath = Uri::post('savepath','backup');
@@ -97,8 +105,10 @@
 
 				$datas['mysqldump'] = $mysqldump;
 				$datas['savepath'] = $savepath;
+				die(json_encode($datas));
+			}else{
+				$this->view->load('manage/m_dbback',$datas);
 			}
-			return $datas;
 		}
 		// 敏感词
 		public function verify(){

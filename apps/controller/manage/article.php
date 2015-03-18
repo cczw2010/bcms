@@ -1,11 +1,10 @@
 <?php
 // 文章管理类
-class MArticle{
+class Article{
 	const ERRNAME = '_x_errmsg';
 
 	// 文章列表
 	public function lists(){
-		
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$page = !empty($params[0])?$params[0]:1;
@@ -52,7 +51,7 @@ class MArticle{
 		$datas['options'] = Module_Category::getChildsOptions($cates['data']['items'],$cateid);
 		Uri::setPrevPage();
 
-		return $datas;
+		$this->view->load('manage/m_articles',$datas);
 	}
 	// 编辑文章
 	public function edit(){
@@ -104,7 +103,7 @@ class MArticle{
 						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Article::TNAME
 						));
 			}
-			Uri::build('manage','particles',false,true);
+			Uri::build('manage/article','lists',false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
@@ -116,7 +115,7 @@ class MArticle{
 				$datas['oitem'] = $ret['data'];
 			}else{
 				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
-				Uri::build('manage','particles',false,true);
+				Uri::build('manage/article','lists',false,true);
 			}
 		}
 		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Article::APPID));
@@ -124,7 +123,7 @@ class MArticle{
 		$cateid = isset($datas['oitem']['cateid'])?$datas['oitem']['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($datas['cates'],$cateid);
 		
-		return $datas;
+		$this->view->load('manage/m_articleedit',$datas);
 	}
 	// 删除文章
 	public function del(){

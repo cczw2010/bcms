@@ -11,7 +11,7 @@
 	<div class="flex">
 		<div class="tabbody active">
 		<div class="filter">
-				<form action="<?php echo Uri::build('manage','pusers'); ?>">
+				<form action="/manage/user/users/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
@@ -53,9 +53,9 @@
 										<td>'.date('Y-m-d H:i',$user['lasttime']).'</td>
 										<td class="ccenter">'.(Module_User::$statuss[$user['status']]).'</td>
 										<td class="">
-											<span data-url="'.Uri::build('manage','puseraddress').'?id='.$user['id'].'" class="ajaxbtn">地址列表</span>
-											<span data-url="'.Uri::build('manage','puseredit',array($user['id'])).'"  data-flusharea=".tabbody.active" class="ajaxbtn">编辑</span>
-											<span data-url="'.Uri::build('manage','puserdel',array($user['id'])).'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</span>
+											<span data-url="/manage/user/address/?id='.$user['id'].'" class="ajaxbtn">地址列表</span>
+											<span data-url="/manage/user/edit/'.$user['id'].'"  data-flusharea=".tabbody.active" class="ajaxbtn">编辑</span>
+											<span data-url="/manage/user/del/'.$user['id'].'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</span>
 										</td></tr>';
 						}
 					?>

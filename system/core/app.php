@@ -10,7 +10,7 @@ Class Core_App{
 		Uri::init();
 		$params = Uri::getParams();
 		// dump($params);die();
-		$subpath = $params[Uri::key_p];
+		$GLOBALS['cur_cpath'] = $subpath = $params[Uri::key_p];
 		$GLOBALS['cur_controller'] = $c = $params[Uri::key_c];
 		$GLOBALS['cur_method'] = $m = $params[Uri::key_m];
 		
