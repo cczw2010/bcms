@@ -21,7 +21,9 @@
 		<tr>
 			<td>用户组：</td>
 			<td><select name="group" >
-				<option value="<?php echo Module_Group::GROUP_GENERAL;?>">普通用户</option>
+				<?php if (isset($user)&&$user['types']==Module_User::TYPE_USER): ?>
+					<option value="<?php echo Module_Group::GROUP_GENERAL;?>">普通用户</option>
+				<?php endif ?>
 				<?php
 					$cursid = isset($user)?$user['group']:Module_Group::GROUP_GENERAL; 
 					foreach ($groups as $group) {
@@ -39,6 +41,7 @@
 		<tr>
 			<td colspan="2" class="ccenter">
 				<input type="hidden" name="id" value="<?php echo isset($user)?$user['id']:''; ?>">
+				<input type="hidden" name="types" value="<?php echo isset($user)?$user['types']:''; ?>">
 				<input type="button" name="submitbtn" class="submitbtn" value="提 交">
 			</td>
 		</tr>

@@ -63,7 +63,7 @@ class User{
 	}
 	// 用户列表
 	public function users(){
-		$datas = array();
+		$datas = array('types'=>Module_User::TYPE_USER);
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 
 		$params = Uri::getParams();
@@ -71,8 +71,8 @@ class User{
 		$page = !empty($params[0])?$params[0]:1;
 		$psize = 20;
 		// 过滤条件
-		$conds = array();	//检索条件
-		$pageParams = array();//分页搜索参数
+		$conds = array('types'=>Module_User::TYPE_USER);	//检索条件
+		$pageParams = array('types'=>Module_User::TYPE_USER);//分页搜索参数
 		if (!empty($_REQUEST['email'])) {
 			$conds['email'] = 'like "%'.$_REQUEST['email'].'%"';
 			$pageParams['email'] = $_REQUEST['email'];
@@ -90,17 +90,53 @@ class User{
 		// 检索
 		$datas['users'] = Module_User::getUsers($conds,'order by id desc',$page,$psize);
 
-		$ret = Module_Group::getGroups();
+		$ret = Module_Group::getGroups(array('types'=>Module_Group::TYPE_USER));
 		$datas['groups'] = $ret['list'];
 		$datas['pages'] = multiPages($page,$psize,$datas['users']['total'],$pageParams,true);
 
 		$this->view->load('manage/m_users',$datas);
+	}
+	// 管理员列表
+	public function managers(){
+		$datas = array('types'=>Module_User::TYPE_MANAGER);
+		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
+
+		$params = Uri::getParams();
+		$params = $params['params'];
+		$page = !empty($params[0])?$params[0]:1;
+		$psize = 20;
+		// 过滤条件
+		$conds = array('types'=>Module_User::TYPE_MANAGER);	//检索条件
+		$pageParams = array('types'=>Module_User::TYPE_MANAGER);//分页搜索参数
+		if (!empty($_REQUEST['email'])) {
+			$conds['email'] = 'like "%'.$_REQUEST['email'].'%"';
+			$pageParams['email'] = $_REQUEST['email'];
+		}
+		if (!empty($_REQUEST['username'])) {
+			$conds['username'] = 'like "%'.$_REQUEST['username'].'%"';
+			$pageParams['username'] = $_REQUEST['username'];
+		}
+		if (isset($_REQUEST['status']) && $_REQUEST['status']!='-1') {
+			// 状态可能为0,所以不能用empty来判断
+			$conds['status'] = $_REQUEST['status'];
+			$pageParams['status'] = $_REQUEST['status'];
+		}
+		$datas['conds'] = $conds;
+		// 检索
+		$datas['users'] = Module_User::getUsers($conds,'order by id desc',$page,$psize);
+
+		$ret = Module_Group::getGroups(array('types'=>Module_Group::TYPE_MANAGER));
+		$datas['groups'] = $ret['list'];
+		$datas['pages'] = multiPages($page,$psize,$datas['users']['total'],$pageParams,true);
+
+		$this->view->load('manage/m_managers',$datas);
 	}
 	// 用户编辑
 	public function edit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
+			$types = Uri::post('types',Module_User::TYPE_USER);
 			$username = Uri::post('username');
 			if(mb_strlen($username)>0){
 				$ret = Module_User::modifyUser($id,array('username'=>$username,
@@ -119,25 +155,33 @@ class User{
 			}else{
 				Helper::setSession(self::ERRNAME,'用户名不能为空！');
 			}
-			Uri::build('manage/user','users',false,true);
+			if ($types == Module_User::TYPE_USER) {
+				Uri::build('manage/user','users',false,true);
+			}else{
+				Uri::build('manage/user','managers',false,true);
+			}
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$datas = array();
 		if (count($params)>0) {
+			$types = $params[1]||Module_Group::TYPE_USER;
 			$ret = Module_User::getUser($params[0]);
 			if ($ret['code']>0) {
 				$datas['user'] = $ret['data'];
+				$ret = Module_Group::getGroups(array('types'=>$types));
+				$datas['groups'] = $ret['list'];
+				$this->view->load('manage/m_useredit',$datas);
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户信息');
-				Uri::build('manage/user','users',false,true);
+				if ($types == Module_User::TYPE_USER) {
+					Uri::build('manage/user','users',false,true);
+				}else{
+					Uri::build('manage/user','managers',false,true);
+				}
 			}
 		}
-
-		$ret = Module_Group::getGroups();
-		$datas['groups'] = $ret['list'];
-		$this->view->load('manage/m_useredit',$datas);
 	}
 	// 个人信息修改
 	public function editinfo(){
@@ -176,8 +220,7 @@ class User{
 			if ($ret['code']>0) {
 				$datas['user'] = $ret['data'];
 			}else{
-				Helper::setSession(self::ERRNAME,'没有相关用户信息');
-				Uri::build('manage/user','users',false,true);
+				$datas['errmsg'] = '没有相关用户信息';
 			}
 		}
 
@@ -214,6 +257,7 @@ class User{
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$datas = array();
+		$types = $params[1];
 		if (count($params)>0) {
 			$ret = Module_User::delUser($params[0]);
 			// 添加日志
@@ -226,7 +270,11 @@ class User{
 			}
 		}
 		// 不管删除成功与否直接跳转
-		Uri::build('manage/user','users',false,true);
+		if ($types == Module_User::TYPE_USER) {
+			Uri::build('manage/user','users',false,true);
+		}else{
+			Uri::build('manage/user','managers',false,true);
+		}
 	}
 	// 用户收货地址
 	public function address(){
@@ -268,8 +316,8 @@ class User{
 	// 管理员分组组
 	public function mgroup(){
 		$datas = array();
-		$datas['groups'] = Module_Group::getGroups(array('types'=>0));
-		$datas['modules'] = $this->getModules1();
+		$datas['groups'] = Module_Group::getGroups(array('types'=>Module_Group::TYPE_MANAGER));
+		$datas['modules'] = $this->getRightList();
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['types'] = 0;
 		Uri::setPrevPage();
@@ -278,8 +326,8 @@ class User{
 	// 用户分组
 	public function ugroup(){
 		$datas = array();
-		$datas['groups'] = Module_Group::getGroups(array('types'=>1));
-		$datas['modules'] = $this->getModules1();
+		$datas['groups'] = Module_Group::getGroups(array('types'=>Module_Group::TYPE_USER));
+		$datas['modules'] = $this->getRightList();
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['types'] = 1;
 		Uri::setPrevPage();
@@ -323,7 +371,7 @@ class User{
 				Uri::build('manage/user','ugroup',false,true);
 			}
 		}
-		$datas['modules'] = $this->getModules1();
+		$datas['modules'] = $this->getRightList();
 		$this->view->load('manage/m_groupedit',$datas);
 	}
 	// 删除用户组
@@ -345,53 +393,34 @@ class User{
 		// 不管删除成功与否直接跳转
 		Uri::redirect(Uri::getPrevPage());
 	}
-	/**
-	 * 自动获取当前所有的模块和模块下的页面
-	 * modify by awen @2014-7-3  改为只返回管理员页面的权限
-	 * @param boolean $m 是否包含方法一起返回 
-	 */
-	private function getModules($m=false){
-		// $cpath = $GLOBALS['path_app'].'/'.$GLOBALS['config']['folder_c'];
-		// $files = SFile::getPathFiles($cpath,'php');
-		$modules = array();
-		// foreach ($files as $file) {
-		// 	$file = basename($file,'.php');
-		// 	$clsname = ucfirst($file);
-		// 	if ($m) {
-				// include_once($cpath.'/'.$file.'.php');
-				$refclass = new ReflectionClass('Manage');
-				$methods = $refclass->getMethods(ReflectionMethod::IS_PUBLIC);
-				$modules['Manage'] = $methods;
-			// }else{
-			// 	$modules[] = $clsname;
-			// }
-		// }
-		return $modules;
-	}
 	//中文说明
-	private function getModules1(){
+	private function getRightList(){
 		return array('manage'=>array(
-															'index'=>'首页',
-															'pinfo'=>'系统信息',
-															'pcache'=>'缓存处理',
-															'plogs'=>'log日志',
-															'pusers'=>'用户列表',
-															'pugroup'=>'管理员分组',
-															'pusergroup'=>'用户分组',
-															'puserlog'=>'登录日志',
-															'particles'=>'文章列表',
-															'particlecate'=>'文章分类',
-															'particlecomm'=>'评论管理',
-															'pbrands'=>'品牌列表',
-															'pproducts'=>'商品列表',
-															'pproductcate'=>'商品分类',
-															'pproductcomm'=>'评论管理',
-															'porders'=>'订单列表',
-															'pcitys'=>'区域管理',
-															'pverify'=>'敏感词汇',
-															'pappcfgs'=>'第三方登陆',
-															'ppayments'=>'支付管理',
-															'pmails'=>'SMTP邮件',)
+															// 'home-index'=>'首页',
+															'setting-info'=>'系统信息',
+															'setting-cache'=>'缓存处理',
+															'setting-logs'=>'log日志',
+															'setting-dbback'=>'数据库备份',
+															'user-users'=>'用户列表',
+															'user-managers'=>'管理员列表',
+															'user-mgroup'=>'管理员分组',
+															'user-ugroup'=>'用户分组',
+															'user-ulogs'=>'登录日志',
+															'article-lists'=>'文章列表',
+															'article-cate'=>'文章分类',
+															'article-comm'=>'文章评论管理',
+															'product-brands'=>'品牌列表',
+															'product-lists'=>'商品列表',
+															'product-cate'=>'商品分类',
+															'product-comm'=>'商品评论管理',
+															'order-lists'=>'订单列表',
+															'setting-citys'=>'区域管理',
+															'setting-verify'=>'敏感词汇',
+															'setting-thirdlogincfg'=>'第三方登陆配置',
+															'setting-payment'=>'支付配置',
+															'mail-cfg'=>'SMTP邮件配置',
+															'mail-send'=>'发送邮件',
+															)
 			);
 	}
 }

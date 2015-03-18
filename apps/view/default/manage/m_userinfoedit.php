@@ -6,6 +6,7 @@
 		</tr>
 	</thead>
 	<tbody>
+		<?php if (isset($user)): ?>
 		<tr>
 			<td>用户名：</td>
 			<td>
@@ -33,6 +34,14 @@
 				<input type="button" name="submitbtn" class="submitbtn" data-callback="dialogclose" value="提 交">
 			</td>
 		</tr>
+		<?php else: ?>
+			<tr>
+				<td colspan="2" class="ccenter">
+					<?php echo $errmsg; ?>
+				</td>
+			</tr>
+		<?php endif ?>
+		
 	</tbody>
 </table>
 </form>

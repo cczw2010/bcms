@@ -23,12 +23,13 @@ Class Home{
 				array('name'=>'系统管理','con'=>'setting','subs'=>array(
 																		'info'=>'系统信息',
 																		'cache'=>'缓存处理',
-																		'logs'=>'log日志')),
-				
+																		'logs'=>'log日志',
+																		'dbback'=>'数据备份')),
 				array('name'=>'用户管理','con'=>'user','subs'=>array(
+																		'ugroup'=>'用户分组',
 																		'users'=>'用户列表',
 																		'mgroup'=>'管理员分组',
-																		'ugroup'=>'用户分组',
+																		'managers'=>'管理员列表',
 																		'ulogs'=>'登录日志')),
 				array('name'=>'内容管理','con'=>'article','subs'=>array(
 																		'lists'=>'文章列表',
@@ -42,13 +43,7 @@ Class Home{
 																		'comm'=>'评论管理')),
 				array('name'=>'订单管理','con'=>'order','subs'=>array(
 																		'lists'=>'订单列表')),
-				// array('name'=>'问答系统','con'=>'answers','subs'=>array(
-				// 														'panswers'=>'问答列表')),
-				// array('name'=>'流程管理','con'=>'process','subs'=>array(
-				// 														'pprocess'=>'流程列表',
-				// 														'pprocescate'=>'流程分类')),
 				array('name'=>'高级扩展','con'=>'setting','subs'=>array(
-																		// 'pproductprop'=>'属性管理',
 																		'citys'=>'区域管理',
 																		'verify'=>'敏感词汇',
 																		'thirdlogincfg'=>'第三方登陆',
@@ -62,7 +57,7 @@ Class Home{
 			foreach ($datas['menuTree'] as $mkey=>&$submenus) {
 				foreach ($submenus['subs'] as $pkey => $pname) {
 					// if (preg_match('/'.$GLOBALS['cur_controller'].'-'.$GLOBALS['cur_method'].'($|,)/', $this->rights)==0) {
-					if (preg_match('/m-'.$submenus['con'].'-'.$pkey.'($|,)/', $this->rights)==0) {
+					if (preg_match('/'.$submenus['con'].'-'.$pkey.'($|,)/', $this->rights)==0) {
 						unset($submenus['subs'][$pkey]);
 					}
 				}

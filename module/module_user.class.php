@@ -10,7 +10,9 @@ final class Module_User{
 	const TADRESS = 't_user_address';
 	const TFRIEND = 't_follow';
 	const PASSPERFIX = 'ssms_'; // 密码前缀
-
+	// 分组类型 0 管理员分组， 1 普通用户分组
+	const TYPE_USER = 1;
+	const TYPE_MANAGER = 0;
 	static public $statuss = array(0=>'锁定',1=>'正常',2=>'未完善');
 	/**
 	 * 登录,并更新登录信息

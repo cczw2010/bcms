@@ -106,9 +106,8 @@
 				$datas['mysqldump'] = $mysqldump;
 				$datas['savepath'] = $savepath;
 				die(json_encode($datas));
-			}else{
-				$this->view->load('manage/m_dbback',$datas);
 			}
+			$this->view->load('manage/m_dbback');
 		}
 		// 区域管理
 		public function citys(){
