@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','porderedit'); ?>">
+<form action="/manage/order/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="1000" >
 	<thead>
 		<tr>
@@ -75,7 +75,7 @@
 </form>
 <script>
 	$(function(){
-		initTinymce("#ordercontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css');
+		initTinymce("#ordercontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
 	});
 	
 </script>

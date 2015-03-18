@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','ppropedit'); ?>">
+<form action="/manage/product/propedit/">
 <table class="tablebox formtable" border="0"  width="80%"  cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>

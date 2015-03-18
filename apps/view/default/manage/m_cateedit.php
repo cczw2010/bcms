@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','pcateedit'); ?>">
+<form action="/manage/category/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>

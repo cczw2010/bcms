@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::buid('manage','pcommedit') ;?>">
+<form action="/manage/comment/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="1000" >
 	<thead>
 		<tr>
@@ -9,15 +9,13 @@
 		<tr>
 			<td>评分：</td>
 			<td>
-				<input name="scroe"  value=" <?=(isset($oitem)?$oitem['score']:0);?>" >
+				<input name="score"  value=" <?=isset($oitem)?$oitem['score']:0;?>" >
 			</td>
 		</tr>
 		<tr>
-			<td>消息*：</td>
+			<td>内容*：</td>
 			<td>
-			<textarea name="message" id="" cols="30" rows="10">
-				<?php echo isset($oitem)?$oitem['message']:''; ?>
-			</textarea>
+			<textarea name="message" id="" cols="30" rows="10"><?php echo isset($oitem)?$oitem['message']:''; ?></textarea>
 		</tr>
 		<tr>
 			<td>状态:</td>

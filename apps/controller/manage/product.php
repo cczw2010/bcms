@@ -1,6 +1,6 @@
 <?php
 // 商品管理类
-class MProduct{
+class Product{
 	const ERRNAME = '_x_errmsg';
 	// 品牌管理
 	public function brands(){
@@ -29,10 +29,10 @@ class MProduct{
 		// 分类
 		Uri::setPrevPage();
 
-		return $datas;
+		$this->view->load('manage/m_brands',$datas);
 	}
 	// 编辑品牌
-	public function bedit(){
+	public function brandedit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
@@ -47,7 +47,7 @@ class MProduct{
 			// logo文件,只取第一个logo
 			$uplodify_fpaths = Uri::post('uplodify_fpaths');
 			$uplodify_fnames = Uri::post('uplodify_fnames');
-			if (!empty($uplodify_fpaths)) {
+			if (!empty($uplodify_fpaths[0])) {
 				$attrs['logo'] = $uplodify_fpaths[0].'/'.$uplodify_fnames[0];
 			}
 			$ret = Module_Brand::setItem($attrs,$id);
@@ -61,7 +61,7 @@ class MProduct{
 						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Brand::TNAME
 						));
 			}
-			Uri::build('manage','pbrands',false,true);
+			Uri::build('manage/product','brands',false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
@@ -73,13 +73,13 @@ class MProduct{
 				$datas['oitem'] = $ret['data'];
 			}else{
 				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
-				Uri::build('manage','pbrands',false,true);
+				Uri::build('manage/product','brands',false,true);
 			}
 		}
-		return $datas;
+		$this->view->load('manage/m_brandedit',$datas);
 	}
 	// 删除品牌
-	public function bdel(){
+	public function branddel(){
 		$params = Uri::getParams();
 		$params = $params['params'];
 		if (count($params)>0) {
@@ -97,7 +97,7 @@ class MProduct{
 		Uri::redirect(Uri::getPrevPage());
 	}
 	// 商品列表
-	public function products(){
+	public function lists(){
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$page = !empty($params[0])?$params[0]:1;
@@ -147,10 +147,10 @@ class MProduct{
 		$brands = Module_Brand::getItems(false,'order by name',-1);
 		$brandid = isset($filter['brandid'])?$filter['brandid']:'';
 		$datas['brandoptions'] = SForm::build_options($brands['list'],'id','name',$brandid);
-		return $datas;
+		$this->view->load('manage/m_products',$datas);
 	}
 	// 编辑商品
-	public function pedit(){
+	public function edit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
@@ -173,7 +173,7 @@ class MProduct{
 					'lastdate'=>$t,
 				);
 			if($id == 0){
-				$SUSER = Module_User::getloginUser();
+				$SUSER = Module_User::getloginUser(true);
 				$attrs['userid']  = $SUSER['id'];
 				$attrs['username']  = $SUSER['username'];
 				$attrs['sales']  = 0;
@@ -202,7 +202,7 @@ class MProduct{
 						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Product::TNAME
 						));
 			}
-			Uri::build('manage','pproducts',false,true);
+			Uri::build('manage/product','lists',false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
@@ -214,7 +214,7 @@ class MProduct{
 				$datas['oitem'] = $ret['data'];
 			}else{
 				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
-				Uri::build('manage','pproducts',false,true);
+				Uri::build('manage/product','lists',false,true);
 			}
 		}
 		// 分类
@@ -227,10 +227,10 @@ class MProduct{
 		$brandid = isset($datas['oitem'])?$datas['oitem']['brandid']:'';
 		$datas['brandoptions'] = SForm::build_options($brands['list'],'id','name',$brandid);
 
-		return $datas;
+		$this->view->load('manage/m_productedit',$datas);
 	}
 	// 删除商品
-	public function pdel(){
+	public function del(){
 		$params = Uri::getParams();
 		$params = $params['params'];
 		if (count($params)>0) {
@@ -247,14 +247,85 @@ class MProduct{
 		// 不管删除成功与否直接跳转
 		Uri::redirect(Uri::getPrevPage());
 	}
+	// 文章分类管理
+	public function cate(){
+		Uri::setPrevPage();
+		Uri::redirect('/manage/category/lists/?appid='.Module_Product::APPID);
+	}
+	// 
+	public function comm(){
+		Uri::setPrevPage();
+		Uri::redirect('/manage/comment/lists/?appid='.Module_Product::APPID);
+	}
 	// 商品属性管理
-	public function pprop(){
+	public function prop(){
 		$datas = array('appid'=>Module_Product::APPID);
 		$props = Module_Prop::getItems($datas,false,-1);
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['props'] = $props['list'];
 		$datas['appname']=Module_Product::APPNAME;
 		Uri::setPrevPage();
-		return $datas;
+		$this->view->load('manage/m_prop',$datas);
+	}
+	// 编辑属性
+	public function propedit(){
+		// 表单提交
+		if (isset($_POST['id'])) {
+			$id = Uri::post('id',0);
+			$appid = Uri::post('appid',0);
+			$ret = Module_Prop::setItem(array('name'=>Uri::post('name'),
+																		'vals'=>Uri::post('vals'),
+																		'status'=>Uri::post('status'),
+																		'appid'=>$appid,
+																		'desc'=>Uri::post('desc'),),$id);
+			if ($ret['code']<0) {
+				Helper::setSession(self::ERRNAME,$ret['msg']);
+			}else{
+				// 添加日志
+				Module_log::setItem(array('modulename'=>Module_Prop::APPNAME,
+						'moduleid'=>Module_Prop::APPID,
+						'key'=>($id==0?'新增':'更新'),
+						'message'=>'操作id '.($id==0?$ret['data']:$id).';分类对应模块APPID '.$appid.';操作库:'.Module_Prop::TNAME
+						));
+			}
+			Uri::redirect(Uri::getPrevPage());
+		}
+		// 不是表单提交
+		$params = Uri::getParams();
+		$params = $params['params'];
+		$datas = array();
+		if (count($params)>0) {
+			$ret = Module_Prop::getItem($params[0]);
+			if ($ret['code']>0) {
+				$datas['prop'] = $ret['data'];
+			}else{
+				Helper::setSession(self::ERRNAME,$ret['msg']);
+				Uri::redirect(Uri::getPrevPage());
+			}
+		}
+		$this->view->load('manage/m_propedit',$datas);
+	}
+	// 删除属性
+	public function propdel(){
+		$params = Uri::getParams();
+		$params = $params['params'];
+		if (count($params)>0) {
+			$cnt = $GLOBALS['db']->result('select count(*) as cnt from '.Module_Prop::TPITEM.' where propid ='.$params[0]);
+			if ($cnt>0) {
+				Helper::setSession(self::ERRNAME,'该属性被其他模块使用着，不能直接删除。');
+			}else{
+				$ret = Module_Prop::delItem($params[0]);
+				// 添加日志
+				if ($ret['code']>0) {
+					Module_log::setItem(array('modulename'=>Module_Prop::APPNAME,
+							'moduleid'=>Module_Prop::APPID,
+							'key'=>'删除',
+							'message'=>'操作id '.$params[0].$appid.';操作库:'.Module_Prop::TNAME
+							));
+				}
+			}
+		}
+		// 不管删除成功与否直接跳转
+		Uri::redirect(Uri::getPrevPage());
 	}
 }

@@ -32,19 +32,16 @@ Class Home{
 																		'ulogs'=>'登录日志')),
 				array('name'=>'内容管理','con'=>'article','subs'=>array(
 																		'lists'=>'文章列表',
-																		'particlecate'=>'文章分类',
-																		'particlecomm'=>'评论管理')),
+																		'cate'=>'文章分类',
+																		'comm'=>'评论管理')),
 				array('name'=>'商品管理','con'=>'product','subs'=>array(
-																		'pbrands'=>'品牌列表',
-																		'pproducts'=>'商品列表',
-																		'pproductcate'=>'商品分类',
-																		'pproductcomm'=>'评论管理')),
-				// array('name'=>'礼包管理','con'=>'gift','subs'=>array(
-				// 														'pgifts'=>'礼包列表',
-				// 														'pgifts/cate'=>'礼包分类',
-				// 														'pgifts/comm'=>'评论管理')),
+																		'lists'=>'商品列表',
+																		'cate'=>'商品分类',
+																		'brands'=>'品牌列表',
+																		'prop'=>'商品属性',
+																		'comm'=>'评论管理')),
 				array('name'=>'订单管理','con'=>'order','subs'=>array(
-																		'porders'=>'订单列表')),
+																		'lists'=>'订单列表')),
 				// array('name'=>'问答系统','con'=>'answers','subs'=>array(
 				// 														'panswers'=>'问答列表')),
 				// array('name'=>'流程管理','con'=>'process','subs'=>array(
@@ -52,11 +49,13 @@ Class Home{
 				// 														'pprocescate'=>'流程分类')),
 				array('name'=>'高级扩展','con'=>'setting','subs'=>array(
 																		// 'pproductprop'=>'属性管理',
-																		'pcitys'=>'区域管理',
-																		'pverify'=>'敏感词汇',
-																		'pappcfgs'=>'第三方登陆',
-																		'ppayments'=>'支付管理',
-																		'pmails'=>'SMTP邮件',))
+																		'citys'=>'区域管理',
+																		'verify'=>'敏感词汇',
+																		'thirdlogincfg'=>'第三方登陆',
+																		'payment'=>'支付管理')),
+				array('name'=>'邮件管理','con'=>'mail','subs'=>array(
+																		'cfg'=>'SMTP邮件配置',
+																		'send'=>'发送邮件')),
 			);
 		//根据用户权限过滤一下
 		if ($this->loginuser['group']!=Module_Group::GROUP_SUPER) {

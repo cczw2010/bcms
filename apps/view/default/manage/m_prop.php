@@ -32,8 +32,8 @@
 										<td>'.$prop['desc'].'</td>
 										<td>'.Module_Prop::$statuss[$prop['status']].'</td>
 										<td class="">
-											<span data-url="'.Uri::build('manage','ppropedit',array($prop['id'])).'" data-flusharea=".tabbody.active"  class="xicon ajaxbtn">_</span>
-											<span data-url="'.Uri::build('manage','ppropdel',array($prop['id'])).'" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子类敬意并删除！同时如果已有其他资源关联到本类，请慎重！" class="xicon ajaxbtn">Y</span>
+											<span data-url="/manage/product/propedit/'.$prop['id'].'" data-flusharea=".tabbody.active"  class="xicon ajaxbtn">_</span>
+											<span data-url="/manage/product/propdel/'.$prop['id'].'" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子类敬意并删除！同时如果已有其他资源关联到本类，请慎重！" class="xicon ajaxbtn">Y</span>
 										</td></tr>';
 						}
 					?>
@@ -41,7 +41,7 @@
 			</table>			
 		</div>
 		<div class="tabbody">
-			<form action="<?php echo Uri::build('manage','ppropedit'); ?>">
+			<form action="/manage/product/propedit/">
 			<table class="tablebox formtable" border="0" width="80%" cellpadding="10" cellspacing="1" >
 				<thead>
 					<tr>

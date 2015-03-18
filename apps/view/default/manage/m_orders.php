@@ -11,7 +11,7 @@
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','porders'); ?>">
+				<form action="/manage/order/lists/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
@@ -56,8 +56,8 @@
 									<td>'.Module_Order::$statuss[$item['status']].'</td>
 									<td>'.date('Y-m-d H:i:s',$item['createdate']).'</td>
 									<td>
-									<span data-url="'.Uri::build('manage','porderedit',array($item['id'])).'"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','porderdel',array($item['id'])).'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
+									<span data-url="/manage/order/edit/'.$item['id'].'"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/order/del/'.$item['id'].'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
 									</td>';
 						}
 					}

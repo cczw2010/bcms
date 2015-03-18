@@ -11,7 +11,7 @@
 	</ul>
 	<div class="flex">
 		<div class="tabbody active">
-			<form action="<?php echo Uri::build('manage','pverify'); ?>">
+			<form action="/manage/setting/verify/">
 			<table class="tablebox formtable" width="400" border="0" cellpadding="5" cellspacing="1" >
 				<tbody>
 					<tr>

@@ -1,5 +1,5 @@
 <div class="info"><span class="xicon mr10">R</span> tips:sdk都做了一些修改，改为从数据库中获取配置信息</div>
-<form action="<?php echo Uri::build('manage','pappcfgedit'); ?>">
+<form action="/manage/setting/thirdloginedit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="80%" >
 	<thead>
 		<tr>

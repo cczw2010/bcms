@@ -6,13 +6,13 @@
 	?>
 	<ul class="boxs">
 		<li class="tablabel active">商品列表</li>
-		<li class="tablabel"><span class="xicon">g</span><span data-url="<?php echo Uri::build('manage','pproductedit'); ?>" class="ajaxbtn">新增</span></li>
+		<li class="tablabel"><span class="xicon">g</span><span data-url="/manage/product/edit" class="ajaxbtn">新增</span></li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','pproducts'); ?>">
+				<form action="/manage/product/lists/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">分类：</label>
 				<select name="cateid" id="">
@@ -57,7 +57,7 @@
 						<th width="30">收藏</th>
 						<th width="30">喜欢</th>
 						<th width="30">热门</th>
-						<th width="100">创建时间</th>
+						<th width="110">创建时间</th>
 						<th width="40">状态</th>
 						<th width="120">操作</th>
 					</tr>
@@ -79,9 +79,9 @@
 									<td>'.date('Y-m-d H:i',$item['createdate']).'</td>
 									<td>'.Module_Product::$statuss[$item['status']].'</td>
 									<td>
-									<span data-url="'.Uri::build('manage','pproductcomm').'?objid='.$item['id'].'"  class="ajaxbtn">评论</span>
-									<span data-url="'.Uri::build('manage','pproductedit',array($item['id'])).'"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','pproductdel',array($item['id'])).'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
+									<span data-url="/manage/product/comm/?objid='.$item['id'].'"  class="ajaxbtn">评论</span>
+									<span data-url="/manage/product/edit/'.$item['id'].'"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/product/del/'.$item['id'].'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
 									</td>';
 						}
 					}

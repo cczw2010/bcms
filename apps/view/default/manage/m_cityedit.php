@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','pcityedit'); ?>">
+<form action="/manage/city/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>

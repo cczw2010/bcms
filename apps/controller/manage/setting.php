@@ -110,6 +110,11 @@
 				$this->view->load('manage/m_dbback',$datas);
 			}
 		}
+		// 区域管理
+		public function citys(){
+			Uri::setPrevPage();
+			Uri::redirect('/manage/city/lists/?appid=0');
+		}
 		// 敏感词
 		public function verify(){
 			$datas = array();
@@ -126,7 +131,13 @@
 			if ($ret['code']==1) {
 				$datas['oitem'] = $ret['data'];
 			}
-			return $datas;
+			$this->view->load('manage/m_pverify',$datas);
+		}
+		//支付方式
+		public function payment(){
+			$pays = Module_Payment::getItems(array('status'=>1));
+			$datas = array('items'=>$pays['list']);
+			$this->view->load('manage/m_payments',$datas);
 		}
 		// 支付方式编辑
 		public function payedit(){
@@ -147,7 +158,13 @@
 			$key = Uri::get('key');
 			$ret = Module_Payment::getItemByKey($key);
 			$datas = array('oitem'=>$ret['data']);
-			return $datas;
+			$this->view->load('manage/m_paymentedit',$datas);
+		}
+		// 第三方登陆配置页
+		public function thirdlogincfg(){
+			$pays = Module_ThirdLogin::getAppCfgs();
+			$datas = array('items'=>$pays['list']);
+			$this->view->load('manage/m_appcfgs',$datas);
 		}
 		// 第三方登陆配置编辑
 		public function thirdloginedit(){
@@ -172,6 +189,6 @@
 			$key = Uri::get('key');
 			$ret = Module_ThirdLogin::getAppCfgByKey($key);
 			$datas = array('oitem'=>$ret['data']);
-			return $datas;
+			$this->view->load('manage/m_appcfgedit',$datas);
 		}
 	}

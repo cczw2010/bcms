@@ -1,6 +1,6 @@
 <?php
 	// 管理订单页面处理类
-	class M_Order{
+	class Order{
 		const ERRNAME = '_x_errmsg';
 		// 获取订单列表
 		public function lists(){
@@ -37,7 +37,7 @@
 			$datas['options'] = SForm::build_options_simple(Module_Order::$statuss,$curstatus);
 			Uri::setPrevPage();
 
-			return $datas;
+			$this->view->load('manage/m_orders',$datas);
 		}
 		// 编辑订单，没有新增
 		public function edit(){
@@ -74,7 +74,7 @@
 								'message'=>'订单更新,操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Order::TNAME
 								));
 					}
-					Uri::build('manage','porders',false,true);
+					Uri::build('manage/order','lists',false,true);
 				}else{
 					showmessage($ret1['msg']);
 				}
@@ -90,10 +90,10 @@
 					$datas['options'] = SForm::build_options_simple(Module_Order::$statuss,$datas['oitem']['status']);
 				}else{
 					Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
-					Uri::build('manage','porders',false,true);
+					Uri::build('manage/order','lists',false,true);
 				}
 			}
-			return $datas;
+			$this->view->load('manage/m_orderedit',$datas);
 		}
 		// 删除订单
 		public function del(){

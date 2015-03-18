@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','ppaymentedit'); ?>">
+<form action="/manage/setting/payedit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="1000" >
 	<thead>
 		<tr>

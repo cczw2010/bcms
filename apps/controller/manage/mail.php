@@ -1,9 +1,9 @@
 <?php
 	// 一些配置信息和系统级页面的综合处理
-	class Mails{
+	class Mail{
 		const ERRNAME = '_x_errmsg';
 		// 邮件列表
-		public function mails(){
+		public function lists(){
 			
 		}
 		// 接收邮件
@@ -11,7 +11,7 @@
 
 		}
 		// 邮件配置
-		public function mailcfg(){
+		public function cfg(){
 			$ret = array('code'=>-1,'msg'=>'');
 			// 表单提交
 			if (isset($_POST['id'])) {
@@ -31,14 +31,15 @@
 					$ret['msg'] = '更新成功';
 					$ret['data'] = $ret1['data'];
 				}
-			}else{
-				$ret1 = Module_Mail::getCfg();
-				if ($ret1['code']>0) {
-					$ret['code'] = 1;
-					$ret['data'] = $ret1['data'];
-				}
+				die(json_encode($ret));
 			}
-			return $ret;
+
+			$ret1 = Module_Mail::getCfg();
+			if ($ret1['code']>0) {
+				$ret['code'] = 1;
+				$ret['data'] = $ret1['data'];
+			}
+			$this->view->load('manage/m_mails',$ret);
 		}
 		// 发送邮件
 		public function send(){
@@ -54,7 +55,7 @@
 				);
 				if ($check!==true) {
 					$ret['msg'] = $check;
-					return $ret;
+					die(json_encode($ret));
 				}
 				//
 				$receivers = explode(';', $receiver);
@@ -73,7 +74,8 @@
 				}else{
 					$ret['msg'] = $ret1;
 				}
+				die(json_encode($ret));
 			}
-			return $ret;
+			$this->view->load('manage/m_sendmail',$ret);
 		}
 	}

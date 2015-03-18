@@ -1,7 +1,7 @@
 <div class="info">
 	<span class="xicon mr10">R</span> tips:商品应尽量挂在最底层分类上
 </div>
-<form action="<?php echo Uri::build('manage','pproductedit'); ?>">
+<form action="/manage/product/edit/">
 <table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" width="1000" >
 	<thead>
 		<tr>
@@ -21,11 +21,11 @@
 		</tr>
 		<tr>
 			<td>标题*：</td>
-			<td><input type="text" name="title" value="<?php echo isset($oitem)?$oitem['title']:''; ?>"></td>
+			<td><input type="text" size="50" name="title" value="<?php echo isset($oitem)?$oitem['title']:''; ?>"></td>
 		</tr>
 		<tr>
 			<td>副标题：</td>
-			<td><input type="text" name="subtitle" value="<?php echo isset($oitem)?$oitem['subtitle']:''; ?>"></td>
+			<td><input type="text" size="50" name="subtitle" value="<?php echo isset($oitem)?$oitem['subtitle']:''; ?>"></td>
 		</tr>
 		<tr>
 			<td>成品图：</td>
@@ -89,7 +89,7 @@
 </form>
 <script>
 	$(function(){
-		initTinymce("#productcontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css');
+		initTinymce("#productcontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
 		// 上传
 		var jsons = <?=isset($oitem)?json_encode($oitem['covers']):'[]';?>,
 			objtype = "<?=Module_Product::ATTACHTYPE;?>",idx=0;
@@ -98,14 +98,14 @@
 			addUpload('#coverarea',{
 				objtype:objtype,
 				json:jsons[k],
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload"
 			});
 		}
 		if (idx==0) {
 			addUpload('#coverarea',{
 				objtype:objtype,
 				fileexts:'*.*',
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload"
 			});
 		}
 	});

@@ -73,7 +73,7 @@ class Article{
 					'lastdate'=>$t,
 				);
 			if($id == 0){
-				$SUSER = Module_User::getloginUser();
+				$SUSER = Module_User::getloginUser(true);
 				$attrs['userid']  = $SUSER['id'];
 				$attrs['username']  = $SUSER['username'];
 				$attrs['createdate']  = $t;
@@ -142,5 +142,16 @@ class Article{
 		}
 		// 不管删除成功与否直接跳转
 		Uri::redirect(Uri::getPrevPage());
+	}
+
+	// 文章分类管理
+	public function cate(){
+		Uri::setPrevPage();
+		Uri::redirect('/manage/category/lists/?appid='.Module_Article::APPID);
+	}
+	// 
+	public function comm(){
+		Uri::setPrevPage();
+		Uri::redirect('/manage/comment/lists/?appid='.Module_Article::APPID);
 	}
 }

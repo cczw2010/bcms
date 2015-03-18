@@ -9,14 +9,14 @@
 	}
 	?>
 	<ul class="boxs">
-		<li class="tablabel ajaxbtn active" data-url="<?php echo Uri::build('manage','pcategory').'?appid='.$appid; ?>">分类列表</li>
-		<li class="tablabel ajaxbtn" data-url="<?php echo Uri::build('manage','pcateedit').'?appid='.$appid; ?>" data-flusharea="#newitemarea" >添加新顶级分类</li>
+		<li class="tablabel ajaxbtn active" data-url="/manage/category/lists/?<?php echo 'appid='.$appid; ?>">分类列表</li>
+		<li class="tablabel ajaxbtn" data-url="/manage/category/edit/?<?php echo 'appid='.$appid; ?>" data-flusharea="#newitemarea" >添加新顶级分类</li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
 		<div class="tabbody active" id="itemslist">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','pcategory').'?appid='.$appid; ?>">
+				<form action="/manage/category/lists/?appid=<?php echo $appid;?>">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">父项id：</label>
 				<input type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>">
@@ -61,9 +61,9 @@
 								<td>'.$item['desc'].'</td>
 								<td>'.Module_Category::$statuss[$item['status']].'</td>
 								<td class="">
-									<span data-url="'.Uri::build('manage','pcateedit').'?parentId='.$item['id'].'&appid='.$appid.'" data-flusharea=".tabbody.active"  class="ajaxbtn"><label class="f14">添加子项</label></span>
-									<span data-url="'.Uri::build('manage','pcateedit',array($item['id'])).'" data-flusharea=".tabbody.active"  class="ajaxbtn"><label class="f14">编辑</label></span>
-									<span data-url="'.Uri::build('manage','pcatedel').'?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！"><label class="f14">删除</label></span>
+									<span data-url="/manage/category/edit/?parentId='.$item['id'].'&appid='.$appid.'" data-flusharea=".tabbody.active"  class="ajaxbtn"><label class="f14">添加子项</label></span>
+									<span data-url="/manage/category/edit/'.$item['id'].'" data-flusharea=".tabbody.active"  class="ajaxbtn"><label class="f14">编辑</label></span>
+									<span data-url="/manage/category/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！"><label class="f14">删除</label></span>
 								</td></tr>';
 						}
 					}

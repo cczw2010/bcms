@@ -12,7 +12,7 @@
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','pbrands'); ?>">
+				<form action="/manage/product/brands/">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
@@ -52,8 +52,8 @@
 									<td>'.mb_substr($item['desc'],0,50).'...</td>
 									<td>'.Module_Article::$statuss[$item['status']].'</td>
 									<td>
-									<span data-url="'.Uri::build('manage','pbrandedit',array($item['id'])).'"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','pbranddel',array($item['id'])).'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
+									<span data-url="/manage/product/brandedit/'.$item['id'].'"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/product/branddel/'.$item['id'].'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
 									</td>';
 						}
 					}
@@ -63,7 +63,7 @@
 			</table>			
 		</div>
 		<div class="tabbody">
-			<form action="<?php echo Uri::build('manage','pbrandedit'); ?>">
+			<form action="/manage/product/brandedit/">
 			<table class="tablebox formtable" border="0" width="500" cellpadding="10" cellspacing="1" >
 				<thead>
 					<tr>
@@ -122,6 +122,6 @@
 				objtype:'brandlogo',
 				hidenew:true,
 				hidedel:true,
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload"
 			});
 </script>

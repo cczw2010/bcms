@@ -1,7 +1,7 @@
 <div class="tabbox groupmain">
 	<ul class="boxs">
 		<?php foreach ($items as $item) {
-			echo '<li class="tablabel active"><span class="ajaxbtn" data-url="'.Uri::build('manage','pappcfgedit').'/?key='.$item['key'].'" data-flusharea=".tabbody">'.$item['name'].'</span></li>';
+			echo '<li class="tablabel active"><span class="ajaxbtn" data-url="/manage/setting/thirdloginedit/?key='.$item['key'].'" data-flusharea=".tabbody">'.$item['name'].'</span></li>';
 		}?>
 		<li class="flex"></li>
 	</ul>

@@ -1,4 +1,4 @@
-<form action="<?php echo Uri::build('manage','pbrandedit'); ?>">
+<form action="/manage/product/brandedit/">
 <table class="tablebox formtable" border="0" width="500" cellpadding="10" cellspacing="1" >
 	<thead>
 		<tr>
@@ -53,6 +53,6 @@
 				objtype:'brandlogo',
 				hidenew:true,
 				hidedel:true,
-				uploadurl:"<?php echo Uri::build('widget','upload')?>"
+				uploadurl:"/manage/widget/upload"
 			});
 </script>

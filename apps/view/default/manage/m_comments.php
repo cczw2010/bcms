@@ -1,18 +1,18 @@
 <div class="tabbox">
-	<div class="info"><span class="xicon mr10">R</span> tips:评论模块的所在模块的appid是<?=$appid;?></div>
+	<div class="info hidden"><span class="xicon mr10">R</span> tips:评论模块的所在模块的appid是<?=$appid;?></div>
 	<?php
 	if (!empty($errmsg)) {
 		echo	'<div class="errmsg"><span class="xicon mr10">a</span>'.$errmsg.'</div>';
 	}
 	?>
 	<ul class="boxs">
-		<li class="tablabel ajaxbtn active" data-url="<?php echo Uri::build('manage','pcomms').'?appid='.$appid;?>">评论列表</li>
+		<li class="tablabel ajaxbtn active" data-url="/manage/article/comm/?appid=<?php echo $appid;?>">评论列表</li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
 		<div class="tabbody active">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','pcomms').'?appid='.$appid ;?>">
+				<form action="/manage/comment/lists/?appid=<?php echo $appid;?>">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
@@ -49,13 +49,13 @@
 						foreach ($items['list'] as $id => $item) {
 							echo '<tr><td>'.$id.'</td>
 									<td>'.$item['username'].'</td>
-									<td>'.$item['scroe'].'</td>
+									<td>'.$item['score'].'</td>
 									<td>'.mb_substr($item['message'],0,100).'...</td>
 									<td>'.date('Y-m-d H:i:s',$item['createdate']).'</td>
 									<td>'.Module_Comment::$statuss[$item['status']].'</td>
 									<td>
-									<span data-url="'.Uri::build('manage','pcommedit').'?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','pcommdel').'?id='.$item['id'].'&appid='.$appid.'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
+									<span data-url="/manage/comment/edit/'.$item['id'].'/'.$appid.'"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/comment/del/'.$item['id'].'/'.$appid.'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</span>
 									</td>';
 						}
 					}

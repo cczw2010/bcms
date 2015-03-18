@@ -6,14 +6,14 @@
 	?>
 	<ul class="boxs">
 		<!-- <li class="tablabel active">区域模块</li> -->
-		<li class="tablabel ajaxbtn active" data-url="<?php echo Uri::build('manage','pcitys').'?appid='.$appid; ?>">区域列表</li>
-		<li class="tablabel ajaxbtn" data-url="<?php echo Uri::build('manage','pcityedit').'?appid='.$appid; ?>" data-flusharea="#newitemarea" >添加新顶级区域</li>
+		<li class="tablabel ajaxbtn active" data-url="/manage/city/lists/?appid=<?php echo $appid; ?>">区域列表</li>
+		<li class="tablabel ajaxbtn" data-url="/manage/city/edit/?appid=<?php echo $appid; ?>" data-flusharea="#newitemarea" >添加新顶级区域</li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
 		<div class="tabbody active" id="itemslist">
 			<div class="filter">
-				<form action="<?php echo Uri::build('manage','pcitys').'?appid='.$appid; ?>">
+				<form action="/manage/city/lists/?appid=<?php echo $appid; ?>">
 				<span class="xicon mr10">!</span>筛选：
 				<label class="ml20" for="">父项id：</label>
 				<input type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>">
@@ -60,9 +60,9 @@
 								<td>'.$item['desc'].'</td>
 								<td>'.Module_Area::$statuss[$item['status']].'</td>
 								<td class="">
-									<span data-url="'.Uri::build('manage','pcityedit').'?parentId='.$item['id'].'&appid='.$appid.'" data-flusharea=".tabbody.active"  class="ajaxbtn">添加子项</span>
-									<span data-url="'.Uri::build('manage','pcityedit',array($item['id'])).'" data-flusharea=".tabbody.active"  class="ajaxbtn">编辑</span>
-									<span data-url="'.Uri::build('manage','pcitydel').'?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</span>
+									<span data-url="/manage/city/edit/?parentId='.$item['id'].'&appid='.$appid.'" data-flusharea=".tabbody.active"  class="ajaxbtn">添加子项</span>
+									<span data-url="/manage/city/edit/'.$item['id'].'" data-flusharea=".tabbody.active"  class="ajaxbtn">编辑</span>
+									<span data-url="/manage/city/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</span>
 								</td></tr>';
 						}
 					}
