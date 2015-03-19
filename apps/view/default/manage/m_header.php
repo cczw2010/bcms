@@ -36,7 +36,6 @@
 				<?php 
 				if (isset($user)) {
 					echo '欢迎您！'.$user['username'].' |
-					 <span class="ajaxbtn dialogbtn"  data-url="'.Uri::build('manage/user','editinfo',array($user['id'])).'">修改个人信息</span> | 
 					 <span class="ajaxbtn dialogbtn"  data-url="'.Uri::build('manage/user','repass').'">修改密码</span> | <a href="'.Uri::build('manage/user','logout').'" title="退出">退出</a>';
 				}else{
 					echo '未登录！';

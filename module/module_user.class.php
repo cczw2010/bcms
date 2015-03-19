@@ -116,40 +116,30 @@ final class Module_User{
 	 * 注册用户
 	 * @param  string $username 必须项目，用户名
 	 * @param  string $password 必须项目，密码
-	 * @param  string $email 必须项目，邮箱
 	 * @param  array  $data    其他附加项键值对
 	 * @return array
 	 */
-	static public function register($username,$password,$email,$data=array()){
+	static public function register($username,$password,$data=array()){
 		$ret=array('code'=>-1,'msg'=>'');
-		$check = FormVerify::rule(
-			array(FormVerify::userName($username,4,30),'用户名必须再4~30个字符之间'),
-			array(Module_Sword::banned($username),'用户名请不要使用敏感词汇'),
-			array(FormVerify::password($password,6,16),'密码必须在6~16个字符之间,允许的符号(|-_字母数字)'),
-			array(FormVerify::email($email),'邮箱格式不正确')
-			);
-		if ($check===true) {
-			//检查是否注册过用户名和邮箱
-			if (self::checkUser('username = "'.$username.'" or email="'.$email.'"')>0) {
-				$ret['msg'] = '很抱歉！用户名或者邮箱已被注册'; 	
-			}else{
-				$password = md5($password);
-				$data['username'] = $username;
-				$data['password'] = $password;
-				$data['email'] = $email;
-				$data['addip'] = Helper::getClientIp();
-				$data['addtime'] = $_SERVER['REQUEST_TIME'];
-
-				$uid = $GLOBALS['db']->insert(self::TNAME,$data);
-				if ($uid>0) {
-					$ret['code'] = 1;
-					$ret['data'] = $uid;
-				}else{
-					$ret['msg'] = '注册失败，请重新输入';
-				}
-			}
+		//检查是否注册过用户名和邮箱
+		if (self::checkUser('username = "'.$username.'"')>0) {
+			$ret['msg'] = '很抱歉！用户名已被注册'; 	
 		}else{
-			$ret['msg'] = $check;
+			$password = md5($password);
+			$cip = Helper::getClientIp();
+			$data['username'] = $username;
+			$data['password'] = $password;
+			$data['addip'] = $cip;
+			$data['lastip'] = $cip;
+			$data['addtime'] = $_SERVER['REQUEST_TIME'];
+			$data['lasttime'] = $_SERVER['REQUEST_TIME'];
+			$uid = $GLOBALS['db']->insert(self::TNAME,$data);
+			if ($uid>0) {
+				$ret['code'] = 1;
+				$ret['data'] = $uid;
+			}else{
+				$ret['msg'] = '注册失败，请重新输入';
+			}
 		}
 		return $ret;
 	}

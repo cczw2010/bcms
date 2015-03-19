@@ -131,12 +131,74 @@ class User{
 
 		$this->view->load('manage/m_managers',$datas);
 	}
+	// 增加|修改管理员
+	public function medit(){
+		if (isset($_POST['id'])) {
+			$ret = array('code'=>-1,'msg'=>'');
+
+			$id = Uri::post('id',0);
+			$group = Uri::post('group',0);
+			$username = Uri::post('username','');
+			$password = Uri::post('password','');
+
+			if ($id>0) {
+				$arrs = array('group'=>$group);
+				if (!empty($password)) {
+					if (FormVerify::password($password,6,16)) {
+						$arrs['password'] = md5($password);
+					}else{
+						$ret['msg'] = '密码必须在6~16个字符之间,允许的符号(-_)字母数字)'; 
+					}
+				}
+				if (empty($ret['msg'])) {
+					if(Module_User::modifyUser($id,$arrs)){
+						$ret['code'] = 1;
+						$ret['msg'] = '编辑成功';							
+					}else{
+						$ret['msg'] = '编辑失败';							
+					}
+				}
+			}else{
+				if (!FormVerify::userName($username,4,30) || !FormVerify::password($password,6,16)) {
+					$ret['msg'] = '用户名必须再4~30个字符之间；密码必须在6~16个字符之间,允许的符号(-_)字母数字)'; 
+				}else{
+					$ret1 = Module_User::register($username,$password,array(
+						'types'=>Module_User::TYPE_MANAGER,
+						'group'=>$group,
+					));
+					if ($ret1['code']>0) {
+						$ret['code'] = 1;
+						$ret['msg'] = '编辑成功';
+					}else{
+						$ret['msg'] = '编辑失败';
+					}
+				}
+			}
+			die(json_encode($ret));
+		}
+		// 不是表单提交
+		$params = Uri::getParams();
+		$params = $params['params'];
+		$datas = array();
+		if (count($params)>0) {
+			$ret = Module_User::getUser($params[0]);
+			if ($ret['code']>0) {
+				$datas['user'] = $ret['data'];
+				$ret = Module_Group::getGroups(array('types'=>Module_Group::TYPE_MANAGER));
+				$datas['groups'] = $ret['list'];
+				$this->view->load('manage/m_medit',$datas);
+			}else{
+				Helper::setSession(self::ERRNAME,'没有相关用户信息');
+				Uri::build('manage/user','managers',false,true);
+			}
+		}
+	}
 	// 用户编辑
 	public function edit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
-			$types = Uri::post('types',Module_User::TYPE_USER);
+			// $types = Uri::post('types',Module_User::TYPE_USER);
 			$username = Uri::post('username');
 			if(mb_strlen($username)>0){
 				$ret = Module_User::modifyUser($id,array('username'=>$username,
@@ -155,78 +217,24 @@ class User{
 			}else{
 				Helper::setSession(self::ERRNAME,'用户名不能为空！');
 			}
-			if ($types == Module_User::TYPE_USER) {
-				Uri::build('manage/user','users',false,true);
-			}else{
-				Uri::build('manage/user','managers',false,true);
-			}
+			Uri::build('manage/user','users',false,true);
 		}
 		// 不是表单提交
 		$params = Uri::getParams();
 		$params = $params['params'];
 		$datas = array();
 		if (count($params)>0) {
-			$types = $params[1]||Module_Group::TYPE_USER;
 			$ret = Module_User::getUser($params[0]);
 			if ($ret['code']>0) {
 				$datas['user'] = $ret['data'];
-				$ret = Module_Group::getGroups(array('types'=>$types));
+				$ret = Module_Group::getGroups(array('types'=>Module_User::TYPE_USER));
 				$datas['groups'] = $ret['list'];
 				$this->view->load('manage/m_useredit',$datas);
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户信息');
-				if ($types == Module_User::TYPE_USER) {
-					Uri::build('manage/user','users',false,true);
-				}else{
-					Uri::build('manage/user','managers',false,true);
-				}
+				Uri::build('manage/user','users',false,true);
 			}
 		}
-	}
-	// 个人信息修改
-	public function editinfo(){
-		// 表单提交
-		if (isset($_POST['id'])) {
-			$ret = array('code'=>-1,'msg'=>'');
-			$id = Uri::post('id',0);
-			$username = Uri::post('username');
-			if(mb_strlen($username)>0){
-				$_ret = Module_User::modifyUser($id,array('username'=>$username,
-																			'email'=>Uri::post('email'),
-																			'sign'=>Uri::post('sign'),
-																			'status'=>Uri::post('status')));
-				if ($_ret) {
-					// 添加日志
-					Module_log::setItem(array('modulename'=>Module_User::APPNAME,
-						'moduleid'=>Module_User::APPID,
-						'key'=>'更新',
-						'message'=>'操作id '.$id.';操作库:'.Module_User::TNAME
-						));
-					$ret['msg'] = '修改成功';
-				}else{
-					$ret['msg'] = '修改失败，请重试';
-				}
-			}else{
-				$ret['msg'] = '用户名不能为空';
-			}
-			die(json_encode($ret));
-		}
-		// 不是表单提交
-		$params = Uri::getParams();
-		$params = $params['params'];
-		$datas = array();
-		if (count($params)>0) {
-			$ret = Module_User::getUser($params[0]);
-			if ($ret['code']>0) {
-				$datas['user'] = $ret['data'];
-			}else{
-				$datas['errmsg'] = '没有相关用户信息';
-			}
-		}
-
-		$ret = Module_Group::getGroups();
-		$datas['groups'] = $ret['list'];
-		$this->view->load('manage/m_userinfoedit',$datas);
 	}
 	// 修改当前用户密码
 	public function repass(){

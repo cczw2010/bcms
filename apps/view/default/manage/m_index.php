@@ -150,11 +150,9 @@
 			// 关闭dialog
 			function dialogclose(){
 				if (dialog) {
-					setTimeout(function(){
-							dialog&&dialog.close();
-							dialog = null;
-						},1000);
-				};
+					dialog&&dialog.close();
+					dialog = null;
+				}
 			}
 			// 清除页面上的编辑器和日历
 			function clearJsObj(wraper){

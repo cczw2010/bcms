@@ -23,12 +23,6 @@
 			<td><input type="text" name="sign" value="<?php echo isset($user)?$user['sign']:''; ?>"></td>
 		</tr>
 		<tr>
-			<td>状态:</td>
-			<td>
-				<?php echo SForm::build_checks_simple(Module_User::$statuss,'status',$user['status'],'radio');?>
-			</td>
-		</tr>
-		<tr>
 			<td colspan="2" class="ccenter">
 				<input type="hidden" name="id" value="<?php echo isset($user)?$user['id']:''; ?>">
 				<input type="button" name="submitbtn" class="submitbtn" data-callback="dialogclose" value="提 交">

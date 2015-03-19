@@ -6,6 +6,7 @@
 	?>
 	<ul class="boxs">
 		<li class="tablabel active">管理员列表</li>
+		<li class="tablabel">新增管理员</li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
@@ -51,7 +52,7 @@
 										<td>'.date('Y-m-d H:i',$user['lasttime']).'</td>
 										<td class="ccenter">'.(Module_User::$statuss[$user['status']]).'</td>
 										<td class="">
-											<span data-url="/manage/user/edit/'.$user['id'].'/'.Module_User::TYPE_MANAGER.'"  data-flusharea=".tabbody.active" class="ajaxbtn">编辑</span>
+											<span data-url="/manage/user/medit/'.$user['id'].'/'.Module_User::TYPE_MANAGER.'" class="ajaxbtn dialogbtn">编辑</span>
 											<span data-url="/manage/user/del/'.$user['id'].'/'.Module_User::TYPE_MANAGER.'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</span>
 										</td></tr>';
 						}
@@ -60,8 +61,45 @@
 				</tbody>
 			</table>			
 		</div>
+		<div class="tabbody">
+			<form action="/manage/user/medit/">
+			<table class="tablebox formtable" border="0" cellpadding="10" cellspacing="1" >
+				<thead>
+					<tr>
+						<th colspan="2">编辑管理员</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>用户名：</td>
+						<td><input type="text" name="username" value=""></td>
+					</tr>
+					<tr>
+						<td>密码：</td>
+						<td><input type="text" name="password" value=""></td>
+					</tr>
+					<tr>
+						<td>用户组：</td>
+						<td><select name="group" >
+							<?php
+								foreach ($groups as $group) {
+									echo '<option value="'.$group['id'].'" '.($cursid==$group['id']?'selected=true':'').' >'.$group['name'].'</option>';
+								}
+							?>
+						</select></td>
+					</tr>
+					<tr>
+						<td colspan="2" class="ccenter">
+							<input type="hidden" name="id" value="">
+							<input type="button" name="submitbtn" class="submitbtn" value="提 交">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</div>
 	</div>
 </div>
 <script>
-	// buildTab('.groupmain');
+	buildTab('.groupmain');
 </script>

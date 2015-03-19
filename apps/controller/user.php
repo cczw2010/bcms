@@ -16,7 +16,51 @@ class User{
 		$datas['user']['avatar']= Module_User::getUserAvatar($this->loginuser['id']);
 		$this->view->load('user_index',$datas);
 	} 
+	// 个人信息修改
+	public function edit(){
+		// 表单提交
+		if (isset($_POST['id'])) {
+			$ret = array('code'=>-1,'msg'=>'');
+			$id = Uri::post('id',0);
+			$username = Uri::post('username');
+			if(mb_strlen($username)>0){
+				$_ret = Module_User::modifyUser($id,array('username'=>$username,
+																			'email'=>Uri::post('email'),
+																			'sign'=>Uri::post('sign'),
+																			'status'=>Uri::post('status')));
+				if ($_ret) {
+					// 添加日志
+					Module_log::setItem(array('modulename'=>Module_User::APPNAME,
+						'moduleid'=>Module_User::APPID,
+						'key'=>'更新',
+						'message'=>'操作id '.$id.';操作库:'.Module_User::TNAME
+						));
+					$ret['msg'] = '修改成功';
+				}else{
+					$ret['msg'] = '修改失败，请重试';
+				}
+			}else{
+				$ret['msg'] = '用户名不能为空';
+			}
+			die(json_encode($ret));
+		}
+		// 不是表单提交
+		$params = Uri::getParams();
+		$params = $params['params'];
+		$datas = array();
+		if (count($params)>0) {
+			$ret = Module_User::getUser($params[0]);
+			if ($ret['code']>0) {
+				$datas['user'] = $ret['data'];
+			}else{
+				$datas['errmsg'] = '没有相关用户信息';
+			}
+		}
 
+		$ret = Module_Group::getGroups();
+		$datas['groups'] = $ret['list'];
+		$this->view->load('user_edit',$datas);
+	}
 	// 用户登陆
 	public function login(){
 		if ($this->loginuser) {
@@ -66,21 +110,28 @@ class User{
 			$username = trim($_POST['username']);
 			$password = trim($_POST['password']);
 			$email = trim($_POST['email']);
-			$cip = Helper::getClientIp();
-			$param = array(
-				'addip'=>$cip,
-				'lastip'=>$cip,
-				'addtime'=>$_SERVER['REQUEST_TIME'],
-				'lasttime'=>$_SERVER['REQUEST_TIME'],
-			);
- 			// 注册
-			$ret = Module_User::register($username,$password,$email,$param);
-			if ($ret['code']>0) {
-				// 登陆跳转
-				$ret = Module_User::login($username,$password);
-				Uri::redirect('/');
+			
+			$check = FormVerify::rule(
+				array(FormVerify::userName($username,4,30),'用户名必须再4~30个字符之间'),
+				array(Module_Sword::banned($username),'用户名请不要使用敏感词汇'),
+				array(FormVerify::password($password,6,16),'密码必须在6~16个字符之间,允许的符号(|-_字母数字)'),
+				array(FormVerify::email($email),'邮箱格式不正确')
+				);
+			if ($check===true) {
+	 			// 注册
+				$ret = Module_User::register($username,$password,array(
+					'email'=>$email,
+					'types'=>Module_User::TYPE_USER,
+				));
+				if ($ret['code']>0) {
+					// 登陆跳转
+					$ret = Module_User::login($username,$password);
+					Uri::redirect('/');
+				}
+				$datas['error'] = $ret['msg'];
+			}else{
+				$datas['error'] = $check;
 			}
-			$datas['error'] = $ret['msg'];
 			
 		}
 		$this->view->load('user_register',$datas);
