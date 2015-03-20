@@ -1,4 +1,4 @@
-# SSMS应用开发框架API文档 `v1.0`
+# BCMS应用开发框架API文档 `v1.0`
 
 ## 一些值得注意的
 * cache和upfiles需要可读写权限，
@@ -61,7 +61,7 @@
 * JS分页(没有使用a标签)
 
 		multiPages($curpage,$psize,$itemcount,$params=false)
-		
+
 ## 应用内方法
 
 * controller中调用 model 
@@ -163,7 +163,7 @@ info:`文件内有详细注释。存加入组（命名空间）的概念，get,s
 ## 数据库操作
 path:/system/libs/db.class.php
 
-info:`文件内有详细注释。`
+info:`文件内有详细注释。$cond参数，标示条件，既可以是条件字符串，也可以是条件数组`
 
 * 数据库连接
 
@@ -218,9 +218,13 @@ info:`文件内有详细注释。`
 
 		$GLOBALS['db']->fetch_all($result,$index='');
 	
-* 根据传入的字段数组，在表中选择数据
+* 根据传入的字段数组，在表中选择数据,$cond可以使条件字符串，也可是条件数组
 
-		$GLOBALS['db']->select($table,$conditions=array(),$index='',$orderby='',$page=1,$psize=20);
+		$GLOBALS['db']->select($table,$cond='',$index='',$orderby='',$page=1,$psize=20);
+
+* 带缓存的 select 方法,就是比其多了一个$ttl参数，来表示数据缓存的时间
+		
+		$GLOBALS['db']->getdata($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0);
  	
 * 根据传入的字段数组，在表中插入一条数据
 
@@ -228,11 +232,11 @@ info:`文件内有详细注释。`
  	
 * 简化的更新函数    
 
-		$GLOBALS['db']->update($table,$arr,$condition='');
+		$GLOBALS['db']->update($table,$arr,$cond='');
 	
 * 简化的删除函数
 
-		$GLOBALS['db']->delete($table,$condition='');
+		$GLOBALS['db']->delete($table,$cond='');
 	
 * 返回结果集中某行某列的值 
 

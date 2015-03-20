@@ -207,7 +207,7 @@ final class Module_ThirdLogin{
 		return $ret;
 	}
 	// 注册账户，并与第三方token生成关联（不检查关联是否重复），并登陆，
-	// $username,$password为空的情况自动注册临时账号，临时密码：ssms_tmp_123456789，注册的临时用户(status = 2)。后期完善时可以提示修改：邮箱，密码，昵称
+	// $username,$password为空的情况自动注册临时账号，临时密码：bcms_tmp_123456789，注册的临时用户(status = 2)。后期完善时可以提示修改：邮箱，密码，昵称
 	// 不为空的情况生成实际用户,状态默认1
 	static function registerAppUser($username='',$password='',$email='',$conds=array()){
 		$ret = array('code'=>-1,'msg'=>'');
@@ -314,7 +314,7 @@ final class Module_ThirdLogin{
 			$ret['msg'] = '编辑成功';
 			// 更新缓存
 			$cachekey = 'xm_appcfg_'.$arrs['key'];
-			$cachgroup = $GLOBALS['config']['db']['group'];
+			$cachgroup = 'setting';
 			$arrs['id'] = $id;
 			$GLOBALS['cache_file']->delete($cachgroup,$cachekey);
 		}
@@ -323,7 +323,7 @@ final class Module_ThirdLogin{
 	// 根据key获取开启的第三方登陆配置,(**带缓存)
 	static function getAppCfgByKey($key){
 		$cachekey = 'xm_appcfg_'.$key;
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		// 检查缓存
 		if(!($ret = $GLOBALS['cache_file']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');

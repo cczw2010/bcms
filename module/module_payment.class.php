@@ -204,7 +204,7 @@ final class Module_Payment{
 	// 根据key获取开启的支付配置，(**自动刷新缓存)
 	static function getItemByKey($key){
 		$cachekey = 'xm_paymentcfg_'.$key;
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		// 检查缓存
 		if(!($datas = $GLOBALS['cache_file']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');
@@ -246,7 +246,7 @@ final class Module_Payment{
 			$ret['msg'] = '编辑成功';
 			// 更新缓存
 			$cachekey = 'xm_paymentcfg_'.$arrs['key'];
-			$cachgroup = $GLOBALS['config']['db']['group'];
+			$cachgroup = 'setting';
 			$arrs['id'] = $id;
 			$GLOBALS['cache_file']->delete($cachgroup,$cachekey);
 		}

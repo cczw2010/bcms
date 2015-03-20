@@ -19,13 +19,11 @@ return array(
 	"def_m"=>'index',
 	
 	// view模板设置，如果设置的缓存（伪静态），请注意这里使用的文件缓存
-	// 模板引擎，可以使用任何以实现的引擎,false混编模式（不缓存，因为本身就符合模板伪静态，挺操蛋的）
+	// 模板引擎，可以使用任何以实现的引擎,false混编模式（推荐）
 	"view"=>array(
 		'version'=>'default',	//引入模板的版本目录（方便多套模板之间切换例如：v1|v2|v3）
-		'engine'=>false,			//模板引擎
+		'engine'=>false,			//模板引擎，其他第三方模板引擎，请在view中增加实现即可
 		'ext'		=>'.php',			//模板后缀
-		'group'	=>'view',			//缓存分组
-		'ttl'		=>3600,				//默认模板缓存时间秒,0代表永不过期,-1不缓存
 	),
 	// 数据库配置
 	'db' => array(
@@ -34,9 +32,8 @@ return array(
 		'port'		=> 3306,
 		'user'		=> 'root',
 		'pass'		=> '123456',
-		'dbname'	=> 'ssms',
+		'dbname'	=> 'bcms',
 		'group'		=>'db',		//缓存分组
-		'ttl'			=>3600,		//默认数据缓存时间（秒）,0代表永不过期,-1不缓存
 	),
 
 	// 缓存配置,default代表默认的缓存,如果为true,则可以通过 $GLOBALS['cache']来访问。都不设置default默认第一个

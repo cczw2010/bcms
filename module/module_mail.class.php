@@ -32,7 +32,7 @@ final class Module_Mail{
 	 * 获取邮件配置信息
 	 */
 	static public function getCfg(){
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		// 检查缓存
 		if(!($ret = $GLOBALS['cache_file']->get($cachgroup,self::CACHEKEY))){
 			$ret =array('code'=>-1,'msg'=>'');
@@ -62,7 +62,7 @@ final class Module_Mail{
 		$ret['msg'] = '更新成功';
 		$ret['data'] = $id;
 		// 删除缓存
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		$GLOBALS['cache_file']->delete($cachgroup,self::CACHEKEY);
 		return $ret;
 	}

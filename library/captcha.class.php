@@ -11,7 +11,7 @@
 class Captcha{
 	
 	const charWidth = 10;//单个字符宽度,根据输出字符大小而变
-	const sessionKey = 'xssms_captcha';//session中保存的名字
+	const sessionKey = 'xbcms_captcha';//session中保存的名字
 	private $width;//宽度
 	private $height; //高度
 	private $codeNum;//验证码字符数量

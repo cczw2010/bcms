@@ -8,7 +8,6 @@
 		user=>,			 （*）用户
 		pass=>,			 （*）密码
 		dbname=>,		  默认库
-		ttl=>,		  	//默认缓存时间秒,0代表永不过期,-1不缓存
  	)
 */
 
@@ -45,10 +44,12 @@ class Db_mysql implements db{
 		if(!isset($this->dbconn)){
 			$this->dbconn = mysql_connect($this->db_host.':'.$this->db_port,$this->db_user,$this->db_pass);
 			if (!$this->dbconn){
-				throw new Exception('数据库连接错误: ' . mysql_error());
+				throw new Exception('数据库服务器连接错误: ' . mysql_error());
 			}else{
 				if (strlen($this->db_name)>0) {
-					$this->select_db($this->db_name);
+					if (!$this->select_db($this->db_name)) {
+						throw new Exception('数据库连接错误: ' . mysql_error());
+					}
 				}
 			}
 		}
@@ -185,6 +186,39 @@ class Db_mysql implements db{
  		}
  		return $vs;
  	}
+
+ /**
+ * 封装的带缓存(使用默认的缓存)的db的select方法,只比select多一个ttl参数
+ * @param  string  				$table   表名
+ * @param  array|string   $cond    条件数组,或者条件字符串
+ * @param  string  				$index   返回结果数组的key索引字段，默认自动数字索引
+ * @param  string  				$orderby 排序方式
+ * @param  integer 				$page    页码如果该值设为-1则表示全部不分页
+ * @param  integer 				$psize   每页大小
+ * @param  integer				$ttl	 	缓存时间（秒），	默认0不缓存，
+ * @return array					结果数组
+ */
+	public function getdata($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0){
+		$data=false;
+		$cachegroup;
+		$cachekey;
+		if ($ttl>0) {
+			$_cond = $GLOBALS['db']->build_where($cond);
+			$cachegroup = $GLOBALS['config']['db']['group'];
+			$cachekey = $_cond.'-'.$index.'-'.$orderby.'-'.$page.'-'.$psize;
+			$cachekey = $table.'-'.md5($cachekey);
+
+			$data = $GLOBALS['cache']->get($cachegroup,$cachekey);
+			if ($data) {
+				return $data;
+			}
+		}
+		$data = $GLOBALS['db']->select($table,$cond,$index,$orderby,$page,$psize);
+		if ($ttl>0) {
+			$GLOBALS['cache']->set($cachegroup,$cachekey,$data,$ttl);
+		}
+		return $data;
+	}
  	/**
  	 * 返回结果集中某行某列的值
  	 * @param  string|mysqlquery $query mysql字符串或者查询的query结果

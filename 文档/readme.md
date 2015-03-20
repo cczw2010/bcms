@@ -1,4 +1,4 @@
-# SSMS V1.0   build by awen  email:71752352@qq.com
+# BCMS V1.0   build by awen  email:71752352@qq.com
 
 ## 说明
 
@@ -14,20 +14,33 @@
 
 2 mvc 
  
-	传统的mvc结构，当然你完全可以不这么写
+传统的mvc结构，当然你完全可以不这么写
 
 3 resetful
 	
-	url支持原始模式和reset模式，默认reset模式（'/'）,详情可查看config.php
+url支持原始模式和reset模式，默认reset模式（'/'）,详情可查看config.php
+
+4 缓存策略
+
+数据库操作与缓存处理绑定使用，api支持是否缓存的选项，当然有些系统配置是变更自动更新缓存的，例如第三方登陆列表，支付配置信息，敏感词模块，邮件配置等，详情关注后台【缓存处理】
+
 
 ## 安装
 	
-	backup中包含了元数据库的备份，直接导入即可。
-	config.php文件中设置该系统的所有配置。
-	nginx.conf 需要配置到nginx中
-	后台地址：http://xxxx:xx/manage
-	前台：木有暂时，自己写吧
-	超级管理员：admin 密码：123456
++ 在nginx或者apache中设置index.php为唯一入口,参考根目录下的nginx和apache配置文件
++ 目录权限， upfiles,cache,backup目录必须拥有可读写权限
++ php扩展，用户头像和图片处理库SImage依托于imagick,请注意安装
++ 本程序用的是utf-8字符，所以数据库的默认配置中的字符请设置成utf-8
++ 本程序中的一些第三方控件要求服务器short_open_tag=On,还好一般都开启的，另外需要openssl支持
++ 很多网站系统都忽略了一个问题，就是富文本编辑器编辑的效果和目标展示页面的效果不一致，原因就是后台编辑的时候页面的css样式和展示页面的css样式不一致。
+  initTinymce是网站初始化富文本编辑器的包装js方法，支持注入编辑器css文件参数，请根据展示页面的样式修改该方法的参数，以确保编辑器中与最终显示的时候效果一致（很多网站系统都忽略了该问题）
++ backup中包含了元数据库的备份，直接导入即可。
+
+config.php文件中设置该系统的所有配置。
+nginx.conf 需要配置到nginx中
+后台地址：http://xxxx:xx/manage
+超级管理员：admin 密码：123456
+
 
 ## gulp
 

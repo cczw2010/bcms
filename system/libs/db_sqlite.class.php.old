@@ -24,7 +24,7 @@ class Db_sqlite implements Db{
     	}
     	if (isset($config)) {
     		$this->dbpath=isset($config['dbpath'])?$config['dbpath']:'./';
-    		$this->dbname=isset($config['dbname'])?$config['dbname']:'ssms.db';
+    		$this->dbname=isset($config['dbname'])?$config['dbname']:'bcms.db';
 
             //建立连接
             $this->connect();

@@ -5,6 +5,8 @@ Class Home{
 	// 首页打印一些测试数据
 	public function index(){
 		// dump($GLOBALS);
+		$data = $GLOBALS['db']->getdata('t_user',array('status'=>1,'types'=>1),'','',1,20,60);
+		dump($data);
 		// $ret = Module_Notify::setItem(array('userid'=>3,'objid'=>1,'objtype'=>'test','msg'=>'这是测试'));
 		
 		// $ret = Module_Notify::setItem(array('status'=>1),30);
@@ -40,7 +42,7 @@ Class Home{
 		// $datas = $model_home->getIndex();
 		// dump($datas);
 
- 		// $this->view->load('homeindex',$datas);
+ 		$this->view->load('homeindex',$datas);
 	}
 
 	public function test(){

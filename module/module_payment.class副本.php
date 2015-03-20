@@ -14,7 +14,7 @@ final class Module_Payment{
 	// 根据id获取支付配置，(**带缓存)
 	static function getItem($id){
 		$cachekey = 'xm_paymentcfg_'.$id;
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		// 检查缓存
 		if(!($datas = $GLOBALS['cache']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');
@@ -60,7 +60,7 @@ final class Module_Payment{
 			$ret['msg'] = '编辑成功';
 			// 更新缓存
 			$cachekey = 'xm_paymentcfg_'.$id;
-			$cachgroup = $GLOBALS['config']['db']['group'];
+			$cachgroup = 'setting';
 			$arrs['id'] = $id;
 			$GLOBALS['cache']->delete($cachgroup,$cachekey);
 		}

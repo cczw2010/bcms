@@ -8,7 +8,7 @@
 	// 获取验证过滤数据，带缓存
 	public static function getItem(){
 		$cachekey = 'xm_db_verify';
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		// 检查缓存
 		if(!($datas = $GLOBALS['cache_file']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');
@@ -43,7 +43,7 @@
 		$ret['data'] = $id;
 		// 删除缓存
 		$cachekey = 'xm_db_verify';
-		$cachgroup = $GLOBALS['config']['db']['group'];
+		$cachgroup = 'setting';
 		$GLOBALS['cache_file']->delete($cachgroup,$cachekey);
 		return $ret;
 	}

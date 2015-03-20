@@ -136,3 +136,6 @@ function multiPages($curpage,$psize,$itemcount,$params=false,$isajax=false){
 	$jumppage.='" value="'.$curpage.'"  class="jpagebtn"><'.$tag.' class="jpagebtn jpagecan" '.$urlattr.'="'.$url.$curpage.'?'.$query.'">GO</'.$tag.'>';
 	return '<div class="jpages">'.$pre.$pagemid.$next.$jumppage.'</div>';
 }
+
+
+

@@ -28,7 +28,7 @@ function access($attr, $path, $data, $volume) {
 
 /**
  * modify by awen
- * 将配置文件抽离到ssms框架中的配置文件中,并且根据登陆用户id定位路径(能到这的肯定登陆了)
+ * 将配置文件抽离到bcms框架中的配置文件中,并且根据登陆用户id定位路径(能到这的肯定登陆了)
  */
 $sconfig = require('../../../config.php');
 $spath = $sconfig['elfinder']['path'];

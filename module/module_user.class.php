@@ -9,7 +9,7 @@ final class Module_User{
 	const TLOG = 't_user_log';
 	const TADRESS = 't_user_address';
 	const TFRIEND = 't_follow';
-	const PASSPERFIX = 'ssms_'; // 密码前缀
+	const PASSPERFIX = 'bcms_'; // 密码前缀
 	// 分组类型 0 管理员分组， 1 普通用户分组
 	const TYPE_USER = 1;
 	const TYPE_MANAGER = 0;
