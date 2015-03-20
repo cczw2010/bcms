@@ -1,7 +1,9 @@
 # BCMS应用开发框架API文档 `v1.0`
 
 ## 一些值得注意的
-* cache和upfiles需要可读写权限，
+* cache和upfiles,backup需要可读写权限，
+
+* resetful的间隔符为/
 
 * 配置文件:根目录下的config.php
 

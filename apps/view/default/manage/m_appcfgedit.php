@@ -145,7 +145,7 @@
 		<tr>
 			<td>回调地址*：</td>
 			<td>
-				<div>(请注意与网站的uritype相符合的url类型。默认地址："http://xxxx/user/appcallback")</div>
+				<div>(默认地址："http://xxxx/user/appcallback")</div>
 				<input type="text" size="50" name="callback" value="<?=$oitem['callback']; ?>">
 			</td>
 		</tr>

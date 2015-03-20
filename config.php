@@ -6,9 +6,6 @@
 return array(
 	"sitename"=> 'BCMS',	//网站名称
 	"debug" =>true,		//是否显示应用级报错（调试）和常规错误警告
-	//设置url参数的默认reset展现方式“-|/”，(默认的规则是/)
-	//值得注意的是,请不要随便更改该配置，除非你想重新建立一个新项目，否则以前写死的静态url就全报销了，而后台就写死了不少
-	"uritype"=>'/',
 	
 	// controller和view和model文件夹名称
 	"folder_c"=>'controller',

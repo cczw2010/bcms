@@ -4,15 +4,12 @@ Class Uri{
 	const key_p = "_p";				//controller的二级目录
 	const key_c = "_c";				//controller的key
 	const key_m = "_m";				//method的key
-	public static $uritype;
+	public static $uritype = '/';
 	private static $def_c;
 	private static $def_m;
 	private $params;
 	private static $instance = null;
 	private function __construct(){
-		$uritype = $GLOBALS['config']['uritype'];
-
-		self::$uritype = empty($uritype)?'/':$uritype;
 		self::$def_c = $GLOBALS['config']['def_c'];
 		self::$def_m = $GLOBALS['config']['def_m'];
 		$this->params = $this->resolve();
