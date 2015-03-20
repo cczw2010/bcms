@@ -6,7 +6,6 @@ Class Home{
 	public function index(){
 		// dump($GLOBALS);
 		$data = $GLOBALS['db']->getdata('t_user',array('status'=>1,'types'=>1),'','',1,20,60);
-		dump($data);
 		// $ret = Module_Notify::setItem(array('userid'=>3,'objid'=>1,'objtype'=>'test','msg'=>'这是测试'));
 		
 		// $ret = Module_Notify::setItem(array('status'=>1),30);

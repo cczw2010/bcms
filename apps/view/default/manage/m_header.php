@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 	<head>
 		<meta charset="utf-8" />
-		<title>BCMS后台管理系统 v1.0</title>
+		<title><?php echo $GLOBALS['config']['sitename'];?>后台管理系统 v1.0</title>
 		<meta name="description" content="bcms 后台管理系统" />
 		<meta name="email" content="71752352@qq.com" />
     <meta name="Author" content="awen" />
@@ -30,7 +30,7 @@
 		<!-- 顶部 -->
 		<div class="topbar posrel clearfix p10">
 			<div class="shbox-l f20 ">
-				 BCMS后台管理系统
+				 <?php echo $GLOBALS['config']['sitename'];?>后台管理系统
 			</div>
 			<div class="shbox-flex cright">
 				<?php 

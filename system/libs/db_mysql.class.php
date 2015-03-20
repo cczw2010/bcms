@@ -8,6 +8,7 @@
 		user=>,			 （*）用户
 		pass=>,			 （*）密码
 		dbname=>,		  默认库
+		group=>,		  缓存组
  	)
 */
 
@@ -21,6 +22,7 @@ class Db_mysql implements db{
 	private $db_user;
 	private $db_pass;
 	private $db_name;
+	private $cache_group;
 
 	function __construct($config=array()){
 		if (isset(self::$instance)) {
@@ -34,6 +36,7 @@ class Db_mysql implements db{
 		$this->db_user=isset($config['user'])?$config['user']:'admin';
 		$this->db_pass=isset($config['pass'])?$config['pass']:'';
 		$this->db_name=isset($config['dbname'])?$config['dbname']:'';
+		$this->cache_group=isset($config['group'])?$config['group']:'db';
 		//建立连接
 		$this->connect();
 		//设置编码 （考虑换成其他方式）
@@ -200,22 +203,20 @@ class Db_mysql implements db{
  */
 	public function getdata($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0){
 		$data=false;
-		$cachegroup;
 		$cachekey;
 		if ($ttl>0) {
-			$_cond = $GLOBALS['db']->build_where($cond);
-			$cachegroup = $GLOBALS['config']['db']['group'];
+			$_cond = $this->build_where($cond);
 			$cachekey = $_cond.'-'.$index.'-'.$orderby.'-'.$page.'-'.$psize;
 			$cachekey = $table.'-'.md5($cachekey);
 
-			$data = $GLOBALS['cache']->get($cachegroup,$cachekey);
+			$data = $GLOBALS['cache']->get($this->cache_group,$cachekey);
 			if ($data) {
 				return $data;
 			}
 		}
-		$data = $GLOBALS['db']->select($table,$cond,$index,$orderby,$page,$psize);
+		$data = $this->select($table,$cond,$index,$orderby,$page,$psize);
 		if ($ttl>0) {
-			$GLOBALS['cache']->set($cachegroup,$cachekey,$data,$ttl);
+			$GLOBALS['cache']->set($this->cache_group,$cachekey,$data,$ttl);
 		}
 		return $data;
 	}

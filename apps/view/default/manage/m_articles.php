@@ -49,16 +49,16 @@
 			<table class="tablebox" width="100%" border="0" cellpadding="5" cellspacing="1" >
 				<thead>
 					<tr>
-						<th width="20">id</th>
+						<th width="50">id</th>
 						<th width="">标题</th>
-						<th width="60">作者</th>
+						<th width="70">作者</th>
 						<th width="30">浏览</th>
 						<th width="30">评论</th>
 						<th width="30">收藏</th>
 						<th width="30">喜欢</th>
 						<th width="30">置顶</th>
 						<th width="30">热门</th>
-						<th width="100">创建时间</th>
+						<th width="120">创建时间</th>
 						<th width="40">状态</th>
 						<th width="120">操作</th>
 					</tr>
