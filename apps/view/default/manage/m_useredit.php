@@ -35,7 +35,7 @@
 		<tr>
 			<td>状态:</td>
 			<td>
-				<?php echo SForm::build_checks_simple(Module_User::$statuss,'status',$user['status'],'radio');?>
+				<?php echo SForm::buildChecksSimple(Module_User::$statuss,'status',$user['status'],'radio');?>
 			</td>
 		</tr>
 		<tr>

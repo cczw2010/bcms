@@ -146,7 +146,7 @@ class Product{
 		// 品牌列表
 		$brands = Module_Brand::getItems(false,'order by name',-1);
 		$brandid = isset($filter['brandid'])?$filter['brandid']:'';
-		$datas['brandoptions'] = SForm::build_options($brands['list'],'id','name',$brandid);
+		$datas['brandoptions'] = SForm::buildOptions($brands['list'],'id','name',$brandid);
 		$this->view->load('manage/m_products',$datas);
 	}
 	// 编辑商品
@@ -225,7 +225,7 @@ class Product{
 		// 品牌列表
 		$brands = Module_Brand::getItems(false,'order by name',-1);
 		$brandid = isset($datas['oitem'])?$datas['oitem']['brandid']:'';
-		$datas['brandoptions'] = SForm::build_options($brands['list'],'id','name',$brandid);
+		$datas['brandoptions'] = SForm::buildOptions($brands['list'],'id','name',$brandid);
 
 		$this->view->load('manage/m_productedit',$datas);
 	}

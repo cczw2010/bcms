@@ -27,7 +27,7 @@
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
 					<option value="-1" >全部</option>
-					<?php echo SForm::build_options_simple(Module_Product::$statuss,isset($filter['status'])?$filter['status']:'') ?>
+					<?php echo SForm::buildOptionsSimple(Module_Product::$statuss,isset($filter['status'])?$filter['status']:'') ?>
 				</select>
 				<label class="ml20" for="">推荐：</label>
 				<select name="ishot" id="">

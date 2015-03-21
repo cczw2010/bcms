@@ -58,7 +58,7 @@
 						<select name="language" >
 							<?php 
 								$language = isset($data)?$data['language']:'';
-								echo SForm::build_options_simple(array('zh'=>'中文','en'=>'英文'),$language) ;
+								echo SForm::buildOptionsSimple(array('zh'=>'中文','en'=>'英文'),$language) ;
 							?>
 						</select>
 						</td>

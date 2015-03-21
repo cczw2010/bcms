@@ -17,7 +17,7 @@
 				<label class="ml20" for="">状态：</label>
 				<select name="status" id="">
 					<option value="-1" >全部</option>
-					<?=SForm::build_options_simple(Module_User::$statuss,$conds['status']);?>
+					<?=SForm::buildOptionsSimple(Module_User::$statuss,$conds['status']);?>
 				</select>
 				<label class="ml20"  for="">用户名：</label>
 				<input type="text" name="username" size="10" value="<?php echo isset($_REQUEST['username'])?$_REQUEST['username']:'' ?>">

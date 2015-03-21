@@ -9,7 +9,7 @@
 		 * @param  array  $extarr 一些其他属性的键值对数组
 		 * @return string   返回html字符串
 		 */
-		static function build_input($name,$val='',$type='text',$extarr=false){
+		static function buildInput($name,$val='',$type='text',$extarr=false){
 			$html = '<input name="'.$name.'" value="'.$val.'" type="'.$type.'"';
 			if (!empty($extarr)) {
 				foreach ($extarr as $attrname => $attrval) {
@@ -28,7 +28,7 @@
 		 * @param  string $selectval 初始选中的值
 		 * @return string            返回html字符串
 		 */
-		static function build_options($items,$valkey,$namekey,$selectval=''){
+		static function buildOptions($items,$valkey,$namekey,$selectval=''){
 			$html = '';
 			if (!empty($items)) {
 				foreach ($items as $item) {
@@ -44,7 +44,7 @@
 		 * @param  string $selectval 初始选中的值
 		 * @return string            返回html字符串
 		 */
-		static function build_options_simple($items,$selectval=''){
+		static function buildOptionsSimple($items,$selectval=''){
 			$html = '';
 			if (!empty($items)) {
 				foreach ($items as $k=>$v) {
@@ -63,7 +63,7 @@
 		 * @param  string $type				checkbox|radio
 		 * @return string							返回html字符串
 		 */
-		static function build_checks($items,$name,$valkey,$namekey,$selectval='',$type='checkbox'){
+		static function buildChecks($items,$name,$valkey,$namekey,$selectval='',$type='checkbox'){
 			$html = '';
 			if (!empty($items)) {
 				foreach ($items as $item) {
@@ -82,7 +82,7 @@
 		 * @param  string $type				checkbox|radio
 		 * @return string							返回html字符串
 		 */
-		static function build_checks_simple($items,$name,$selectval='',$type='checkbox'){
+		static function buildChecksSimple($items,$name,$selectval='',$type='checkbox'){
 			$html = '';
 			if (!empty($items)) {
 				foreach ($items as  $k =>$v) {

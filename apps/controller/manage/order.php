@@ -34,7 +34,7 @@
 			$datas['items'] = Module_Order::getItems($conds,'order by id desc',$page,$psize);
 			$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);
 			$curstatus = isset($pageParams['status'])?$pageParams['status']:-1;
-			$datas['options'] = SForm::build_options_simple(Module_Order::$statuss,$curstatus);
+			$datas['options'] = SForm::buildOptionsSimple(Module_Order::$statuss,$curstatus);
 			Uri::setPrevPage();
 
 			$this->view->load('manage/m_orders',$datas);
@@ -87,7 +87,7 @@
 				$ret = Module_Order::getItem($params[0]);
 				if ($ret['code']>0) {
 					$datas['oitem'] = $ret['data'];
-					$datas['options'] = SForm::build_options_simple(Module_Order::$statuss,$datas['oitem']['status']);
+					$datas['options'] = SForm::buildOptionsSimple(Module_Order::$statuss,$datas['oitem']['status']);
 				}else{
 					Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getLastSql());
 					Uri::build('manage/order','lists',false,true);

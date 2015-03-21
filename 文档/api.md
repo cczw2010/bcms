@@ -325,7 +325,7 @@ info:`文件内有详细注释。`
 		$captcha = new Captcha();
 		$captcha->buildAndExportImage();
 
-* 检查验证码
+* 检查最后一次生成的验证码
 
 		Captcha::check($val);
 		
@@ -438,23 +438,23 @@ info:`全部都是静态方法，文件内有详细注释。扩展中`
 
 * 创建input
 		
-		SForm::build_input($name,$val='',$type='text',$extarr=false)
+		SForm::buildInput($name,$val='',$type='text',$extarr=false)
 
 * 创建option下拉菜单,基于二维数组
 		
-		SForm::build_options($items,$valkey,$namekey,$selectval='')
+		SForm::buildOptions($items,$valkey,$namekey,$selectval='')
 
 * 创建option下拉菜单,基于一维数组
 		
-		SForm::build_options($items,$selectval='')
+		SForm::buildOptionsSimple($items,$selectval='')
 
 * 创建checkbox或者radio组,基于二维数组
 		
-		SForm::build_checks($items,$name,$valkey,$namekey,$selectval='',$type='checkbox')
+		SForm::buildChecks($items,$name,$valkey,$namekey,$selectval='',$type='checkbox')
 
 * 创建checkbox或者radio组,基于一维数组
 		
-		SForm::build_checks_simple($items,$name,$selectval='',$type='checkbox')
+		SForm::buildChecksSimple($items,$name,$selectval='',$type='checkbox')
 
 ##FormVerify 表单验证类
 path:/liberay/formverify.class.php
