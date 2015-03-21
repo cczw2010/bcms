@@ -23,11 +23,12 @@ Class Home{
 				array('name'=>'系统管理','con'=>'setting','subs'=>array(
 																		'info'=>'系统信息',
 																		'cache'=>'缓存处理',
-																		'logs'=>'log日志',
-																		'dbback'=>'数据备份')),
+																		'dbback'=>'数据备份',
+																		'logs'=>'操作日志')),
 				array('name'=>'用户管理','con'=>'user','subs'=>array(
 																		'ugroup'=>'用户分组',
-																		'users'=>'用户列表',
+																		'users'=>'用户列表')),
+				array('name'=>'管理员信息','con'=>'user','subs'=>array(
 																		'mgroup'=>'管理员分组',
 																		'managers'=>'管理员列表',
 																		'ulogs'=>'登录日志')),
@@ -66,6 +67,28 @@ Class Home{
 				}
 			}
 		}
+		// 获取运营统计信息
+		$datas['yysj'] = array();
+		$today_start = strtotime(date("Y-m-d"));
+		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_user group by status');
+		$datas['yysj']['user_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['user_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_user where types=1 and status>0 and addtime>='.$today_start);
+
+		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_article group by status');
+		$datas['yysj']['article_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['article_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_article  where status>0 and createdate>='.$today_start);
+
+		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_product group by status');
+		$datas['yysj']['product_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['product_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_product where status>0 and createdate>='.$today_start);
+
+		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_order group by status');
+		$datas['yysj']['order_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['order_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_order where status<4 and createdate>='.$today_start);
+
+		// dump($datas['yysj']);
+		// dump(session_name(),session_id());
+
  		$this->view->load('manage/m_index',$datas);
 	}
 }

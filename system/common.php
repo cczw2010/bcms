@@ -1,10 +1,4 @@
 <?php
-// 设置内部字符编码
-mb_internal_encoding('UTF-8');
-// 开启session
-if (!isset($_SESSION)) {
-	session_start();
-}
 // 加载配置文件
 $GLOBALS['config'] = require(BASEPATH.DIRECTORY_SEPARATOR.'config.php');
 // 异常处理
@@ -102,7 +96,7 @@ function multiPages($curpage,$psize,$itemcount,$params=false,$isajax=false){
 	if (empty($itemcount)) {
 		return '';
 	}
-	$url = '/'.$GLOBALS['cur_cpath'].'/'.$GLOBALS['cur_controller'].'/'.$GLOBALS['cur_method'].'/';
+	$url = '/'.$GLOBALS['cur_cpath'].Uri::$uritype.$GLOBALS['cur_controller'].Uri::$uritype.$GLOBALS['cur_method'].Uri::$uritype;
 	$query = http_build_query($params);
 	$tag = $isajax?'span':'a';
 	$urlattr = $isajax?'data-url':'href';

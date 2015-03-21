@@ -53,7 +53,7 @@ class User{
 			}
 		}
 		// $datas['thirdapp'] = Module_ThirdLogin::getThirdLoginHTML();
-		// dump($GLOBALS['db']->getlastsql());
+		// dump($GLOBALS['db']->getLastSql());
 		$this->view->load('manage/m_ulogin',$datas);
 	}
 	// 退出登陆
@@ -375,7 +375,7 @@ class User{
 			if ($ret['pcnt']>0) {
 				$datas['group'] = current($ret['list']);
 			}else{
-				Helper::setSession(self::ERRNAME,'没有相关用户组信息'.$GLOBALS['db']->getlastsql());
+				Helper::setSession(self::ERRNAME,'没有相关用户组信息'.$GLOBALS['db']->getLastSql());
 				Uri::build('manage/user','ugroup',false,true);
 			}
 		}

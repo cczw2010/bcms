@@ -17,15 +17,14 @@ interface Db{
 	//关闭连接
 	public function close();
 	//选择操作数据库   
-	public function select_db($dbname);
+	public function selectDB($dbname);
 	/*创建添加新的数据库*/  
-	public function create_db($dbname);
+	public function createDB($dbname);
 	//获取当前数据库详情
-	public function get_db_info();
+	public function getDBInfo();
 	//返回上一次sql操作语句
-	public function getlastsql();
+	public function getLastSql();
 	/*---------------------------------------------------------------------------------
-  函数名 	：query($sql)    
   作 用 	：数据库执行语句，可执行查询添加修改删除等任何sql语句    
   参 数 	：$sql(sql语句)    
   返回值 	：结果集 result   实 例：无 
@@ -34,20 +33,19 @@ interface Db{
 	//清空结果集
 	public function free($result);
 	//返回上一次insert操作生成的id
-	public function insert_id();
+	public function insertId();
 	//返回insert,update,delete影响的记录数
-	public function affected_rows();
+	public function affectedRows();
 	//返回select返回的记录数
-	public function num_rows($result);
+	public function numRows($result);
 	//从结果集中获取一个行作为关联数组返回
-	public function fetch_array($result);
+	public function fetchArray($result);
 	//从结果集中获取一个行作为数字索引数组返回
-	public function fetch_assoc($result);
+	public function fetchAssoc($result);
 	//将整个结果集转为关联数组返回
 	//$index 每行数据都将以$index列的值为索引，如fetch_all('id'),那么所有的数据都将以id为索引,默认数字索引
-	public function fetch_all($result,$index='');
+	public function fetchAll($result,$index='');
 	/*---------------------------------------------------------------------------------
-	函数名 	：select($table,$conds=array())
 	作 用 	：根据传入的字段数组，在表中选择数据    
 	参 数 	：$conds(条件字段数组||字符串)  ,键值中可以直接写入><!=like等值 ，
 					如果键为or则键值为or所对应的语句，只能有一个or  
@@ -58,21 +56,18 @@ interface Db{
 	-----------------------------------------------------------------------------------*/
  	public function select($table,$conds=array(),$index='',$orderby="",$page=1,$psize=20);
 	/*---------------------------------------------------------------------------------
-	函数名 	：insert($table,$arr=array())
 	作 用 	：根据传入的字段数组，在表中插入一条数据    
 	参 数 	：$arr(字段数组)    
 	返回值 	：insert的id
 	-----------------------------------------------------------------------------------*/
  	public function insert($table,$arr);
  	/*---------------------------------------------------------------------------------
-	函数名 	：update($table,$arr,$conds='')
 	作 用 	：简化的更新函数    
 	参 数 	：$arr(字段键值对数组，如果没有给key，那么直接拼接，有key则拼接) ,$conds(条件字段数组||字符串)  ,键值中可以直接写入><!=like等值 ，如果键为or则键值为or所对应的语句，只能有一个or  
 	返回值 	：无
 	-----------------------------------------------------------------------------------*/
 	public function update($table,$arr,$conds='');
 	/*---------------------------------------------------------------------------------
-	函数名 	：delete($table,$conds='')
 	作 用 	：简化的删除函数    
 	参 数 	：$conds(条件字段数组||字符串)  ,键值中可以直接写入><!=like等值 ，如果键为or则键值为or所对应的语句，只能有一个or  
 	返回值 	：boolean
@@ -80,7 +75,6 @@ interface Db{
 	public function delete($table,$conds='');
 
 	/*---------------------------------------------------------------------------------
- 	函数名 	：result($query, $row = 0, $field = 0)
 	作 用 	：返回结果集中某行某列的值 
 	参 数 	：$query(string|mysqlquery $query mysql字符串或者查询的query结果),$row第几行,$field 第几列
 	返回值 	value
@@ -88,31 +82,30 @@ interface Db{
 	public function result($query, $row = 0, $field = 0);
 
 	/*---------------------------------------------------------------------------------
-	函数名 	：getlasterror()
 	作 用 	：获取上一个sql文本错误    
 	返回值 	：string
 	-----------------------------------------------------------------------------------*/
-	public function getlasterror();
+	public function getLastErr();
 	/*---------------------------------------------------------------------------------
 	作 用 ：构建where字符串
 	参 数 ：array|string $conds 	键值对条件数组或者不带where的条件字符串，
 				 数组情况下如果键值是数字（没有key），那么直接拼接为条件
 	返回值 	：凭借后的字符串
 	-----------------------------------------------------------------------------------*/
-	public function build_where($conds);
+	public function buildWhere($conds);
 	/*---------------------------------------------------------------------------------
 	作 用 ：事务开始
 	返回值 	：void
 	-----------------------------------------------------------------------------------*/
-	public function trans_begin();
+	public function transBegin();
 	/*---------------------------------------------------------------------------------
 	作 用 ：事务提交
 	返回值 	：void
 	-----------------------------------------------------------------------------------*/
-	public function trans_commit();
+	public function transCommit();
 	/*---------------------------------------------------------------------------------
 	作 用 ：事务回滚
 	返回值 	：void
 	-----------------------------------------------------------------------------------*/
-	public function trans_rollback();
+	public function transRollback();
 }

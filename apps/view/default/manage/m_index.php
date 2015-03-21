@@ -31,11 +31,7 @@
 				</div>
 				<!-- 内容展示区域-->
 				<div  id="pageArea">
-						<div class="info"><span class="xicon mr10">R</span> tips:为避免不必要的麻烦，请慎重操作。
-						</div>
-						<?php
-							// dump($GLOBALS);
-						?>
+						
 				</div>
 			</div>
 		</div>

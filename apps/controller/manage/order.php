@@ -89,7 +89,7 @@
 					$datas['oitem'] = $ret['data'];
 					$datas['options'] = SForm::build_options_simple(Module_Order::$statuss,$datas['oitem']['status']);
 				}else{
-					Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
+					Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getLastSql());
 					Uri::build('manage/order','lists',false,true);
 				}
 			}

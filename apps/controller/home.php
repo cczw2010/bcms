@@ -5,7 +5,7 @@ Class Home{
 	// 首页打印一些测试数据
 	public function index(){
 		// dump($GLOBALS);
-		$data = $GLOBALS['db']->getdata('t_user',array('status'=>1,'types'=>1),'','',1,20,60);
+		// $data = $GLOBALS['db']->getdata('t_user',array('status'=>1,'types'=>1),'','',1,20,60);
 		// $ret = Module_Notify::setItem(array('userid'=>3,'objid'=>1,'objtype'=>'test','msg'=>'这是测试'));
 		
 		// $ret = Module_Notify::setItem(array('status'=>1),30);
@@ -116,12 +116,12 @@ Class Home{
 	}
 	// mysql事务，ok
 	public function transaction(){
-		// $GLOBALS['db']->trans_begin();
+		// $GLOBALS['db']->transBegin();
 		// $ret = $GLOBALS['db']->query('INSERT INTO `t_order` (`userid`,`orderno`,`totalfee`,`paymentid`,`shippingid`, `addressid`,`createdate`,`updatedate`) VALUES (1, "E00010", 100.10,2,12,22,123121123,12323499)');
 		// $ret1 = $GLOBALS['db']->query('INSERT INTO `t_order` (`userid`,`orderno`,`totalfee`,`paymentid`,`shippingid`, `addressid`,`createdate`,`updatedate`) VALUES (2, "E00012", 120.10,2,12,22,123121123,12323499)');
 		// $GLOBALS['db']->query('delete from t_order');
-		// $GLOBALS['db']->trans_commit();
-		// $GLOBALS['db']->trans_rollback();
+		// $GLOBALS['db']->transCommit();
+		// $GLOBALS['db']->transRollback();
 	}
 	// 测试其支付，成功但是回调未开发完成
 	public function pay(){

@@ -19,7 +19,7 @@ final class Module_Category{
 	static public function getCate($id){
 		$ret = array('code'=>-1,'msg'=>'');
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
-		if ($item = $GLOBALS['db']->fetch_array($query)) {
+		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			$ret['data'] = $item;
 		}else{
@@ -132,7 +132,7 @@ final class Module_Category{
 		}
 		if (isset($ppath)) {
 			$result = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id.' and path rlike "^'.$ppath.'(,|$)"');
-			$rows = $GLOBALS['db']->fetch_all($result);
+			$rows = $GLOBALS['db']->fetchAll($result);
 			if (count($rows)) {
 				return true;
 			}
@@ -144,7 +144,7 @@ final class Module_Category{
 	 */
 	static public function checkChild($id){
 		$result = $GLOBALS['db']->query("select id from ".self::TNAME.' where parentId = '.$id);
-		$rows = $GLOBALS['db']->num_rows($result);
+		$rows = $GLOBALS['db']->numRows($result);
 		return !!$rows;
 	}
 	/**
@@ -157,7 +157,7 @@ final class Module_Category{
 			$path = $cate['data']['path'].','.$id;
 			$GLOBALS['db']->query("delete from ".self::TNAME.' where id='.$id.' or path rlike "^'.$path.'(,|$)"');
 			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affected_rows();
+			$ret['data'] = $GLOBALS['db']->affectedRows();
 		}else{
 			$ret['msg']='分类不存在';
 		}
@@ -185,7 +185,7 @@ final class Module_Category{
 			$_path = '0';
 			$_depth = 0;
 		}
-		$where = $GLOBALS['db']->build_where($cond);
+		$where = $GLOBALS['db']->buildWhere($cond);
 		if (empty($where)) {
 			$where = ' where path rlike "^'.$_path.'(,|$)"';
 		}else{
@@ -218,7 +218,7 @@ final class Module_Category{
 	 		if ($cnt>0) {
 	 			$sql = 'select *,concat(path,",",id) as _order from '.self::TNAME.$where.$limit;
 				$query = $GLOBALS['db']->query($sql);
-				$vs['items'] = $GLOBALS['db']->fetch_all($query,'id');
+				$vs['items'] = $GLOBALS['db']->fetchAll($query,'id');
 	 		}else{
 	 			$vs['items'] = array();
 	 		}

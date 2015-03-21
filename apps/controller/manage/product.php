@@ -72,7 +72,7 @@ class Product{
 			if ($ret['code']>0) {
 				$datas['oitem'] = $ret['data'];
 			}else{
-				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
+				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getLastSql());
 				Uri::build('manage/product','brands',false,true);
 			}
 		}
@@ -213,7 +213,7 @@ class Product{
 			if ($ret['code']>0) {
 				$datas['oitem'] = $ret['data'];
 			}else{
-				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
+				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getLastSql());
 				Uri::build('manage/product','lists',false,true);
 			}
 		}

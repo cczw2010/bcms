@@ -114,7 +114,7 @@ class Article{
 			if ($ret['code']>0) {
 				$datas['oitem'] = $ret['data'];
 			}else{
-				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getlastsql());
+				Helper::setSession(self::ERRNAME,$ret['msg'].$GLOBALS['db']->getLastSql());
 				Uri::build('manage/article','lists',false,true);
 			}
 		}

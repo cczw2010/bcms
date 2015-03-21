@@ -96,7 +96,7 @@ class User{
 			}
 		}
 		$datas['thirdapp'] = Module_ThirdLogin::getThirdLoginHTML();
-		// dump($GLOBALS['db']->getlastsql());
+		// dump($GLOBALS['db']->getLastSql());
 		$this->view->load('user_login',$datas);
 	}
 

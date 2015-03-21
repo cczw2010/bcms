@@ -13,7 +13,7 @@ class Module_Log{
 	static public function getItem($id){
 		$ret = array('code'=>-1,'msg'=>'');
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
-		if ($item = $GLOBALS['db']->fetch_array($query)) {
+		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			$ret['data'] = $item;
 		}else{
@@ -88,7 +88,7 @@ class Module_Log{
 		if ($cate['code']>0) {
 			$GLOBALS['db']->query("delete from ".self::TNAME.' where id='.$id);
 			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affected_rows();
+			$ret['data'] = $GLOBALS['db']->affectedRows();
 		}else{
 			$ret['msg']='内容不存在';
 		}
@@ -104,7 +104,7 @@ class Module_Log{
 		$ret = array('code'=>-1,'msg'=>'');
 		$GLOBALS['db']->delete(self::TNAME,$cond);
 		$ret['code'] = 1;
-		$ret['data'] = $GLOBALS['db']->affected_rows();
+		$ret['data'] = $GLOBALS['db']->affectedRows();
 		return $ret;
 	}
 }

@@ -5,9 +5,9 @@
 
 		public function info(){
 			$datas = array();
-			$datas['sinfo'] = Helper::getSystemInfo();
-			$datas['winfo'] = Helper::getSiteInfo();
-			$datas['dbinfo'] = $GLOBALS['db']->get_db_info();
+			$datas['sinfo'] = Sysinfo::getSystemInfo();
+			$datas['winfo'] = Sysinfo::getSiteInfo();
+			$datas['dbinfo'] = $GLOBALS['db']->getDBInfo();
 			$datas['uainfo'] = new Useragent();
 			$this->view->load('manage/m_info',$datas);
 		}

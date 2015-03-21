@@ -209,7 +209,7 @@ final class Module_Payment{
 		if(!($datas = $GLOBALS['cache_file']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');
 			$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where status>0 and `key`="'.$key.'"');
-			if ($item = $GLOBALS['db']->fetch_array($query)) {
+			if ($item = $GLOBALS['db']->fetchArray($query)) {
 				$ret['code'] = 1;
 				$ret['data'] = $item;
 			}else{

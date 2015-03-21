@@ -66,7 +66,7 @@ final class Module_User{
 						'useragent' => $_SERVER['HTTP_USER_AGENT'],
 						);
 					$GLOBALS['db']->insert(self::TLOG,$param1);
-					// dump($GLOBALS['db']->getlastsql());die();
+					// dump($GLOBALS['db']->getLastSql());die();
 					$ret['code'] = 1;
 					$ret['data'] = $user;
 				}
@@ -151,7 +151,7 @@ final class Module_User{
 		return isset($_SESSION[$session])?$_SESSION[$session]:false;
 	}
 	/**
-	 *刷新登陆用户缓存,比如修改用户密码，签名等的时候还是很有必要的
+	 *手动刷新登陆用户缓存,比如修改用户密码，签名等的时候还是很有必要的
 	 */
 	static public function refreshLoginUser($ismanager=false){
 		$session = $ismanager?'_s_manager':'_s_user';
@@ -168,7 +168,6 @@ final class Module_User{
 	 * 退出登陆
 	 */
 	static public function logout($ismanager=false){
-		// Helper::getSession('_s_user',true);
 		if ($ismanager) {
 			unset($_SESSION['_s_manager']);
 		}else{
@@ -196,7 +195,7 @@ final class Module_User{
 	static public function getUser($id){
 		$ret = array('code'=>-1,'msg'=>'');
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
-		if ($item = $GLOBALS['db']->fetch_array($query)) {
+		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			$ret['data'] = $item;
 		}else{
@@ -212,7 +211,7 @@ final class Module_User{
 	static public function getUserByUsername($username){
 		$ret = array('code'=>-1,'msg'=>'');
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where username="'.$username.'"');
-		if ($item = $GLOBALS['db']->fetch_array($query)) {
+		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			$ret['data'] = $item;
 		}else{
@@ -261,7 +260,7 @@ final class Module_User{
 		if ($user['code']>0) {
 			$GLOBALS['db']->query("delete from ".self::TNAME.' where id='.$uid);
 			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affected_rows();
+			$ret['data'] = $GLOBALS['db']->affectedRows();
 		}else{
 			$ret['msg']=$user['msg'];
 		}
@@ -471,7 +470,7 @@ final class Module_User{
 		}else{
 			$GLOBALS['db']->delete(self::TFRIEND,$conds);
 			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affected_rows();
+			$ret['data'] = $GLOBALS['db']->affectedRows();
 		}
 		return $ret;
 	}
@@ -492,7 +491,7 @@ final class Module_User{
 	 * @return 数量
 	 */
 	static public function getFollowsCnt($cond=array()){
-		$where = $GLOBALS['db']->build_where($cond);
+		$where = $GLOBALS['db']->buildWhere($cond);
 		$cnt = $GLOBALS['db']->result('select count(*) from '.self::TFRIEND.$where);
 		return $cnt==null?0:$cnt;
 	}

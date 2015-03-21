@@ -3,10 +3,12 @@
 Class Core_App{
 	//当前的controller实例
 	static $instance=null;
-
+	static $db;
+	static $cache;
+	
 	private function __construct(){
 		// 解析配置文件成成全局,并生成全局的应用相关的变量，包括，app路径，数据类和缓存类句柄
-		$applibs = self::resolveConfig($GLOBALS['config']);
+		self::resolveConfig($GLOBALS['config']);
 		Uri::init();
 		$params = Uri::getParams();
 		// dump($params);die();
@@ -20,7 +22,6 @@ Class Core_App{
 
 		// 生成实际的controller实例
 		$refc = $this->_refcontroller($subpath,$c);
-		// $$uri,$applibs;
 		if ($refc->hasMethod($m)) {
 			$instance = $refc->newInstanceWithoutConstructor();
 			// $instance = $refc->newInstance();
@@ -73,6 +74,8 @@ Class Core_App{
 	}
 	// 解析配置文件，生成所有的应用级实例数组（db,cache。。。）
 	static function resolveConfig($config){
+		// 设置session过期时间
+		Helper::setSessionTTL($config['sessionttl']);
 		// 应用目录
 		$apppath = BASEPATH.DIRECTORY_SEPARATOR.'apps';
 		if (!is_dir($apppath)) {

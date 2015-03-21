@@ -50,7 +50,7 @@ class Db_mysql implements db{
 				throw new Exception('数据库服务器连接错误: ' . mysql_error());
 			}else{
 				if (strlen($this->db_name)>0) {
-					if (!$this->select_db($this->db_name)) {
+					if (!$this->selectDB($this->db_name)) {
 						throw new Exception('数据库连接错误: ' . mysql_error());
 					}
 				}
@@ -64,33 +64,33 @@ class Db_mysql implements db{
 			};
 		}
 	}
-	public function select_db($dbname){
+	public function selectDB($dbname){
 		if(isset($this->dbconn)){
 			return !!mysql_select_db($dbname,$this->dbconn);
 		}
 		return false;
 	}
-	public function create_db($dbname){  
+	public function createDB($dbname){  
 		return $this->query('create database '.$dbname);  
 	}
-	public function get_db_info(){
+	public function getDBInfo(){
 		$ret = array();
 		// 数据库基础信息
 		$result = $this->query('SHOW variables');
-		$ret['db'] = $this->fetch_all($result,'Variable_name');
+		$ret['db'] = $this->fetchAll($result,'Variable_name');
 
 		// 获取所有表的信息
 		$result = $this->query('SHOW TABLE STATUS');
-		$ret['tables']  = $this->fetch_all($result,'Name');
+		$ret['tables']  = $this->fetchAll($result,'Name');
 		
 		return $ret;
 	}
-	public function get_table_info($tablename){
+	public function getTableInfo($tablename){
 		$result = $this->query('SHOW COLUMNS from '.$tablename);
-		$ret = $this->fetch_all($result);
+		$ret = $this->fetchAll($result);
 		return $ret;	
 	}
-	public function getlastsql(){
+	public function getLastSql(){
 		return $this->sql;
 	}
 	public function query($sql){
@@ -103,40 +103,40 @@ class Db_mysql implements db{
 		return false;
 	}
 	public function seek($result,$pos=0){
-		$max=$this->num_rows($result);
+		$max=$this->numRows($result);
 		if ($max>0&&$max>$pos) {
 			mysql_data_seek($result,$pos);
 		}
 	}
-	public function getconn(){
+	public function getConn(){
 		return $this->dbconn;
 	}
 	public function free($result){
 		$result = !empty($result)?$result:$this->result;
 		mysql_free_result($result);
 	}
- 	public function affected_rows(){
+ 	public function affectedRows(){
 		return mysql_affected_rows();
 	}
-	public function insert_id(){
+	public function insertId(){
 		return mysql_insert_id();
 	}
-	public function num_rows($result){
+	public function numRows($result){
 		$result = !empty($result)?$result:$this->result;
 		return mysql_num_rows($result);
 	}
-	public function fetch_array($result){
+	public function fetchArray($result){
 		return mysql_fetch_assoc($result);
 	}
-	public function fetch_assoc($result){
+	public function fetchAssoc($result){
 		return mysql_fetch_row($result);
 	}
- 	public function fetch_all($result,$index=''){
+ 	public function fetchAll($result,$index=''){
  		$ret=array();
  		if ($result) {
 	 		$this->seek($result);
 	 		$index=trim($index);
-	 		while ($row=$this->fetch_array($result)) {
+	 		while ($row=$this->fetchArray($result)) {
 	 			if (strlen($index)>0 && isset($row[$index])) {
 	 				$ret[$row[$index]]=$row;
 	 			}else{
@@ -160,7 +160,7 @@ class Db_mysql implements db{
  		$vs = array('list'=>array(),'pcnt'=>0);
  		$where = '';
  		if (isset($cond)) {
- 			$where=$this->build_where($cond);
+ 			$where=$this->buildWhere($cond);
  		}
  		// 获取总数
  		$cnt = $this->result('select count(*) as num from '.$table.$where);
@@ -184,7 +184,7 @@ class Db_mysql implements db{
  		if ($cnt>$vs['start']) {
  			$sql='select * from '.$table.$where.' '.$vs['orderby'].$limit;
 	 		$result=$this->query($sql);
-	 		$vs['list'] = $this->fetch_all($result,$index);
+	 		$vs['list'] = $this->fetchAll($result,$index);
 	 		$vs['pcnt'] = count($vs['list']);
  		}
  		return $vs;
@@ -201,11 +201,11 @@ class Db_mysql implements db{
  * @param  integer				$ttl	 	缓存时间（秒），	默认0不缓存，
  * @return array					结果数组
  */
-	public function getdata($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0){
+	public function selectCache($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0){
 		$data=false;
 		$cachekey;
 		if ($ttl>0) {
-			$_cond = $this->build_where($cond);
+			$_cond = $this->buildWhere($cond);
 			$cachekey = $_cond.'-'.$index.'-'.$orderby.'-'.$page.'-'.$psize;
 			$cachekey = $table.'-'.md5($cachekey);
 
@@ -258,7 +258,7 @@ class Db_mysql implements db{
 		}  
 		$sql = $sql.' ('.substr($k,0,-1).') VALUES ('.substr($v,0,-1).')';
 		if ($this->query($sql)) {
-			return $this->insert_id();
+			return $this->insertId();
 		}else{
 			return false;
 		}
@@ -283,19 +283,19 @@ class Db_mysql implements db{
 			}
 		}  
 		$sql = substr($sql,0,-1);
-		$sql.=$this->build_where($cond);
+		$sql.=$this->buildWhere($cond);
 		return $this->query($sql);
 	}  
 	//简化的delete  
 	public function delete($table,$cond=''){   
-		$where=$this->build_where($cond);
+		$where=$this->buildWhere($cond);
 		$sql = 'DELETE FROM '.$table.' '.$where;
 		return $this->query($sql);  
 	}
-	public function getlasterror(){
+	public function getLastErr(){
 		return mysql_error();
 	}
-	public function build_where($cond){
+	public function buildWhere($cond){
 		$where="";
 		if (isset($cond)) {
 			if (is_array($cond) && !empty($cond)) {
@@ -323,15 +323,15 @@ class Db_mysql implements db{
 		return $where;
 	}
 	// 事务开始
-	public function trans_begin(){
+	public function transBegin(){
 		$this->query('BEGIN');
 	}
 	// 事务提交
-	public function trans_commit(){
+	public function transCommit(){
 		$this->query('COMMIT');
 	}
 	// 事务回滚
-	public function trans_rollback(){
+	public function transRollback(){
 		$this->query('ROLLBACK');
 	}
 }

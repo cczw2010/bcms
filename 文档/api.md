@@ -177,48 +177,48 @@ info:`文件内有详细注释。$cond参数，标示条件，既可以是条件
 	
 * 选择操作数据库
 
-		$GLOBALS['db']->select_db($dbname);
-		$GLOBALS['db']->create_db($dbname);
+		$GLOBALS['db']->selectDB($dbname);
+		$GLOBALS['db']->createDB($dbname);
 	
 * 获取当前数据库详情
 
-		$GLOBALS['db']->get_db_info();
+		$GLOBALS['db']->getDBInfo();
 	
 * 返回上一次sql操作语句
 
-		$GLOBALS['db']->getlastsql();
+		$GLOBALS['db']->getLastSql();
 	
 * 数据库执行语句，可执行查询添加修改删除等任何sql语句
 
 		$GLOBALS['db']->query($sql);
-	
+
 * 清空结果集
 
 		$GLOBALS['db']->free($result);
 	
 * 返回上一次insert操作生成的id
 
-		$GLOBALS['db']->insert_id();
+		$GLOBALS['db']->insertId();
 	
 * 返回insert,update,delete影响的记录数
 
-		$GLOBALS['db']->affected_rows();
+		$GLOBALS['db']->affectedRows();
 	
 * 返回select返回的记录数
 
-		$GLOBALS['db']->num_rows($result);
+		$GLOBALS['db']->numRows($result);
 	
 * 从结果集中获取一个行作为关联数组返回
 
-		$GLOBALS['db']->fetch_array($result);
+		$GLOBALS['db']->fetchArray($result);
 	
 * 从结果集中获取一个行作为数字索引数组返回
 
-		$GLOBALS['db']->fetch_assoc($result);
+		$GLOBALS['db']->fetchAssoc($result);
 	
 * 将整个结果集转为关联数组返回
 
-		$GLOBALS['db']->fetch_all($result,$index='');
+		$GLOBALS['db']->fetchAll($result,$index='');
 	
 * 根据传入的字段数组，在表中选择数据,$cond可以使条件字符串，也可是条件数组
 
@@ -226,7 +226,7 @@ info:`文件内有详细注释。$cond参数，标示条件，既可以是条件
 
 * 带缓存的 select 方法,就是比其多了一个$ttl参数，来表示数据缓存的时间
 		
-		$GLOBALS['db']->getdata($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0);
+		$GLOBALS['db']->selectCache($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0);
  	
 * 根据传入的字段数组，在表中插入一条数据
 
@@ -246,26 +246,26 @@ info:`文件内有详细注释。$cond参数，标示条件，既可以是条件
 	
 * 获取上一个sql文本错误
 
-		$GLOBALS['db']->getlasterror();
+		$GLOBALS['db']->getLastErr();
 	
 * 构建where字符
 
-		$GLOBALS['db']->build_where($cond);
+		$GLOBALS['db']->buildWhere($cond);
 
 * 事务开始（要求表支持）
 
-		$GLOBALS['db']->trans_begin();
+		$GLOBALS['db']->transBegin();
 
 * 事务提交（结束）（要求表支持）
 
-		$GLOBALS['db']->trans_commit();
+		$GLOBALS['db']->transCommit();
 
 * 事务回滚（结束）（要求表支持）
 
-		$GLOBALS['db']->trans_rollback();
-	
-## Helper类
-path:/liberay/helper.class.php
+		$GLOBALS['db']->transRollback();
+
+## Sysinfo类
+path:/liberay/sysinfo.class.php
 
 info:`全部都是静态方法，文件内有详细注释。`
 
@@ -276,6 +276,12 @@ info:`全部都是静态方法，文件内有详细注释。`
 * 获取站点相关信息
 
 		Helper::getSiteInfo();
+
+	
+## Helper类
+path:/liberay/helper.class.php
+
+info:`全部都是静态方法，文件内有详细注释。`
 		
 * 获取客户端IP
 
@@ -305,6 +311,10 @@ info:`全部都是静态方法，文件内有详细注释。`
 		
 		Helper::getSession($key,$destory);
 		
+* 设置session过期时间,框架默认过期时间可以在配置文件中设置
+
+		Helper::setSessionTTL($ttl=3600,$path='/');
+
 ##Captcha图片验证码类
 path:/liberay/captcha.class.php
 

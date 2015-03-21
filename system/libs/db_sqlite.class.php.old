@@ -7,7 +7,7 @@
 		dbname=>,		  默认库
  	)
 */
-class Db_sqlite implements Db{
+class Db_sqlite{
     private static $instance;
     private $db;
     private $result;
@@ -29,7 +29,7 @@ class Db_sqlite implements Db{
             //建立连接
             $this->connect();
             if (strlen($this->dbname)>0) {
-                $this->select_db($this->dbname);
+                $this->selectDB($this->dbname);
             }
     	}
     }
@@ -39,16 +39,16 @@ class Db_sqlite implements Db{
     public function close(){
     	$this->db->close();
     }
-    public function select_db($dbname){
+    public function selectDB($dbname){
     	$this->db=new Sqlite3($this->dbpath.'/'.$dbname);
     }
-    public function create_db($dbname){
+    public function createDB($dbname){
     	$this->db=new Sqlite3($this->dbpath.'/'.$dbname);
     }
-    public function get_db_info(){
+    public function getDBInfo(){
     	return $this->db->version();
     }
-    public function getlastsql(){
+    public function getLastSql(){
 	   return $this->sql;
     }
     public function query($sql){
@@ -63,7 +63,7 @@ class Db_sqlite implements Db{
     public function free($result){
     	$result->finalize();
     }
-    public function insert_id(){
+    public function insertId(){
     	return $this->db->lastInsertRowID();
     }
     public function affected_rows(){

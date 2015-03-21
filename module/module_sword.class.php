@@ -13,7 +13,7 @@
 		if(!($datas = $GLOBALS['cache_file']->get($cachgroup,$cachekey))){
 			$ret = array('code'=>-1,'msg'=>'');
 			$query = $GLOBALS['db']->query('select * from '.self::TNAME);
-			if ($item = $GLOBALS['db']->fetch_array($query)) {
+			if ($item = $GLOBALS['db']->fetchArray($query)) {
 				$ret['code'] = 1;
 				$ret['data'] = $item;
 			}else{

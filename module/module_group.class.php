@@ -37,7 +37,7 @@ final class Module_Group{
 	static public function getGroup($id){
 		$ret = array('code'=>-1,'msg'=>'');
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
-		if ($item = $GLOBALS['db']->fetch_array($query)) {
+		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			$ret['data'] = $item;
 		}else{
@@ -118,7 +118,7 @@ final class Module_Group{
 		if ($group['code']>0) {
 			$GLOBALS['db']->query("delete from ".self::TNAME.' where id='.$id);
 			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affected_rows();
+			$ret['data'] = $GLOBALS['db']->affectedRows();
 		}else{
 			$ret['msg']=$group['msg'];
 		}
