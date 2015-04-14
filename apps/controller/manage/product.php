@@ -2,6 +2,25 @@
 // 商品管理类
 class Product{
 	const ERRNAME = '_x_errmsg';
+	function __construct(){
+		$this->loginuser = Module_User::getloginUser(true);
+		if (empty($this->loginuser)) {
+			if ($GLOBALS['cur_method']!='login') {
+				Uri::build('manage/user','login',false,true);
+			}
+		}else{
+			if ($GLOBALS['cur_method']=='login') {
+				Uri::build('manage/home','index',false,true);
+			}
+			/////////////////// 切入权限管理模块,根据权限来展示树
+			$this->rights = Module_Group::isManager($this->loginuser['group']);
+			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
+					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			}
+			$this->view->data(array('user'=>$this->loginuser));
+		}
+	}
 	// 品牌管理
 	public function brands(){
 		$params = Uri::getParams();
@@ -153,6 +172,9 @@ class Product{
 	public function edit(){
 		// 表单提交
 		if (isset($_POST['id'])) {
+
+			echo json_encode($_POST);
+			die();
 			$id = Uri::post('id',0);
 			$t = time();
 			$attrs = array(
@@ -172,6 +194,17 @@ class Product{
 					'updatedate'=>$t,
 					'lastdate'=>$t,
 				);
+			// 必填项，判断
+			$check = FormVerify::rule(
+				array(FormVerify::len($arrs['title'],self::MINTITLE),'标题长度不能小于'.self::MINTITLE),
+				array(FormVerify::must($arrs['content']),'商品详情不能为空'),
+				array(FormVerify::must($arrs['brandid']),'品牌不能为空'),
+				array(FormVerify::must($arrs['cateid']),'分类不能为空')
+				);
+			if ($check!==true) {
+				$ret['msg'] = $check;
+				die(json_encode($ret));
+			}
 			if($id == 0){
 				$SUSER = Module_User::getloginUser(true);
 				$attrs['userid']  = $SUSER['id'];
@@ -179,6 +212,7 @@ class Product{
 				$attrs['sales']  = 0;
 				$attrs['createdate']  = $t;
 			}
+
 			$ret = Module_Product::setItem($attrs,$id);
 			if ($ret['code']<=0) {
 				die(json_encode($ret));

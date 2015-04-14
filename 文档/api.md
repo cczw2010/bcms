@@ -227,7 +227,11 @@ info:`文件内有详细注释。$cond参数，标示条件，既可以是条件
 * 带缓存的 select 方法,就是比其多了一个$ttl参数，来表示数据缓存的时间
 		
 		$GLOBALS['db']->selectCache($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0);
- 	
+
+* 带缓存版本的query查询，直接返回的是结果数组
+		
+		$GLOBALS['db']->getData($sql,$ttl=0);
+
 * 根据传入的字段数组，在表中插入一条数据
 
 		$GLOBALS['db']->insert($table,$arr);
@@ -262,7 +266,7 @@ info:`文件内有详细注释。$cond参数，标示条件，既可以是条件
 
 * 事务回滚（结束）（要求表支持）
 
-		$GLOBALS['db']->transRollback();
+		$GLOBALS['db']->transBack();
 
 ## Sysinfo类
 path:/liberay/sysinfo.class.php

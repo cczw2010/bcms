@@ -70,24 +70,24 @@ Class Home{
 		// 获取运营统计信息
 		$datas['yysj'] = array();
 		$today_start = strtotime(date("Y-m-d"));
-		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_user group by status');
-		$datas['yysj']['user_total'] = $GLOBALS['db']->fetchAll($_query);
+		// var_dump($today_start);
+		// 用户
+		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_user where types=1 group by status');
+		$datas['yysj']['user_total'] = $GLOBALS['db']->fetchAll($_query,'status');
 		$datas['yysj']['user_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_user where types=1 and status>0 and addtime>='.$today_start);
-
+		$datas['yysj']['user_login_today'] = $GLOBALS['db']->result('select count(*) as num from t_user where types=1 and status>0 and lasttime>='.$today_start);
+		// 文章
 		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_article group by status');
-		$datas['yysj']['article_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['article_total'] = $GLOBALS['db']->fetchAll($_query,'status');
 		$datas['yysj']['article_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_article  where status>0 and createdate>='.$today_start);
-
+		// 产品
 		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_product group by status');
-		$datas['yysj']['product_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['product_total'] = $GLOBALS['db']->fetchAll($_query,'status');
 		$datas['yysj']['product_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_product where status>0 and createdate>='.$today_start);
-
+		// 订单
 		$_query = $GLOBALS['db']->query('select count(*) as num ,status from t_order group by status');
-		$datas['yysj']['order_total'] = $GLOBALS['db']->fetchAll($_query);
+		$datas['yysj']['order_total'] = $GLOBALS['db']->fetchAll($_query,'status');
 		$datas['yysj']['order_new_today'] = $GLOBALS['db']->result('select count(*) as num from t_order where status<4 and createdate>='.$today_start);
-
-		// dump($datas['yysj']);
-		// dump(session_name(),session_id());
 
  		$this->view->load('manage/m_index',$datas);
 	}

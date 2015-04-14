@@ -1,16 +1,19 @@
 <?php
 /**
  * 商品模块统一处理类,纯静态类
- * 1 关于库存，请注意，商品表中的库存量，已售，和订单中的待支付商品总共组成了商品总数
+ * 单sku商品：库存，已售，价格，市场价都是商品表中的值
+ * 多sku商品：库存，已售，价格，市场价都是商品库存表中的值（注意汇总）
  */
 final class Module_Product{
 	const APPID = 5;
 	const APPNAME = '商品模块';
 	const TNAME = 't_product';
+	const TSKUNAME = 't_product_sku';
+	const TSKULOG = 't_product_sku_log';
 	const MINTITLE = 3;
 	//将商品成品图当做附件存储，对应的表中的objtype
 	const ATTACHTYPE = 'productcover';
- 	public static $statuss = array('不发布','发布');
+ 	public static $statuss = array('下架','上架');
 
  	/**
  	 * 根据id获取内容
@@ -19,7 +22,7 @@ final class Module_Product{
  	 */
 	static public function getItem($id){
 		$ret = array('code'=>-1,'msg'=>'');
-		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
+		$query = $GLOBALS['db']->getData('select * from '.self::TNAME.' where id='.$id);
 		if ($item = $GLOBALS['db']->fetchArray($query)) {
 			$ret['code'] = 1;
 			// 封面图
@@ -27,6 +30,11 @@ final class Module_Product{
 			$item['covers'] = $covers['list'];
 			// 抽出第一个作为主封面图，后期可配置
 			$item['cover'] = current($covers['list']);
+			// 如果是多sku商品
+			if ($item['isskus']==1) {
+				$result = $GLOBALS['db']->select(self::TSKUNAME,'productid='.$id,'','',-1);
+				$item['skus'] = $result['list'];
+			}
 			$ret['data'] = $item;
 		}else{
 			$ret['msg'] = '内容不存在';
@@ -34,7 +42,7 @@ final class Module_Product{
 		return $ret;
 	}
 	/**
-	 * 获取附件列表
+	 * 获取内容列表，
 	 * @param  array	$cond 查询条件
 	 * @param  string $orderby 排序条件字符串
 	 * @param  int 		$page 页码（-1代表全部）
@@ -49,31 +57,23 @@ final class Module_Product{
 			$item['covers'] = $covers['list'];
 			// 抽出第一个作为主封面图，后期可配置
 			$item['cover'] = current($covers['list']);
+			// 如果是多sku商品
+			if ($item['isskus']==1) {
+				$result = $GLOBALS['db']->select(self::TSKUNAME,'productid='.$id,'','',-1);
+				$item['skus'] = $result['list'];
+			}
 		}
 		return $ret;
 	}
 
 	/**
-	 * （编辑|新增）商品，不处理封面图，请单独用setCovers处理
+	 * （编辑|新增）商品，不处理封面图，不处理规格库，请单独用setCovers和setSkus处理
 	 * @param array $arrs 编辑的键值对,不能包含id;
 	 * @param int $id 如果有id则为修改，否则为新增
 	 * @return 返回$id
 	 */
 	static public function setItem($arrs,$id=0){
 		$ret = array('code'=> -1,'msg'=>'');
-
-		// 必填项，判断
-		$check = FormVerify::rule(
-			array(FormVerify::len($arrs['title'],self::MINTITLE),'标题长度不能小于'.self::MINTITLE),
-			array(FormVerify::must($arrs['content']),'商品详情不能为空'),
-			array(FormVerify::must($arrs['price']),'价格必须大于0'),
-			array(FormVerify::must($arrs['brandid']),'品牌不能为空'),
-			array(FormVerify::must($arrs['cateid']),'分类不能为空')
-			);
-		if ($check!==true) {
-			$ret['msg'] = $check;
-			return $ret;
-		}
 		$arrs['content'] = addslashes(stripslashes($arrs['content']));
 		if ($id>0) {
 			// 判断是否存在
@@ -88,7 +88,6 @@ final class Module_Product{
 				}
 			}
 		}else{
-			$arrs['oquantity'] = $arrs['quantity'];
 			$id = $GLOBALS['db']->insert(self::TNAME,$arrs);
 			if (empty($id)) {
 				$ret['msg'] = '更新失败';
@@ -100,10 +99,54 @@ final class Module_Product{
 		}
 		return $ret;
 	}
+
 	/**
- 	 * 删除内容
+	 * 设置商品的多sku，不校验商品是否存在，请自行注意
+	 * 另外以后的库存是不允许删除的，只能上架下架
+	 * @param  $id   商品id
+	 * @param  $skus 多库存无索引数组
+	 * @return 结果数组
+	 */
+	static public function setItemSku($id,$skus){
+		$ret = array('code'=>-1,'msg'=>'');
+		if (count($skus)>0) {
+			//库存比较敏感需要事务支持
+			$GLOBALS['db']->transBegin();
+			foreach ($skus as $sku) {
+				//已经有的更新库存，名称，价格，原价
+				$arr = array(
+					'oprice' => $sku['oprice'],
+					'price' => $sku['price'],
+					'quantity' => $sku['quantity'],
+					'skuname' => $sku['skuname'],
+					);
+				// 有id更新，无则新增
+				if (!empty($sku['id'])) {
+					$result = $GLOBALS['db']->update(self::TSKUNAME,$arr,'id='.$sku['id']);
+				}else{
+					$result = $GLOBALS['db']->insert(self::TSKUNAME,$arr);
+				}
+				if ($result===false) {
+					break;
+				}
+			}
+			$err = $GLOBALS['db']->getLastErr();
+			if (empty($err)) {
+				$GLOBALS['db']->transCommit();
+				$ret['code'] = 1;
+			}else{
+				$GLOBALS['db']->transBack();
+			}
+		}else{
+			$ret['code'] = 1;
+		}
+		return $ret;
+	}
+
+	/**
+ 	 * 删除，不处理规格库存库
  	 * @param  int $id 附件id
- 	 * @return array
+ 	 * @return 结果数组
  	 */
 	static public function delItem($id){
 		$ret = array('code'=>-1,'msg'=>'');

@@ -1,3 +1,22 @@
+<style>
+	.isspecs #mulispec{
+		display:block;
+	}
+	.isspecs #singlespec{
+		display:none;
+	}
+	#mulispec li{
+		float:left;
+		margin-left:5px;
+		padding:6px;
+    border:1px solid #ccc;
+    border-radius: 5px;
+    line-height: 30px;
+	}
+	li#addspec{
+		padding:50px 20px;
+	}
+</style>
 <div class="info">
 	<span class="xicon mr10">R</span> tips:商品应尽量挂在最底层分类上
 </div>
@@ -36,16 +55,29 @@
 			<td><textarea cols="60" rows="6" name="summary" ><?php echo isset($oitem)?$oitem['summary']:''; ?></textarea></td>
 		</tr>
 		<tr>
-			<td>市场价*：</td>
-			<td><input type="text" name="oprice" value="<?php echo isset($oitem)?$oitem['oprice']:''; ?>"></td>
-		</tr>
-		<tr>
-			<td>售价*：</td>
-			<td><input type="text" name="price" value="<?php echo isset($oitem)?$oitem['price']:''; ?>"></td>
-		</tr>
-		<tr>
-			<td>库存*：</td>
-			<td><input type="text" name="quantity" value="<?php echo isset($oitem)?$oitem['quantity']:''; ?>"></td>
+			<td>库存：</td>
+			<td id="skuboxwrap" class="<?=(isset($oitem) && $oitem['isskus']==1)?'isskus':'';?> ">
+			<div>
+				是否多库存:<input id="checkskus" class="mr20" <?=(isset($oitem) && $oitem['isskus']==1)?'checked="checked"':'';?> type="checkbox"  name="isskus" value="1" >
+			</div>
+			<hr>
+			<div id="singlespec">
+				<div>
+					市价*：<input required="true" type="text" size="10" name="oprice" value="<?=oprice?>">
+				</div>
+				<div>
+					售价*：<input required="true" type="text" size="10" name="price" value="<?=price?>">
+				</div>
+				<div>
+					库存*：<input required="true" type="text" size="10" name="quantity" value="<?=quantity?>">
+				</div>
+			</div>
+			<ul id="mulispec" class="clearfix hidden">
+				<li id="addspec" class="ccenter">
+					<input type="button" value="+新增" />
+				</li>
+			</ul>
+			</td>
 		</tr>
 		<tr>
 			<td>单笔上限*：</td>
@@ -87,6 +119,27 @@
 	</tbody>
 </table>
 </form>
+<script type="text/html" id="specitem_tmpl">
+	<li>
+		<div>
+			名称*：<input class="specname" type="text" size="10" name="specname[]" value="<%=specname%>">
+		</div>
+		<div>
+			市价*：<input required="true" type="text" size="10" name="oprice[]" value="<%=oprice%>">
+		</div>
+		<div>
+			售价*：<input required="true" type="text" size="10" name="price[]" value="<%=price%>">
+		</div>
+		<div>
+			库存*：<input required="true" type="text" size="10" name="quantity[]" value="<%=quantity%>">
+		</div>
+		<div>
+			上架*:<input class="mr20" type="checkbox" name="status[]" value="1" <%=((1==status)?checked="checked":"")%>>
+			<input type="button" name="" value="delete" class="delspec ml20 <%=id>0?'hidden':''%>">
+		</div>
+		<input class="specid" type="hidden" size="10" name="ids[]" value="<%=id%>">
+	</li>
+</script>
 <script>
 	$(function(){
 		initTinymce("#productcontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
@@ -108,6 +161,35 @@
 				uploadurl:"/manage/widget/upload"
 			});
 		}
+		// 空数据模板
+		var datatpl = {specname:'',id:'',oprice:'',price:'',quantity:'',status:1};
+		//事件绑定
+		$('#checkskus').on('click',function(){
+			if (this.checked) {
+				$('#skuboxwrap').addClass('isspecs');
+				$('#singlespec').find('input').attr('disabled',true);
+				$('#mulispec').find('input').attr('disabled',false);
+			}else{
+				$('#skuboxwrap').removeClass('isspecs');
+				$('#singlespec').find('input').attr('disabled',false);
+				$('#mulispec').find('input').attr('disabled',true);
+			}
+		});
+		// 添加新规格项
+		$('#addspec').on('click',function(){
+			var html = tmpl('specitem_tmpl',datatpl);
+			$(html).insertBefore(this);
+		});
+		// 删除规则项
+		$('.delspec').live('click',function(){
+			var specitem = $(this).parents('li'),
+				specid = specitem.find('.specid').val();
+			if (specid.length>0) {
+				alert('该规格是已有库存，删除可能会影响库存统计。请使用下架操作。');
+				return;
+			}
+			specitem.remove();
+		});
 	});
 	
 </script>

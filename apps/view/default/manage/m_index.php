@@ -31,7 +31,81 @@
 				</div>
 				<!-- 内容展示区域-->
 				<div  id="pageArea">
-						
+					<style type="text/css" media="screen">
+						.yysj li{
+							float: left;
+							margin:auto auto 10px 10px;
+							width: 30%;
+							font-size: 14px;
+							border:1px solid #ccc;
+						}
+						.yysj .title{
+							margin: 10px;
+							font-size: 20px;
+							color: #f30;
+							text-align: center;
+						}
+						.yysj .lis{
+							line-height: 30px;
+						}
+						.yysj .lis span{
+							width: 32%;
+							display: inline-block;
+							text-align: center;
+							border: 1px solid #ccc;
+						}
+					</style>
+					<ul class="yysj">
+						<li>
+							<div class="title">用户统计</div>
+							<div class="lis">
+							<?php foreach (Module_User::$statuss as $k=>$t){
+								$_v = array_key_exists($k,$yysj['user_total'])?$yysj['user_total'][$k]['num']:0;
+								echo '<span>'.$t.':'.$_v.'</span>';
+							}?>
+							</div>
+							<div class="lis">
+								<span>今日新增:<?php echo $yysj['user_new_today']; ?></span>
+								<span>今日登陆:<sup><?php echo $yysj['user_login_today']; ?></sup></span>
+							</div>
+						</li>
+						<li>
+							<div class="title">文章统计</div>
+							<div class="lis">
+							<?php foreach (Module_Article::$statuss as $k=>$t){
+								$_v = array_key_exists($k,$yysj['article_total'])?$yysj['article_total'][$k]['num']:0;
+								echo '<span>'.$t.':'.$_v.'</span>';
+							}?>
+							</div>
+							<div class="lis">
+								<span>今日新增:<?php echo $yysj['article_new_today']; ?></span>
+							</div>
+						</li>
+						<li>
+							<div class="title">商品统计</div>
+							<div class="lis">
+							<?php foreach (Module_Product::$statuss as $k=>$t){
+								$_v = array_key_exists($k,$yysj['product_total'])?$yysj['product_total'][$k]['num']:0;
+								echo '<span>'.$t.':'.$_v.'</span>';
+							}?>
+							</div>
+							<div class="lis">
+								<span>今日新增:<?php echo $yysj['product_new_today']; ?></span>
+							</div>
+						</li>
+						<li>
+							<div class="title">总订单数</div>
+							<div class="lis">
+							<?php foreach (Module_order::$statuss as $k=>$t){
+								$_v = array_key_exists($k,$yysj['order_total'])?$yysj['order_total'][$k]['num']:0;
+								echo '<span>'.$t.':'.$_v.'</span>';
+							}?>
+							</div>
+							<div class="lis">
+							<span>今日新增:<?php echo $yysj['order_new_today']; ?></span>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>

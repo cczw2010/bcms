@@ -107,5 +107,5 @@ interface Db{
 	作 用 ：事务回滚
 	返回值 	：void
 	-----------------------------------------------------------------------------------*/
-	public function transRollback();
+	public function transBack();
 }

@@ -5,8 +5,8 @@
 
 return array(
 	"sitename"=> 'BCMS',	//网站名称
-	"debug" =>true,		//是否显示应用级报错（调试）和常规错误警告
-	"sessionttl"=>3600,	//session过期时间
+	"debug" =>true,				//是否显示应用级报错（调试）和常规错误警告
+	"sessionttl"=>3600,		//session过期时间
 	
 	// controller和view和model文件夹名称
 	"folder_c"=>'controller',

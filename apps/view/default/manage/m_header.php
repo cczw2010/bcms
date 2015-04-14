@@ -21,6 +21,8 @@
 		<!-- basic scripts -->
 		<script src='/static/dist/js/jquery-1.8.3.min.js'></script>
 		<script src="/static/dist/js/main.min.js"></script>
+		<script src="/static/dist/js/micro-templating.min.js"></script>
+		<script src="/static/dist/js/Validform_v5.3.2_min.js"></script>
 		<script src="/datas/tinymce/tinymce.min.js"></script>
 		<script src="/datas/uploadify/jquery.uploadify.min.js"></script>
 		<script src="/datas/datepicker/javascript/zebra_datepicker.min.js"></script>

@@ -1,6 +1,25 @@
 <?php
 class Comment{
 	const ERRNAME = '_x_errmsg';
+	function __construct(){
+		$this->loginuser = Module_User::getloginUser(true);
+		if (empty($this->loginuser)) {
+			if ($GLOBALS['cur_method']!='login') {
+				Uri::build('manage/user','login',false,true);
+			}
+		}else{
+			if ($GLOBALS['cur_method']=='login') {
+				Uri::build('manage/home','index',false,true);
+			}
+			/////////////////// 切入权限管理模块,根据权限来展示树
+			$this->rights = Module_Group::isManager($this->loginuser['group']);
+			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
+					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			}
+			$this->view->data(array('user'=>$this->loginuser));
+		}
+	}
 	// 评论列表
 	public function lists(){
 		$params = Uri::getParams();

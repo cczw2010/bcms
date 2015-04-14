@@ -220,6 +220,30 @@ class Db_mysql implements db{
 		}
 		return $data;
 	}
+	/**
+	 * 获取数据，带缓存
+	 * @param  string 	$sql 		sql语句
+ 	 * @param  integer	$ttl	 	缓存时间（秒），	默认0不缓存，
+ 	 * @return array					结果数组
+	 */
+	public function getData($sql,$ttl){
+		$data=false;
+		$cachekey;
+		if ($ttl>0) {
+			$cachekey = md5($sql);
+			$data = $GLOBALS['cache']->get($this->cache_group,$cachekey);
+			if ($data) {
+				return $data;
+			}
+		}
+		$query = $this->query($sql);
+		$data = $this->fetchAll($query);
+		if ($ttl>0) {
+			$GLOBALS['cache']->set($this->cache_group,$cachekey,$data,$ttl);
+		}
+		return $data;
+	}
+
  	/**
  	 * 返回结果集中某行某列的值
  	 * @param  string|mysqlquery $query mysql字符串或者查询的query结果
@@ -331,7 +355,7 @@ class Db_mysql implements db{
 		$this->query('COMMIT');
 	}
 	// 事务回滚
-	public function transRollback(){
+	public function transback(){
 		$this->query('ROLLBACK');
 	}
 }
