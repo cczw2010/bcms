@@ -1,6 +1,6 @@
 <?php
 // home页的model层
-class model_home{
+class Model_home{
 
 	// 获取首页数据
 	public function getIndex(){

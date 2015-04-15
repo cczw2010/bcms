@@ -65,7 +65,7 @@ nginx.conf 需要配置到nginx中
 * module
 	
 	各个模块的通用处理类库，系统会在需要时自动加载相应的库，所以用户可以直接使用，但是文件名称必须按照命名规则来：
-	className.class.php 其中 className 是类名小写。建议全部都做成静态的
+	className.class.php 其中 className 是类名小写。
 
 * library
 	

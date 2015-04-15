@@ -6,7 +6,8 @@ class City{
 		$this->loginuser = Module_User::getloginUser(true);
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
-				Uri::build('manage/user','login',false,true);
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+				die();
 			}
 		}else{
 			if ($GLOBALS['cur_method']=='login') {

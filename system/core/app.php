@@ -18,7 +18,7 @@ Class Core_App{
 		//查找是否存在缓存静态文件，如果存在直接返回静态页面，无需继续执行程序
 		//该处正在设计，请注意一些交互性比较强的页面，或者数据更新比较快的页面不建议做成静态的。
 		//building.........
-
+		
 
 		// 生成实际的controller实例
 		$refc = $this->_refcontroller($subpath,$c);
