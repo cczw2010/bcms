@@ -31,6 +31,7 @@ require(SYSDIR.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'uri.php');
 function autoload($classname) {
 	$_cname=strtolower($classname);
  	foreach (array(BASEPATH.DIRECTORY_SEPARATOR.'module',BASEPATH.DIRECTORY_SEPARATOR.'library') as $path)
+ 	// foreach (array(BASEPATH.DIRECTORY_SEPARATOR.'models',BASEPATH.DIRECTORY_SEPARATOR.'library') as $path)
 	{
 		$path=$path.DIRECTORY_SEPARATOR.$_cname.'.class.php';
  		if (file_exists($path))

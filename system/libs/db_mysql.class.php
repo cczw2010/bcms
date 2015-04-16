@@ -292,7 +292,7 @@ class Db_mysql implements db{
    * @param  string 				$table 表名
 	 * @param  array 					$arr   数据数组，可以为key-value方式，也可以没有key直接字符串 如 ’name="test"‘|"name"=>"test"
  	 * @param  array|string   $cond  条件数组，或者条件字符串(不带where)
- 	 * @return 更新结果
+ 	 * @return boolean
  	 */
 	public function update($table,$arr,$cond=''){  
 		$sql = 'UPDATE `'.$table.'` SET ';  
