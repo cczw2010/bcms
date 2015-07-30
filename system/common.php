@@ -3,6 +3,7 @@
 $GLOBALS['config'] = require(BASEPATH.DIRECTORY_SEPARATOR.'config.php');
 // 异常处理
 if ($GLOBALS['config']['debug']) {
+	ini_set('display_errors','On');
 	// 设置当前错误显示模式E_ALL，0
 	error_reporting(E_ALL);
 	// error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
