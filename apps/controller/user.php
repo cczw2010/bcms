@@ -142,11 +142,6 @@ class User{
 		Module_User::logout();
 		Uri::redirect('/');
 	}
-	// 获取验证码,直接输出图片
-	public function captcha(){
-		$cap = new Captcha();
- 		$cap->buildAndExportImage();
-	}
 	/*********************************************
  	* 以下第三方登录部分
  	*********************************************/

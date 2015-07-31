@@ -14,7 +14,7 @@
 				<li>验证码*:</li>
 				<li>
 					<input name="captcha" type="text" class="captchainput" placeholder="请输入验证码">
-					<br><img onclick="flushCaptch(this)" class="captcha" data-osrc="<?php echo Uri::build('user','captcha'); ?>" src="<?php echo Uri::build('user','captcha'); ?>"/>
+					<br><img onclick="flushCaptch(this)" class="captcha" data-osrc="<?php echo Uri::build('widget','captcha'); ?>" src="<?php echo Uri::build('widget','captcha'); ?>"/>
 				</li>
 				<li>
 					<input type="submit" name="subbtn" class="submitbtn" value="登 陆">

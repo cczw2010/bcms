@@ -45,7 +45,7 @@ class Db_mysql implements db{
 	}
 	public function connect(){
 		if(!isset($this->dbconn)){
-			$this->dbconn = mysql_connect($this->db_host.':'.$this->db_port,$this->db_user,$this->db_pass);
+			$this->dbconn = @mysql_connect($this->db_host.':'.$this->db_port,$this->db_user,$this->db_pass);
 			if (!$this->dbconn){
 				throw new Exception('数据库服务器连接错误: ' . mysql_error());
 			}else{

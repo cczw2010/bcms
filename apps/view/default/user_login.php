@@ -17,7 +17,7 @@
 			<div class="userli">
 				<label>验证码*:</label>
 				<input name="captcha" type="text" class="captchainput" placeholder="请输入验证码">
-				<img onclick="flushCaptch(this)" class="captcha" data-osrc="<?php echo Uri::build('user','captcha'); ?>" src="<?php echo Uri::build('user','captcha'); ?>"/>
+				<img onclick="flushCaptch(this)" class="captcha" data-osrc="<?php echo Uri::build('widget','captcha'); ?>" src="<?php echo Uri::build('widget','captcha'); ?>"/>
 			</div>
 			<hr>
 			<div class="clearfix">

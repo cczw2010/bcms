@@ -51,4 +51,9 @@ class Widget{
 		// 输出json
 		echo json_encode($ret);
 	}
+	// 获取验证码,直接输出图片
+	public function captcha(){
+		$cap = new Captcha();
+ 		$cap->buildAndExportImage();
+	}
 }
