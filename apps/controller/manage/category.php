@@ -57,7 +57,7 @@ class Category{
 		}
 		$ret = Module_Category::getChilds(0,0,$conds,$page,$psize);
 		$datas['items'] = $ret['data']['items'];
-		$datas['pages'] = multiPages($page,$psize,$ret['data']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$ret['data']['total'],$pageParams,true);		
 
 		$datas['appname'] = $appname;
 		$datas['filter'] = $pageParams;

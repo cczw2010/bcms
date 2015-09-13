@@ -52,7 +52,7 @@ class Comment{
 			$pageParams['status'] = $_REQUEST['status'];
 		}
 		$datas['items'] = Module_Comment::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);		
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$this->view->load('manage/m_comments',$datas);

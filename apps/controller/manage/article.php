@@ -63,7 +63,7 @@ class Article{
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$datas['items'] = Module_Article::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);		
 		// 分类
 		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Article::APPID),-1);
 		$cateid = isset($_REQUEST['cateid'])?$_REQUEST['cateid']:0;

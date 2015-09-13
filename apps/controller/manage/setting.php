@@ -80,7 +80,7 @@
 			}
 			// 检索
 			$datas['logs'] = Module_Log::getItems($conds,'order by id desc',$page,$psize);
-			$datas['pages'] = multiPages($page,$psize,$datas['logs']['total'],$pageParams,true);		
+			$datas['pages'] = multiPages4Ace($page,$psize,$datas['logs']['total'],$pageParams,true);		
 			$this->view->load('manage/m_logs',$datas);
 		}
 		// 数据库备份

@@ -25,7 +25,7 @@ class User{
 	//登陆
 	public function login(){
 		$datas = array('error'=>'');
-		if (isset($_POST['subbtn'])) {
+		if (Http::isPost()) {
 			$username = trim($_POST['username']);
 			$password = trim($_POST['password']);
 			$captcha = trim($_POST['captcha']);
@@ -93,7 +93,7 @@ class User{
 
 		$ret = Module_Group::getGroups(array('types'=>Module_Group::TYPE_USER));
 		$datas['groups'] = $ret['list'];
-		$datas['pages'] = multiPages($page,$psize,$datas['users']['total'],$pageParams,true);
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['users']['total'],$pageParams,true);
 
 		$this->view->load('manage/m_users',$datas);
 	}
@@ -128,7 +128,7 @@ class User{
 
 		$ret = Module_Group::getGroups(array('types'=>Module_Group::TYPE_MANAGER));
 		$datas['groups'] = $ret['list'];
-		$datas['pages'] = multiPages($page,$psize,$datas['users']['total'],$pageParams,true);
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['users']['total'],$pageParams,true);
 
 		$this->view->load('manage/m_managers',$datas);
 	}
@@ -319,7 +319,7 @@ class User{
 		}
 		// 检索
 		$datas['logs'] = Module_User::getUserLog($conds,$page,$psize);
-		$datas['pages'] = multiPages($page,$psize,$datas['logs']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['logs']['total'],$pageParams,true);		
 		$this->view->load('manage/m_ulogs',$datas);
 	}
 	// 管理员分组组

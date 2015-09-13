@@ -132,6 +132,38 @@ function multiPages($curpage,$psize,$itemcount,$params=false,$isajax=false){
 	$jumppage.='" value="'.$curpage.'"  class="jpagebtn"><'.$tag.' class="jpagebtn jpagecan" '.$urlattr.'="'.$url.$curpage.'?'.$query.'">GO</'.$tag.'>';
 	return '<div class="jpages">'.$pre.$pagemid.$next.$jumppage.'</div>';
 }
+/**
+ * 同上 ace版本
+ */
+function multiPages4Ace($curpage,$psize,$itemcount,$params=false,$isajax=false){
+	if (empty($itemcount)) {
+		return '';
+	}
+	$url = '/'.$GLOBALS['cur_cpath'].Uri::$uritype.$GLOBALS['cur_controller'].Uri::$uritype.$GLOBALS['cur_method'].Uri::$uritype;
+	$query = http_build_query($params);
 
-
-
+	$totalpage = ceil($itemcount/$psize);
+	// 上一页
+	$pre = '<span class="badge badge-primary';
+	if ($curpage<=1) {
+		$pre .= ' disabled';
+	}
+	$pre .= '" data-page="'.($curpage-1).'" ><i class="icon-angle-left bigger-140"></i></span> ';
+	// 下一页
+	$next = '<span class="badge badge-primary';
+	if ($curpage>=$totalpage) {
+		$next .= ' disabled';
+	}
+	$next .= '" data-page="'.($curpage+1).'"><i class="icon-angle-right bigger-140"></i></span> ';
+	
+	$ret = '<p class="ace-page center" data-isajax="'.($isajax?1:0).'" data-url="'.$url.'" data-query="'.$query.'" data-maxpage="'.$totalpage.'">
+						<span class="badge badge-primary" data-page="1">
+							<i class="icon-double-angle-left bigger-140"></i>
+						</span> '.
+		$pre.' <span>Page <span data-page='.$curpage.'></span><input class="input-sm" onkeyup="this.previousSibling.dataset.page = this.value;console.log(this.value);if(event.keyCode==13){event.preventDefault();$(this.previousSibling).trigger(\'click\');return false;}" type="number" size="2" min="1" max="'.$totalpage.'" value="'.$curpage.'"> of <span>'.$totalpage.'</span></span> '.
+		$next.'<span class="badge badge-primary" data-page="'.$totalpage.'">
+							<i class="icon-double-angle-right bigger-140"></i>
+						</span>
+					</p>';
+	return $ret;
+}

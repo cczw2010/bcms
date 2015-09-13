@@ -9,7 +9,7 @@
 	?>
 	<ul class="boxs">
 		<li class="tablabel active"><?php echo Module_Group::$types[$types];?>列表</li>
-		<li class="tablabel ">添加新<?php echo Module_Group::$types[$types];?></li>
+		<li class="tablabel">添加新<?php echo Module_Group::$types[$types];?></li>
 		<li class="flex"></li>
 	</ul>
 	<div class="flex">
@@ -23,7 +23,7 @@
 						<th width="100">操作</th>
 					</tr>
 				</thead>
-				<tbody  align="center">
+				<tbody align="center">
 					<?php
 						foreach ($groups['list'] as $id => $group) {
 							echo '<tr><td>'.$group['id'].'</td>

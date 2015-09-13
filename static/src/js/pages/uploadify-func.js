@@ -71,7 +71,7 @@ function addUpload(wraper,cfg,callback) {
         // 一些初始化的东西
         window.UPLOADIFY_CNT = {};
         // 新增按钮
-        $('.uploadify_add').live('click',function(){
+        $('body').on('click','.uploadify_add',function(){
             var data = $(this).parents('.uploadifyli').eq(0).data(),
                 objtype = data.objtype,
                 cfg = UPLOADIFY_CNT[objtype].cfg,
@@ -79,7 +79,7 @@ function addUpload(wraper,cfg,callback) {
             addUpload(data.wraper,cfg,callback);
         });
         // 删除按钮
-        $('.uploadify_del').live('click',function(){
+        $('body').on('click','.uploadify_del',function(){
             var uploadifyli = $(this).parents('.uploadifyli').eq(0),
                 fpath = uploadifyli.find('.uplodify_fpaths').val(),
                 data = uploadifyli.data();
