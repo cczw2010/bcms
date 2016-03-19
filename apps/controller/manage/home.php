@@ -27,7 +27,8 @@ Class Home{
 																		'logs'=>'操作日志')),
 				array('name'=>'用户管理','con'=>'user','subs'=>array(
 																		'ugroup'=>'用户分组',
-																		'users'=>'用户列表')),
+																		'users'=>'用户列表',
+																		'edit'=>'新增用户')),
 				array('name'=>'管理员信息','con'=>'user','subs'=>array(
 																		'mgroup'=>'管理员分组',
 																		'managers'=>'管理员列表',

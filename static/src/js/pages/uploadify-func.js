@@ -116,7 +116,7 @@ function addUpload(wraper,cfg,callback) {
                     '<div class="">'+(!cfg.hidedel?'<span class="uploadify_del">删除</span>':'')+
                     (!cfg.hidenew?'<span class="uploadify_add">新增</span>':'')+
                     '</div>'+
-                    '<div class="uploadify_showpic" style="background-image:url('+replacepic+');"></div>'+
+                    '<div class="uploadify_showpic" style="height: 100px;background-size: contain;background-repeat: no-repeat;background-image:url('+replacepic+');"></div>'+
                     (cfg.showoname?'<div class="uploadify_showname breakword">'+(json?json.oname:'')+'</div>':'')+
                     '<input type="hidden" class="uplodify_ids" name="'+fieldid+'[]" value="'+(json?json.id:0)+'" >'+
                     '<input type="hidden" class="uplodify_fpaths" name="'+fieldpath+'[]" value="'+(json?json.fpath:'')+'">'+

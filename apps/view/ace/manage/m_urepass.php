@@ -1,5 +1,5 @@
 <form action="/manage/user/repass/">
-<table class="tablebox formtable" width="300" border="0" cellpadding="10" cellspacing="1" >
+<table class="table table-striped table-bordered table-hover">
 	<thead>
 		<tr>
 			<th colspan="2">重置密码</th>
@@ -13,7 +13,7 @@
 		<tr>
 			<td colspan="2" class="text-center">
 				<input type="hidden" name="id" value="<?php echo $user['id']; ?>">
-				<input type="button" name="submitbtn" class="submitbtn" data-callback=""  value="提 交">
+				<input type="button" name="submitbtn" class="submitbtn btn btn-info" data-callback=""  value="提 交">
 			</td>
 		</tr>
 	</tbody>

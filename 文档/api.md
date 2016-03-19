@@ -66,7 +66,7 @@
 
 ## 应用内方法
 
-* controller中调用 model,类名为model文件名首字母大写
+* controller中调用model,modelname为文件,文件中类名为model文件名首字母大写
 		
 		$this->model->load('modelname');
 

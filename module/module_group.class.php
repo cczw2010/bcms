@@ -50,8 +50,8 @@ final class Module_Group{
 	 * @param  array $cond 查询条件
 	 * @return array
 	 */
-	static public function getGroups($cond=array()){
-		$rets = $GLOBALS['db']->select(self::TNAME,$cond,'id','',-1);
+	static public function getGroups($cond=array(),$index='id'){
+		$rets = $GLOBALS['db']->select(self::TNAME,$cond,$index,'',-1);
 		// if (empty($cond)) {
 			// $rets['list'][0] = array('id'=>0,'name'=>'默认用户','desc'=>'注册用户的默认权限,可访问前端页面，不可访问后台页面','rights'=>'');
 		// }

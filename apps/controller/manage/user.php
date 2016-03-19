@@ -3,7 +3,7 @@
 class User{
 	const ERRNAME = '_x_errmsg';
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_User::getLoginUser(true);
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
 				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
@@ -202,12 +202,17 @@ class User{
 			// $types = Uri::post('types',Module_User::TYPE_USER);
 			$username = Uri::post('username');
 			if(mb_strlen($username)>0){
-				$ret = Module_User::modifyUser($id,array('username'=>$username,
-																			'email'=>Uri::post('email'),
-																			'sign'=>Uri::post('sign'),
-																			'group'=>Uri::post('group'),
-																			'status'=>Uri::post('status')));
-				if ($ret) {
+				$attrs = array('email'=>Uri::post('email'),
+											'sign'=>Uri::post('sign'),
+											'group'=>Uri::post('group'),
+											'status'=>Uri::post('status'));
+				if ($id==0) {
+					$ret = Module_User::register($username,'123456',$attrs);
+				}else{
+					$attrs['username'] = $username;
+					$ret = Module_User::modifyUser($id,$attrs);
+				}
+				if ($ret===true || $ret['code']==1) {
 					// 添加日志
 					Module_log::setItem(array('modulename'=>Module_User::APPNAME,
 						'moduleid'=>Module_User::APPID,
@@ -227,15 +232,16 @@ class User{
 		if (count($params)>0) {
 			$ret = Module_User::getUser($params[0]);
 			if ($ret['code']>0) {
-				$datas['user'] = $ret['data'];
-				$ret = Module_Group::getGroups(array('types'=>Module_User::TYPE_USER));
-				$datas['groups'] = $ret['list'];
-				$this->view->load('manage/m_useredit',$datas);
+				$datas['oitem'] = $ret['data'];
+				
 			}else{
 				Helper::setSession(self::ERRNAME,'没有相关用户信息');
 				Uri::build('manage/user','users',false,true);
 			}
 		}
+		$ret = Module_Group::getGroups(array('types'=>Module_User::TYPE_USER));
+		$datas['groups'] = $ret['list'];
+		$this->view->load('manage/m_useredit',$datas);
 	}
 	// 修改当前用户密码
 	public function repass(){
@@ -258,7 +264,7 @@ class User{
 			}
 			die(json_encode($ret));
 		}
-		$datas =array('user'=>Module_User::getloginUser());
+		$datas =array('user'=>$this->loginuser);
 		$this->view->load('manage/m_urepass',$datas);
 	}
 	// 删除用户
@@ -411,6 +417,7 @@ class User{
 															'setting-logs'=>'log日志',
 															'setting-dbback'=>'数据库备份',
 															'user-users'=>'用户列表',
+															'user-edit'=>'编辑用户',
 															'user-managers'=>'管理员列表',
 															'user-mgroup'=>'管理员分组',
 															'user-ugroup'=>'用户分组',

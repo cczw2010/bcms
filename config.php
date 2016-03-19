@@ -70,6 +70,14 @@ return array(
 		// 上传的文件是否重命名
 		'uploadRename' => true,
 	),
+
+	// 微信服务号配置,如果需要的话
+	'weixin'=>array(
+			'token'=>'',
+			'encodingaeskey'=>'',
+			'appid'=>'wx0ccdea25907bca75',
+			'appsecret'=>'c9b08314085ee8d805a0f1c3dbad6784',
+			),
 );
 
 /**！！！其他需要配置的地方！！！

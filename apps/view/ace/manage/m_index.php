@@ -22,17 +22,13 @@
 						</li>
 						<li><span class="active" id="currentcrumb"></span></li>
 					</ul><!-- .breadcrumb -->
-
-					<span class="" id="loading">
-						<i class="icon-refresh icon-spin"></i>
-						<span>loading... </span>
-					</span><!-- #nav-search -->
 				</div>
 				<!-- main area -->
 				<div class="page-content">
 					<div class="row">
 						<div class="col-sm-12" id="pageArea">
 							<!-- 实际内容展示区 -->
+							<h5 class="text-center">欢迎使用</h5>
 						</div>
 					</div>
 				</div>

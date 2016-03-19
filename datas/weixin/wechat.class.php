@@ -69,6 +69,7 @@ class Wechat
 	const SHORT_URL='/shorturl?';
 	const USER_GET_URL='/user/get?';
 	const USER_INFO_URL='/user/info?';
+	const USER_LISTINFO_URL='/user/info/batchget?';
 	const USER_UPDATEREMARK_URL='/user/info/updateremark?';	
 	const GROUP_GET_URL='/groups/get?';
 	const USER_GROUP_URL='/groups/getid?';
@@ -1341,6 +1342,33 @@ class Wechat
 		return false;
 	}
 
+	/**
+	 * 批量获取关注者详细信息   by awen
+	 * @param array $openids
+	 *        [{
+	 *        	"openid": "xxx", 
+	 *        	"lang": "zh-CN" //可以省略  默认zh-CN
+	 *        	},...
+	 *        ]
+	 * @return array {subscribe,openid,nickname,sex,city,province,country,language,headimgurl,subscribe_time,[unionid]}
+	 * 注意：unionid字段 只有在用户将公众号绑定到微信开放平台账号后，才会出现。建议调用前用isset()检测一下
+	 */
+	public function getUserInfos($openids){
+		if (!$this->access_token && !$this->checkAuth()) return false;
+		$params = array('user_list'=>$openids);
+		$result = $this->http_post(self::API_URL_PREFIX.self::USER_LISTINFO_URL.'access_token='.$this->access_token,self::json_encode($params));
+		if ($result)
+		{
+			$json = json_decode($result,true);
+			if (isset($json['errcode'])) {
+				$this->errCode = $json['errcode'];
+				$this->errMsg = $json['errmsg'];
+				return false;
+			}
+			return $json;
+		}
+		return false;
+	}
 	/**
 	 * 设置用户备注名
 	 * @param string $openid

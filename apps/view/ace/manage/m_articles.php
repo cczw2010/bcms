@@ -83,7 +83,7 @@
 						}
 					}
 					?>
-					<tr><td colspan="17"><?=(isset($pages)?$pages:'');?></td></tr>
+					<tr><td colspan="12"><?=(isset($pages)?$pages:'');?></td></tr>
 				</tbody>
 			</table>
 		</div>

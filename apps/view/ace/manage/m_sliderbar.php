@@ -29,12 +29,12 @@
 		</div>
 	</div><!-- #sidebar-shortcuts -->
 	<ul class="nav nav-list">
-		<li class="active">
+		<!-- <li class="active">
 			<a href="/manage/home/index">
 				<i class="icon-dashboard"></i>
 				<span class="menu-text"> 仪表盘 </span>
 			</a>
-		</li>
+		</li> -->
 		<!-- 主菜单树 -->
 		<?php
 			foreach ($menuTree as $mv) {
