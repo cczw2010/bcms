@@ -78,6 +78,18 @@
 					if (extparam) {
 						data = data+"&"+extparam;
 					}
+					// 判断校验,根据data-verify属性,里面可以写表达式
+					var verify = that.dataset.verify;
+					if (verify) {
+						var els = form.elements;
+						for (var i = 0,l=els.length; i <l; i++) {
+							var el = els.item(i);
+							if (el.required && el.value==='') {
+								alert('请认真输入各项.');
+								return false;
+							}
+						}
+					}
 					// 获取提醒确定信息
 					var confirmtxt = that.dataset.confirm;
 					if (!confirmtxt || confirm(confirmtxt)) {

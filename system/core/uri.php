@@ -9,7 +9,20 @@ Class Uri{
 	private static $def_m;
 	private $params;
 	private static $instance = null;
+
+	// sql注入
+	private $getfilter = "'|(and|or)\\b.+?(>|<|=|in|like)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)";
+  private $postfilter = "\\b(and|or)\\b.{1,6}?(=|>|<|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)";
+  private $cookiefilter = "\\b(and|or)\\b.{1,6}?(=|>|<|\\bin\\b|\\blike\\b)|\\/\\*.+?\\*\\/|<\\s*script\\b|\\bEXEC\\b|UNION.+?SELECT|UPDATE.+?SET|INSERT\\s+INTO.+?VALUES|(SELECT|DELETE).+?FROM|(CREATE|ALTER|DROP|TRUNCATE)\\s+(TABLE|DATABASE)";
+
+
 	private function __construct(){
+		// 防sql注入检测
+		foreach($_GET as $key=>$value){$this->sqlSafe($key,$value,$this->getfilter);}
+    foreach($_POST as $key=>$value){$this->sqlSafe($key,$value,$this->postfilter);}
+    foreach($_COOKIE as $key=>$value){$this->sqlSafe($key,$value,$this->cookiefilter);}
+
+
 		self::$def_c = $GLOBALS['config']['def_c'];
 		self::$def_m = $GLOBALS['config']['def_m'];
 		$this->params = $this->resolve();
@@ -57,6 +70,16 @@ Class Uri{
 		}
 		return $ret;
 	}
+
+	// 校验注入
+	private function sqlSafe($StrFiltKey, $StrFiltValue, $ArrFiltReq){
+		if(is_array($StrFiltValue))$StrFiltValue = implode($StrFiltValue);
+		if (preg_match("/".$ArrFiltReq."/is",$StrFiltValue) == 1){   
+		    // write log ..
+		    die('您提交的参数非法,系统已记录您的本次操作！');
+		}
+	}
+
 	// 初始化，单例模式
 	static function init(){
 		if (self::$instance==null) {
@@ -202,7 +225,7 @@ Class Uri{
 		$url = false;
 		if (file_exists($path)) {
 			$url = realpath($path);
-			$url = str_replace(BASEPATH, '', $url);
+			$url = str_replace("\\","/",str_replace(BASEPATH, '', $url));
 		}
 		return $url;
 	}
