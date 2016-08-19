@@ -21,8 +21,8 @@
 			<div class="widget-box transparent">
 				<div class="widget-header header-color-blue3" style="">
 					<form action="/manage/category/lists/?appid=<?php echo $appid;?>">
-					<label for="">父项id：</label>
-					<input class="input-sm" type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>">
+					<!-- <label for="">父项id：</label>
+					<input class="input-sm" type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>"> -->
 					<label for="">id：</label>
 					<input class="input-sm" type="text" name="id" size="10" value="<?php echo isset($filter['id'])?$filter['id']:'' ?>">
 					<label for="">名称：</label>
@@ -30,8 +30,8 @@
 					<label for="">状态：</label>
 					<select class="input-sm"  name="status" id="">
 						<option value="-1" >全部</option>
-						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>>正常</option>
-						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>>锁定</option>
+						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>>启用</option>
+						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>>未启用</option>
 					</select>
 					<input type="hidden" name="filterform" value="1">
 					<input class="submitbtn btn btn-info btn-sm"  type="button" value="提 交">
@@ -66,9 +66,8 @@
 											<td>'.$item['desc'].'</td>
 											<td>'.Module_Category::$statuss[$item['status']].'</td>
 											<td class="">
-												<a href="/manage/category/edit/?parentId='.$item['id'].'&appid='.$appid.'" class="ajaxbtn">添加子项</a>
 												<a href="/manage/category/edit/'.$item['id'].'" class="ajaxbtn">编辑</a>
-												<a href="/manage/category/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</a>
+												<a href="/manage/category/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，如果已有其他资源关联到本项，请慎重！">删除</a>
 											</td></tr>';
 									}
 								}

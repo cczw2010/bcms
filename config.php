@@ -31,7 +31,7 @@ return array(
 		'host'		=> '127.0.0.1',
 		'port'		=> 3306,
 		'user'		=> 'root',
-		'pass'		=> '123456',
+		'pass'		=> 'root',
 		'dbname'	=> 'bcms',
 		'group'		=>'db',		//缓存分组
 	),

@@ -616,7 +616,7 @@ info:`copy的codeigniter的类，详情看文件`
 * 去支付逻辑，根据后台配置调用支付接口
 		
 		//$key = alipay
-		Module_ThirdLogin::gotoAppLogin($key);
+		Module_Payment::gotoPay($key);
 
 	
 

@@ -63,13 +63,22 @@ class Article{
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$datas['items'] = Module_Article::getItems($conds,'order by id desc',$page,$psize);
+		if(is_array($datas['items']['list']) && !empty($datas['items']['list'])){
+			foreach ($datas['items']['list'] as $key => $value) {
+				$cate_array = Module_Category::getCate($value['cateid']);
+				if(is_array($cate_array) && !empty($cate_array['data']['name'])){
+					$datas['items']['list'][$key]['catename'] =  $cate_array['data']['name'];
+				}else{
+					$datas['items']['list'][$key]['catename'] = '无';
+				}
+			}
+		}
 		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);		
 		// 分类
 		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Article::APPID),-1);
 		$cateid = isset($_REQUEST['cateid'])?$_REQUEST['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($cates['data']['items'],$cateid);
 		Uri::setPrevPage();
-
 		$this->view->load('manage/m_articles',$datas);
 	}
 	// 编辑文章
@@ -141,7 +150,6 @@ class Article{
 		$datas['cates'] = $cates['data']['items'];
 		$cateid = isset($datas['oitem']['cateid'])?$datas['oitem']['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($datas['cates'],$cateid);
-		
 		$this->view->load('manage/m_articleedit',$datas);
 	}
 	// 删除文章
@@ -172,5 +180,33 @@ class Article{
 	public function comm(){
 		Uri::setPrevPage();
 		Uri::redirect('/manage/comment/lists/?appid='.Module_Article::APPID);
+	}
+
+	public function number()
+	{
+		if (isset($_POST['id'])) {
+			$id = Uri::post('id',0);
+			$t = time();
+			$attrs = array(
+					'need_user_num' => Uri::post('need'),
+					'designer_num' => Uri::post('design'),
+					'update_time'=>$t
+				);
+			$ret = Module_Number::setItem($attrs,$id);
+			if ($ret['code'] <= 0) {
+				die(json_encode($ret));
+			}
+			Module_log::setItem(array('modulename'=>Module_Number::APPNAME,
+						'moduleid'=>Module_Number::APPID,
+						'key'=>'更新',
+						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Number::TNAME
+						));
+			Uri::build('manage/article','number',false,true);
+		}
+		// 不是表单提交
+		$numbers = Module_Number::getItem();
+		$datas['numbers'] = $numbers['data'];
+		$datas['id'] = 1;
+		$this->view->load('manage/m_number',$datas);
 	}
 }

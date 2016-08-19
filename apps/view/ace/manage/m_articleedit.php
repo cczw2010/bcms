@@ -14,43 +14,43 @@
 			<td>标题*：</td>
 			<td><input type="text" name="title" value="<?php echo isset($oitem)?$oitem['title']:''; ?>"></td>
 		</tr>
-		<tr>
+<!-- 		<tr>
 			<td>副标题：</td>
 			<td><input type="text" name="subtitle" value="<?php echo isset($oitem)?$oitem['subtitle']:''; ?>"></td>
-		</tr>
-		<tr>
+		</tr> -->
+<!-- 		<tr>
 			<td>封面图：</td>
 			<td id="coverarea" class="clearfix"></td>
-		</tr>
-		<tr>
+		</tr> -->
+<!-- 		<tr>
 			<td>简介：</td>
 			<td><textarea cols="60" rows="6" name="summary" ><?php echo isset($oitem)?$oitem['summary']:''; ?></textarea></td>
-		</tr>
+		</tr> -->
 		<tr>
 			<td>详情*：</td>
 			<td><textarea style="width:800px;height:400px;" id="articlecontent" name="content" ><?php echo isset($oitem)?$oitem['content']:''; ?></textarea></td>
 		</tr>
-		<tr>
+<!-- 		<tr>
 			<td>标签：</td>
 			<td>
 			<div>（可用于搜索，seo,多个标签请用英文,隔开）</div>
 			<input type="text" size="40" name="tags" value="<?php echo isset($oitem)?$oitem['tags']:''; ?>">
 			</td>
-		</tr>
-		<tr>
+		</tr> -->
+<!-- 		<tr>
 			<td>置顶:</td>
 			<td>
 				是<input class="" <?=(isset($oitem) && $oitem['istop']==1)?'checked="checked"':'';?> type="radio"  name="istop" value="1" >
 				否<input type="radio" <?=(!isset($oitem) || $oitem['istop']==0)?'checked="checked"':'';?>name="istop" value="0" >
 			</td>
-		</tr>
-		<tr>
+		</tr> -->
+<!-- 		<tr>
 			<td>热推:</td>
 			<td>
 				是<input class="" <?=(isset($oitem) && $oitem['ishot']==1)?'checked="checked"':'';?> type="radio"  name="ishot" value="1" >
 				否<input type="radio" <?=(!isset($oitem) || $oitem['ishot']==0)?'checked="checked"':'';?>name="ishot" value="0" >
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<td>状态:</td>
 			<td>

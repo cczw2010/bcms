@@ -10,7 +10,7 @@ final class Module_Article{
 	//将内容的封面图当做附件存储，对应的表中的objtype
 	const ATTACHTYPE = 'articlecover';
 
- 	public static $statuss = array('未发布','已发布');
+ 	public static $statuss = array('未启用','启用');
 
  	/**
  	 * 根据id获取内容
