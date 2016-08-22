@@ -14,6 +14,17 @@ class Product
     }
 
     /**
+     * [about 产品详情]
+     * @param  string $value [description]
+     * @return [type]        [description]
+     */
+    public function detail()
+    {
+        $datas['type'] = 'detail';
+        $this->view->load('web/detail', $datas);
+    }
+
+    /**
      * [process 使用流程]
      * @return [type] [description]
      */

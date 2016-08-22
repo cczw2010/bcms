@@ -39,14 +39,4 @@ class Home
         $this->view->load('web/about', $datas);
     }
 
-    /**
-     * [about 产品详情]
-     * @param  string $value [description]
-     * @return [type]        [description]
-     */
-    public function detail()
-    {
-        $datas['type'] = 'detail';
-        $this->view->load('web/detail', $datas);
-    }
 }

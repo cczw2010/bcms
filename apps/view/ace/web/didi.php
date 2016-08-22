@@ -11,7 +11,7 @@
 	foreach ($list as $k => $v) {
 		echo '<div class="dynamicStateList">';
 		echo '<h3>'.$v['title'].'</h3>';
-		echo '<p>都说2C产品已是红海一片，2B的海是蓝的吗？Design for Enterprise 星际迷航“企业号的设计图 作者 | 范</p>';
+		echo '<p>'.$v['summary'].'</p>';
 		echo '<div class="readAll clears">';
 		echo '<span>'.date("Y年m月d日", $v['createdate']).'</span>';
 		echo '<a href="article_detail?type_two='.$type_two.'&id='.$v['id'].'">阅读全文</a>';
