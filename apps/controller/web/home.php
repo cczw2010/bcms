@@ -49,17 +49,4 @@ class Home
         $datas['type'] = 'detail';
         $this->view->load('web/detail', $datas);
     }
-
-    /**
-     * [about 滴滴动态]
-     * @param  string $value [description]
-     * @return [type]        [description]
-     */
-    public function news()
-    {
-        $datas['type'] = 'news';
-        $res = Module_Article::getItems();
-        $this->view->load('web/news', $datas);
-    }
-
 }

@@ -15,17 +15,15 @@ class Didi
      */
     public function design()
     {
-        $params = Uri::getParams();
-        $params = $params['params'];
-        if (isset($params['page'])) {
-            $page = $params['page'];
+        $datas['type'] = 'didi';
+        $datas['type_two'] = 'design';
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
         } else {
             $page = 1;
         }
-        $psize = 10;
-        $datas['type'] = 'didi';
-        $datas['type_two'] = 'design';
-        $res = Module_Article::getItems();
+        $psize = 1;
+        $res = Module_Article::getItems(array('cateid'=>42), 'order by id desc', $page, $psize);
         $datas['list'] = $res['list'];
         $datas['pageDiv'] = set_php_page_menu($res['total'], $psize, $page);
         $this->view->load('web/didi', $datas);
@@ -40,6 +38,15 @@ class Didi
     {
         $datas['type'] = 'didi';
         $datas['type_two'] = 'activity';
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        $psize = 1;
+        $res = Module_Article::getItems(array('cateid'=>43), 'order by id desc', $page, $psize);
+        $datas['list'] = $res['list'];
+        $datas['pageDiv'] = set_php_page_menu($res['total'], $psize, $page);
         $this->view->load('web/didi', $datas);
     }
 
@@ -51,6 +58,15 @@ class Didi
     {
         $datas['type'] = 'didi';
         $datas['type_two'] = 'report';
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
+        $psize = 1;
+        $res = Module_Article::getItems(array('cateid'=>44), 'order by id desc', $page, $psize);
+        $datas['list'] = $res['list'];
+        $datas['pageDiv'] = set_php_page_menu($res['total'], $psize, $page);
         $this->view->load('web/didi', $datas);
     }
 
@@ -60,6 +76,10 @@ class Didi
      */
     public function article_detail()
     {
-        # code...
+        $datas['type'] = 'didi';
+        $datas['type_two'] = $_GET['type_two'];
+        $res = Module_Article::getItem($_GET['id']);
+        $datas['data'] = $res['data'];
+        $this->view->load('web/article', $datas);
     }
 }

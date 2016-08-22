@@ -182,13 +182,13 @@ function set_php_page_menu($count,$num,$page){
     if ($countPage <= 1 || !$countPage) {
         return "";
     }
-    $content = '<li><a href="">首页</a></li>';
+    $content = '<li><a href="?page=1">首页</a></li>';
     if($page==1){$prePage = 1;}else{$prePage = $page-1;}//判断上一页的值
-    $content .= '<li><a href="">&lt;</a></li>';
+    $content .= '<li><a href="?page='.$prePage.'">&lt;</a></li>';
     if ($page == 1) {//固定显示第一页，并判断是否加样式
-        $content .= '<li><a class="active">1</a></li>';
+        $content .= '<li><a href="?page=1" class="active">1</a></li>';
     } else {
-        $content .= '<li><a>1</a></li>';
+        $content .= '<li><a href="?page=1">1</a></li>';
     }
     if ($page > 3) {//中间固定显示5页，判断5页的起始页
         $star = $page -2;
@@ -205,22 +205,22 @@ function set_php_page_menu($count,$num,$page){
     }
     for ($i=$star;$i<=$end;$i++) {//中间固定显示5页，循环中间5页
         if ($i == $page) {
-            $content .= '<li><a class="active">'.$i.'</a></li>';
+            $content .= '<li><a href="?page='.$i.'" class="active">'.$i.'</a></li>';
         } else {
-            $content .= '<li><a>'.$i.'</a></li>';
+            $content .= '<li><a href="?page='.$i.'">'.$i.'</a></li>';
         }
     }
     if ($countPage-$page> 3) {//当结束页和总页数差值大于3时加...
         $content .= '<li><a>···</a></li>';
     }
     if ($page == $countPage) {//固定显示最后一页，并判断是否加样式
-        $content .= '<li><a class="active">'.$countPage.'</a></li>';
+        $content .= '<li><a href="?page='.$countPage.'" class="active">'.$countPage.'</a></li>';
     } else {
-        $content .= '<li><a>'.$countPage.'</a></li>';
+        $content .= '<li><a href="?page='.$countPage.'">'.$countPage.'</a></li>';
     }
     if($page==$countPage){$nextPage = $countPage;}else{$nextPage = $page+1;}//判断下一页的值
-    $content .= '<li><a>&gt;</a></li>';
-    $content .= '<li><a>尾页</a></li>';
+    $content .= '<li><a href="?page='.$nextPage.'">&gt;</a></li>';
+    $content .= '<li><a href="?page='.$countPage.'">尾页</a></li>';
     // $content .= '<span class="txt">共'.$countPage.'页'.$count.'条数据</span> <span class="txt">到第</span>';
     // $content .= '<form method="get" style="display:inline-block" action="">';
     // $content .= '<input name=p type="text" value="" class="inputPage"><span class="txt">页</span>';
