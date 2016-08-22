@@ -91,15 +91,15 @@
 				<div class="items9"></div>
 			</div>
 			<div class="pertnerList2">
-				<div class="items1">景观设计师</div>
-				<div class="items2">景观设计师</div>
-				<div class="items3">景观设计师</div>
-				<div class="items4">景观设计师</div>
-				<div class="items5">景观设计师</div>
-				<div class="items6">景观设计师</div>
-				<div class="items7">景观设计师</div>
-				<div class="items8">景观设计师</div>
-				<div class="items9">景观设计师</div>
+				<div class="items1"></div>
+				<div class="items2"></div>
+				<div class="items3"></div>
+				<div class="items4"></div>
+				<div class="items5"></div>
+				<div class="items6"></div>
+				<div class="items7"></div>
+				<div class="items8"></div>
+				<div class="items9">动画设计师</div>
 			</div>
 		</div>
 	</div>
