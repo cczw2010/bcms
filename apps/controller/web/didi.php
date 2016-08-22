@@ -15,19 +15,21 @@ class Didi
      */
     public function design()
     {
-        echo 1111;
+        $params = Uri::getParams();
+        $params = $params['params'];
+        if (isset($params['page'])) {
+            $page = $params['page'];
+        } else {
+            $page = 1;
+        }
+        $psize = 10;
+        $datas['type'] = 'didi';
+        $datas['type_two'] = 'design';
+        $res = Module_Article::getItems();
+        $datas['list'] = $res['list'];
+        $datas['pageDiv'] = set_php_page_menu($res['total'], $psize, $page);
+        $this->view->load('web/didi', $datas);
     }
-
-    /**
-     * [design_info 滴滴设计告白详情页]
-     * @param  string $value [description]
-     * @return [type]        [description]
-     */
-    public function design_info()
-    {
-        # code...
-    }
-
 
     /**
      * [activity 活动消息列表]
@@ -36,17 +38,9 @@ class Didi
      */
     public function activity()
     {
-        # code...
-    }
-
-    /**
-     * [activity_info 活动消息详情]
-     * @param  string $value [description]
-     * @return [type]        [description]
-     */
-    public function activity_info()
-    {
-        # code...
+        $datas['type'] = 'didi';
+        $datas['type_two'] = 'activity';
+        $this->view->load('web/didi', $datas);
     }
 
     /**
@@ -55,16 +49,17 @@ class Didi
      */
     public function report()
     {
-        # code...
+        $datas['type'] = 'didi';
+        $datas['type_two'] = 'report';
+        $this->view->load('web/didi', $datas);
     }
 
     /**
-     * [report 媒体报道列表详情]
+     * [article_detail 文章详情]
      * @return [type] [description]
      */
-    public function report_info()
+    public function article_detail()
     {
         # code...
     }
-    
 }
