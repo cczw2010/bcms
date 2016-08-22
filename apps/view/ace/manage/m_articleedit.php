@@ -22,10 +22,10 @@
 			<td>封面图：</td>
 			<td id="coverarea" class="clearfix"></td>
 		</tr> -->
-<!-- 		<tr>
+		<tr>
 			<td>简介：</td>
 			<td><textarea cols="60" rows="6" name="summary" ><?php echo isset($oitem)?$oitem['summary']:''; ?></textarea></td>
-		</tr> -->
+		</tr>
 		<tr>
 			<td>详情*：</td>
 			<td><textarea style="width:800px;height:400px;" id="articlecontent" name="content" ><?php echo isset($oitem)?$oitem['content']:''; ?></textarea></td>
