@@ -43,8 +43,9 @@ function initTinymce(sel,styles,m){
 	        "insertdatetime media nonbreaking save table contextmenu directionality",
 	        "emoticons template paste textcolor"
 	    ],
-	    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-	    toolbar2: "print preview media | forecolor backcolor emoticons",
+	    toolbar1: "insertfile undo redo | styleselect | fontname fontsize |bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+	    toolbar2: "print preview media | fontsizeselect forecolor backcolor emoticons",
+	    fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
 	    image_advtab: true,
 	    templates: [
 	        {title: 'Test template 1', content: 'Test 1'},

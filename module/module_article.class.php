@@ -158,7 +158,7 @@ final class Module_Article{
 					$arrs['status'] = 1;
 					$coverid=0;
 				}
-				$ret = Module_Attach::setItem($arrs,$coverid,true);
+				$ret = Module_Attach::setItem($arrs,$coverid,false);
 				if ($ret['code']<0) {
 					return false;
 				}
