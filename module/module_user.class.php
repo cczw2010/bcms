@@ -26,10 +26,7 @@ final class Module_User{
 		if (!empty($username) && !empty($password)) {
 			// 过滤禁止注册的用户名包含的字符串,暂时为实现！！！！！后期必须加
 			$password = md5($password);
-			$users = $GLOBALS['db']->select(self::TNAME,array(
-																											'username'=>$username,
-																											'password'=>$password
-																											));
+			$users = $GLOBALS['db']->select(self::TNAME,array('username'=>$username,'password'=>$password));
 			if ($users['pcnt']>0) {
 				$user = $users['list'][0];
 				if ($user['status']==0) {

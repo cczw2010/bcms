@@ -355,7 +355,7 @@ class Db_mysql implements db{
 		$this->query('COMMIT');
 	}
 	// 事务回滚
-	public function transback(){
+	public function transBack(){
 		$this->query('ROLLBACK');
 	}
 }
