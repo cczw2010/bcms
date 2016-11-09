@@ -7,16 +7,16 @@ return array(
 	"sitename"=> 'BCMS',	//网站名称
 	"debug" =>true,				//是否显示应用级报错（调试）和常规错误警告
 	"sessionttl"=>3600,		//session过期时间
-	
+
 	// controller和view和model文件夹名称
 	"folder_c"=>'controller',
 	"folder_v"=>'view',
 	"folder_m"=>'model',
-	
+
 	// 默认模块和入口
 	"def_c"=>'home',
 	"def_m"=>'index',
-	
+
 	// view模板设置，如果设置的缓存（伪静态），请注意这里使用的文件缓存
 	// 模板引擎，可以使用任何以实现的引擎,false混编模式（推荐）
 	"view"=>array(
@@ -32,7 +32,7 @@ return array(
 		'port'		=> 3306,
 		'user'		=> 'root',
 		'pass'		=> '123456',
-		'dbname'	=> 'bcms',
+		'dbname'	=> 'hlwx',
 		'group'		=>'db',		//缓存分组
 	),
 
@@ -47,9 +47,29 @@ return array(
 		// 				// 'memcache3'=>array('host'=>'112.126.70.35','port'=>11213,'weight'=>3),
 		// 			),
 		// 	//当设置缓存的时候如果不指定缓存时间（秒），将使用该默认缓存时间，0表示永不过期
-	 // 		'ttl'		=>3600,
-	 // 		// 'default'	=>true,
+	 	// 	'ttl'		=>3600,
+		//  'default'	=>true,
 		// ),
+		// 'redis' =>array(
+		//        'ttl'=>1,
+		//        'servers'=>array (
+		//                         array (
+		//                             'host'      =>  '127.0.0.1' ,   //默认 127.0.0.1
+		//                             'port'      =>  6379 ,          //默认 6379
+		//                             'database'  =>  15 ,            //默认使用redis自己默认的数据库
+		//                             'password'  =>  '',             //链接密码,如果没有密码移除此项,默认无密码
+		//                             'timeout'   =>  5.0             //链接服务器超时时间, 默认5s
+		//                             'read_write_timeout' =>  5.0    //读写超时时间,默认为系统设置,-1为不读写永不超时
+	 	//                             'alias'	   => 'first'
+	 	//                         ),
+	 	//                         array (
+		//                             'host'      =>  '127.0.0.1' ,   //默认 127.0.0.1
+		//                             'port'      =>  6380 ,          //默认 6379
+		//                             'database'  =>  15 ,            //默认使用redis自己默认的数据库
+		//                             'alias'	   => 'second'
+		//                         )
+		//              		),
+		// 	),
 		'file' =>array(
 			'path' 		=>'/cache',
 			'ext'  		=>'.cache',
