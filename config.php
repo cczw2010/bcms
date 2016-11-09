@@ -32,7 +32,7 @@ return array(
 		'port'		=> 3306,
 		'user'		=> 'root',
 		'pass'		=> '123456',
-		'dbname'	=> 'hlwx',
+		'dbname'	=> 'bcms',
 		'group'		=>'db',		//缓存分组
 	),
 
@@ -95,8 +95,8 @@ return array(
 	'weixin'=>array(
 			'token'=>'',
 			'encodingaeskey'=>'',
-			'appid'=>'wx0ccdea25907bca75',
-			'appsecret'=>'c9b08314085ee8d805a0f1c3dbad6784',
+			'appid'=>'',
+			'appsecret'=>'',
 			),
 );
 
