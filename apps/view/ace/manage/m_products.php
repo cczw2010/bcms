@@ -16,33 +16,33 @@
 				<div class="widget-header header-color-blue3">
 					<form action="/manage/product/lists/">
 					<span class="xicon mr10">!</span>筛选：
-					<label class="ml20" for="">分类：</label>
+					<label class="" for="">分类：</label>
 					<select name="cateid" id="">
 						<option value="0" >全部</option>
 						<?=$options ;?>
 					</select>
-					<label class="ml20" for="">品牌：</label>
+					<label class="" for="">品牌：</label>
 					<select name="brandid" id="">
 						<option value="0" >全部</option>
 						<?= $brandoptions;?>
 					</select>
-					<label class="ml20" for="">状态：</label>
+					<label class="" for="">状态：</label>
 					<select name="status" id="">
 						<option value="-1" >全部</option>
 						<?php echo SForm::buildOptionsSimple(Module_Product::$statuss,isset($filter['status'])?$filter['status']:'') ?>
 					</select>
-					<label class="ml20" for="">推荐：</label>
+					<label class="" for="">推荐：</label>
 					<select name="ishot" id="">
 						<option value="-1" >全部</option>
 						<option value="1" <?php if(isset($filter['ishot'])&&($filter['ishot']==1)){echo 'selected';} ?>>是</option>
 						<option value="0" <?php if(isset($filter['ishot'])&&($filter['ishot']==0)){echo 'selected';} ?>>否</option>
 					</select>
-					<label class="ml20"  for="">作者：</label>
+					<label class=""  for="">作者：</label>
 					<input type="text" name="username" size="10" value="<?php echo isset($filter['username'])?$filter['username']:'' ?>">
-					<label class="ml20"  for="">标题：</label>
+					<label class=""  for="">标题：</label>
 					<input type="text" name="title" size="10" value="<?php echo isset($filter['title'])?$filter['title']:'' ?>">
 					<input type="hidden" name="filterform" value="1">
-					<input class="ml20 submitbtn"  type="button" value="提交">
+					<input class="submitbtn btn btn-info btn-sm"  type="button" value="提交">
 					</form>
 				</div>
 				<div class="widget-body">

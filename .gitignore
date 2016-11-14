@@ -1,7 +1,7 @@
 cache/*
 upfiles/*
 backup/*
-!backup/bcms-all2015-10-10-1444484343.sql
+!backup/bcms-all*.sql
 node_modules/
 .*
 !.gitignore

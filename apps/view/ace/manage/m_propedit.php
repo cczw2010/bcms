@@ -29,7 +29,7 @@
 			<td colspan="2" class="ccenter">
 				<input type="hidden" name="id" value="<?php echo isset($prop)?$prop['id']:''; ?>">
 				<input type="hidden" name="appid" value="<?php echo isset($prop)?$prop['appid']:0; ?>">
-				<input type="button" name="submitbtn" class="submitbtn button" value="提 交">
+				<input type="button" name="submitbtn" class="submitbtn btn btn-info" value="提 交">
 			</td>
 		</tr>
 	</tbody>

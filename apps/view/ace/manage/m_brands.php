@@ -1,7 +1,7 @@
 <div class="row" id="brandmain">
 	<?php
 	if (!empty($errmsg)) {
-		echo	'<div class="errmsg">'.$errmsg.'</div>';
+		echo	'<div class="alert alert-info">'.$errmsg.'</div>';
 	}
 	?>
 	<ul class="nav nav-tabs">
@@ -22,7 +22,7 @@
 					<label class=""  for="">品牌名称：</label>
 					<input type="text" name="name" size="10" value="<?php echo isset($filter['name'])?$filter['name']:'' ?>">
 					<input type="hidden" name="filterform" value="1">
-					<input class="submitbtn button"  type="button" value="提交">
+					<input class="submitbtn btn btn-info btn-sm"  type="button" value="提交">
 					</form>
 				</div>
 				<div class="widget-body">
@@ -108,7 +108,7 @@
 						<tr>
 							<td colspan="2" class="ccenter">
 								<input type="hidden" name="id" value="">
-								<input type="button" name="submitbtn" class="submitbtn" value="提 交">
+								<input type="button" name="submitbtn" class="submitbtn btn btn-info" value="提 交">
 							</td>
 						</tr>
 					</tbody>

@@ -145,14 +145,14 @@
 			 	if (o.length>0) {
 			 		o.html(msg).show();
 			 	}else{
-			 		bootbox.alert(msg);
+			 		alert(msg);
 			 	}
 				}else{
 					// 如果没有data-flusharea 则刷新主区域
 					var flusharea = o.dataset.flusharea||'#pageArea';
 					clearJsObj(flusharea);
 					$(flusharea).html(h);
-				}	
+				}
 			}
 			// function showDialog(){
 			// 	$('#exampleModal').on('show.bs.modal', function (event) {
