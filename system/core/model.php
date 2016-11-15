@@ -19,7 +19,7 @@ class Core_Model{
 		$path = $this->path.DIRECTORY_SEPARATOR.$modelname.'.php';
 		if (file_exists($path)) {
 			include_once($path);
-			$cname = ucfirst($modelname);
+			$cname = ucfirst(basename($modelname));
 			if(class_exists($cname)){
 				$cls = new ReflectionClass($cname);
 				return $cls->newInstance();
