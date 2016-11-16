@@ -54,6 +54,8 @@ Class Home{
 				array('name'=>'邮件管理','con'=>'mail','subs'=>array(
 																		'cfg'=>'SMTP邮件配置',
 																		'send'=>'发送邮件')),
+				array('name'=>'微信管理','con'=>'weixin','subs'=>array(
+																		'menu'=>'菜单列表')),
 			);
 		//根据用户权限过滤一下
 		if ($this->loginuser['group']!=Module_Group::GROUP_SUPER) {
