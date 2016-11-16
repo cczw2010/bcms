@@ -11,29 +11,27 @@
 			<thead>
 				<tr>
 					<th width="50">id</th>
-					<th width="100">用户id</th>
-					<th width="100">收货人</th>
+					<th width="">收货人</th>
 					<th width="">地址</th>
 					<th width="">手机号</th>
 					<th width="">固话</th>
 					<th width="50">默认</th>
-					<th width="100">创建时间</th>
+					<th width="">创建时间</th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php
 					foreach ($items['list'] as $id => $item) {
 						echo '<tr><td>'.$item['id'].'</td>
-									<td>'.$item['userid'].'</td>
 									<td>'.$item['name'].'</td>
 									<td>'.$item['province'].$item['city'].$item['area'].$item['detail'].'</td>
 									<td>'.$item['mobile'].'</td>
 									<td>'.$item['phone'].'</td>
-									<td>'.($item['default']==1?'是':'否').'</td></tr>
+									<td>'.($item['isdefault']==1?'是':'否').'</td>
 									<td>'.date('Y-m-d H:i:s',$item['createdate']).'</td></tr>';
 					}
 				?>
 			</tbody>
-		</table>			
+		</table>
 	</div>
 </div>

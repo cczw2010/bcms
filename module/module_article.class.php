@@ -3,8 +3,6 @@
  * 内容模块统一处理类,纯静态类
  */
 final class Module_Article{
-	const APPID = 2;
-	const APPNAME = '内容模块';
 	const TNAME = 't_article';
 	const MINTITLE = 3;
 	//将内容的封面图当做附件存储，对应的表中的objtype

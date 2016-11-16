@@ -2,11 +2,13 @@
 // 文章管理类
 class Article{
 	const ERRNAME = '_x_errmsg';
+	const MODULEID = 'article';
+
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_Manager::getloginUser();
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
-				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
 				die();
 			}
 		}else{
@@ -14,10 +16,16 @@ class Article{
 				Uri::build('manage/home','index',false,true);
 			}
 			/////////////////// 切入权限管理模块,根据权限来展示树
-			$this->rights = Module_Group::isManager($this->loginuser['group']);
-			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
 			}
 			$this->view->data(array('user'=>$this->loginuser));
 		}
@@ -59,13 +67,13 @@ class Article{
 			$conds['ishot'] = $_REQUEST['ishot'];
 			$pageParams['ishot'] = $_REQUEST['ishot'];
 		}
-		$datas = array('appid'=>Module_Article::APPID);
+		$datas = array('moduleid'=>self::MODULEID);
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$datas['items'] = Module_Article::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);
 		// 分类
-		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Article::APPID),-1);
+		$cates = Module_Category::getChilds(0,0,array('moduleid'=>self::MODULEID),-1);
 		$cateid = isset($_REQUEST['cateid'])?$_REQUEST['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($cates['data']['items'],$cateid);
 		Uri::setPrevPage();
@@ -92,7 +100,7 @@ class Article{
 					'lastdate'=>$t,
 				);
 			if($id == 0){
-				$SUSER = Module_User::getloginUser(true);
+				$SUSER = Module_Manager::getloginUser();
 				$attrs['userid']  = $SUSER['id'];
 				$attrs['username']  = $SUSER['username'];
 				$attrs['createdate']  = $t;
@@ -116,11 +124,7 @@ class Article{
 					}
 				}
 				// 添加日志
-				Module_log::setItem(array('modulename'=>Module_Article::APPNAME,
-						'moduleid'=>Module_Article::APPID,
-						'key'=>($id==0?'新增':'更新'),
-						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Article::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Article::TNAME));
 			}
 			Uri::build('manage/article','lists',false,true);
 		}
@@ -137,11 +141,10 @@ class Article{
 				Uri::build('manage/article','lists',false,true);
 			}
 		}
-		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Article::APPID));
+		$cates = Module_Category::getChilds(0,0,array('moduleid'=>self::MODULEID));
 		$datas['cates'] = $cates['data']['items'];
 		$cateid = isset($datas['oitem']['cateid'])?$datas['oitem']['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($datas['cates'],$cateid);
-		
 		$this->view->load('manage/m_articleedit',$datas);
 	}
 	// 删除文章
@@ -153,11 +156,7 @@ class Article{
 		}
 		// 添加日志
 		if ($ret['code']>0) {
-			Module_log::setItem(array('modulename'=>Module_Article::APPNAME,
-					'moduleid'=>Module_Article::APPID,
-					'key'=>'删除',
-					'message'=>'操作id '.$params[0].';操作库:'.Module_Article::TNAME
-					));
+			Module_log::setItem(array('message'=>'操作id '.$params[0].';操作库:'.Module_Article::TNAME));
 		}
 		// 不管删除成功与否直接跳转
 		Uri::redirect(Uri::getPrevPage());
@@ -166,11 +165,12 @@ class Article{
 	// 文章分类管理
 	public function cate(){
 		Uri::setPrevPage();
-		Uri::redirect('/manage/category/lists/?appid='.Module_Article::APPID);
+		Uri::redirect('/manage/category/lists/?moduleid='.self::MODULEID);
 	}
-	// 
+	//
 	public function comm(){
+		$objid = Uri::get('objid',0);
 		Uri::setPrevPage();
-		Uri::redirect('/manage/comment/lists/?appid='.Module_Article::APPID);
+		Uri::redirect('/manage/comment/lists/?moduleid='.self::MODULEID.'&objid='.$objid);
 	}
 }

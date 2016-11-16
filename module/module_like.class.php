@@ -1,8 +1,6 @@
 <?php
 // 喜欢（赞）模块数据库记录类
 class Module_Like{
-	const APPID = 21;
-	const APPNAME = '喜欢（赞）模块';
 	const TNAME = 't_like';
 
 	/**

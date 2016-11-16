@@ -2,10 +2,10 @@
 class Comment{
 	const ERRNAME = '_x_errmsg';
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_Manager::getloginUser();
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
-				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
 				die();
 			}
 		}else{
@@ -13,10 +13,16 @@ class Comment{
 				Uri::build('manage/home','index',false,true);
 			}
 			/////////////////// 切入权限管理模块,根据权限来展示树
-			$this->rights = Module_Group::isManager($this->loginuser['group']);
-			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
 			}
 			$this->view->data(array('user'=>$this->loginuser));
 		}
@@ -28,11 +34,11 @@ class Comment{
 		$page = !empty($params[0])?$params[0]:1;
 		$psize = 20;
 
-		$appid = Uri::get('appid',0);
-		$datas = array('appid'=>$appid);
+		$moduleid = Uri::get('moduleid',0);
+		$datas = array('moduleid'=>$moduleid);
 		// 过滤条件
-		$conds = array('appid'=>$appid);	//检索条件
-		$pageParams = array('appid'=>$appid);//分页搜索参数
+		$conds = array('moduleid'=>$moduleid);	//检索条件
+		$pageParams = array('moduleid'=>$moduleid);//分页搜索参数
 		if (!empty($_REQUEST['objid'])) {
 			$conds['objid'] = '= '.$_REQUEST['objid'].'';
 			$pageParams['objid'] = $_REQUEST['objid'];
@@ -45,14 +51,14 @@ class Comment{
 			$conds['message'] = 'like "%'.$_REQUEST['message'].'%"';
 			$pageParams['message'] = $_REQUEST['message'];
 		}
-		
+
 		if (isset($_REQUEST['status']) && $_REQUEST['status']!='-1') {
 			// 状态可能为0,所以不能用empty来判断
 			$conds['status'] = $_REQUEST['status'];
 			$pageParams['status'] = $_REQUEST['status'];
 		}
 		$datas['items'] = Module_Comment::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages4Ace($page,$psize,$datas['items']['total'],$pageParams,true);
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$this->view->load('manage/m_comments',$datas);
@@ -62,14 +68,15 @@ class Comment{
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
-			$appid = Uri::post('appid',0);
+			$moduleid = Uri::post('moduleid',0);
 			$attrs = array(
-				'appid'=>$appid,
-				'userid'=>Uri::post('userid'),
-				'objid'=>Uri::post('objid'),
+				'moduleid'=>$moduleid,
+				'userid'=>Uri::post('userid',0),
+				'objid'=>Uri::post('objid',0),
 				'score'=>Uri::post('score',0),
 				'message'=>Uri::post('message'),
 				'status'=>Uri::post('status',0),
+				'updatedate'=>$_SERVER['REQUEST_TIME'],
 			);
 			// 因为评论不在后台新增，所以暂时不考虑其他字段的修改
 			$ret = Module_Comment::setItem($attrs,$id);
@@ -77,11 +84,7 @@ class Comment{
 				Helper::setSession(self::ERRNAME,$ret['msg']);
 			}else{
 				// 添加日志
-				Module_log::setItem(array('modulename'=>Module_Comment::APPNAME,
-						'moduleid'=>Module_Comment::APPID,
-						'key'=>($id==0?'新增':'更新'),
-						'message'=>'操作id '.($id==0?$ret['data']:$id).';评论对应模块APPID '.$appid.';操作库:'.Module_Comment::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.($id==0?$ret['data']:$id).';评论对应模块moduleid '.$moduleid.';操作库:'.Module_Comment::TNAME));
 			}
 			Uri::redirect(Uri::getPrevPage());
 		}
@@ -109,11 +112,7 @@ class Comment{
 		}
 		// 添加日志
 		if ($ret['code']>0) {
-			Module_log::setItem(array('modulename'=>Module_Comment::APPNAME,
-					'moduleid'=>Module_Comment::APPID,
-					'key'=>'删除',
-					'message'=>'操作id '.$params[0].$appid.';操作库:'.Module_Comment::TNAME
-					));
+			Module_log::setItem(array('message'=>'操作id '.$params[0].$moduleid.';操作库:'.Module_Comment::TNAME));
 		}
 		// 不管删除成功与否直接跳转
 		Uri::redirect(Uri::getPrevPage());

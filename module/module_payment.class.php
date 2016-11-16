@@ -3,15 +3,11 @@
  * 新增一个支付方式只需要再数据库中增加一行记录(key为唯一标示)，修改相应的后台编辑代码（必填项），
  * 然后在本类的gotoPay和callback中增加相应的处理模块，其他功能自动实现
  * ps：1 以实现的支付宝支付 会自动判断平台调用pc和wap支付sdk
- * 				
- */
+ * */
 final class Module_Payment{
-	const APPID = 8;
-	const APPNAME = '支付模块';
 	const TNAME = 't_payment';
 	const KEY_ALIPAY = 'alipay';
 	// 判断移动端
-	
 	/**************支付前端业务逻辑部分*************/
 	/**
 	 * 根据支付类型去支付
@@ -21,7 +17,7 @@ final class Module_Payment{
 	 * @param  string $total_fee 		付款金额 必填
 	 * @param  string $body					订单描述
 	 * @param  string $show_url 		商品展示地址,（值得注意的是如果是支付宝wap支付的返回地址不能带参数）
-	 * @return void           
+	 * @return void
 	 */
 	static function gotoPay($key,$out_trade_no,$subject,$total_fee,$body,$show_url){
 		$ret = self::getItemByKey(self::KEY_ALIPAY);

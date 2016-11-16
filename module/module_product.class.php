@@ -3,8 +3,6 @@
  * 商品模块统一处理类,纯静态类
  */
 final class Module_Product{
-	const APPID = 5;
-	const APPNAME = '商品模块';
 	const TNAME = 't_product';
 	const TSKUNAME = 't_product_sku';
 	const TSKULOG = 't_product_sku_log';

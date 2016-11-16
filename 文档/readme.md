@@ -1,23 +1,23 @@
-# BCMS V1.0   build by awen  email:71752352@qq.com
+# BCMS V1.2   build by awen  email:71752352@qq.com
 
 ## 说明
 
    该框架是一个简单的基于PHP的cmf框架。框架内部集成了`内容模块`，`用户模块`，`权限模块`，`模板模块`，`缓存模块`，`第三方登陆模块`,`分类模块`，`商品模块`,`评论模块`,`支付模块`等等.基本上可以直接拿来当cms系统使用。同时灵活的模块方式也便于用户二次开发。
-   
+
    很多思想借助了ci框架，开发这套系统仅仅是为了自己使用着更加方便罢了。
-	
+
 ## 开发思想
 
 1 模块式开发
 
    一切功能皆模块，模块可以抽象出一个面向业务的模型出来，所有的模块通过统一的模型来开发。这样一来整个框架便于管理，集成，和扩展，用户熟悉了开发模型后，基本就了解了整个程序的开发模式。。
 
-2 mvc 
- 
+2 mvc
+
 传统的mvc结构，当然你完全可以不这么写
 
 3 resetful
-	
+
 url支持原始模式和reset模式，默认reset模式（'/'）,详情可查看config.php
 
 4 缓存策略
@@ -26,7 +26,7 @@ url支持原始模式和reset模式，默认reset模式（'/'）,详情可查看
 
 
 ## 安装
-	
+
 + 在nginx或者apache中设置index.php为唯一入口,参考根目录下的nginx和apache配置文件
 + 目录权限， upfiles,cache,backup目录必须拥有可读写权限
 + php扩展，用户头像和图片处理库SImage依托于imagick,请注意安装
@@ -44,7 +44,7 @@ nginx.conf 需要配置到nginx中
 ## gulp
 
 静态文件的开发使用了gulp工程化处理，当然你也可以不用。但是用起来还是非常非常方便的，具体配置可查看gulpfile.js 文件。支持js,css,img自动压缩合并监听，省你很多事。
-	
+
 	在根目录下执行：npm install  安装完必须包后，执行gulp
 
 ## 目录介绍
@@ -54,7 +54,7 @@ nginx.conf 需要配置到nginx中
 	common.php   一些通用全局方法，包括类库autoload,dump,showMessage等方法
 
 * system/core
-	
+
 	系统内核
 
 * system/libs
@@ -67,15 +67,15 @@ nginx.conf 需要配置到nginx中
 	各个模块的通用处理类库，系统会在需要时自动加载相应的库，所以用户可以直接使用，但是文件名称必须按照命名规则来：className.class.php 其中 className 是类名小写。
 
 * library
-	
+
 	该目录，放置了一些系统自带的通用类库（有一部分被系统内核使用，例如SFile 文件处理库，Helper辅助类），
 	也可以放置用户自己封装的类库,并且系统会再需要的时候自动加载该目录下的类库，但是文件名称必须按照命名规则来：
 	className.class.php 其中 className 是类名小写。建议全部都做成静态的
-	
+
 * cache
 
 	缓存目录，请注意读写权限
-	
+
 * backup
 
 	数据库备份目录，请注意读写权限
@@ -97,10 +97,10 @@ nginx.conf 需要配置到nginx中
 * test
 	框架测试代码（/tester/xxx）使用的临时文件夹
 
-* apps 
+* apps
 
 	应用文件夹，该文件夹是放置实际应用版本库的地方，一个应用可能开发很多版本，一个版本对应一个文件夹，内部包含controller,model,和view。系统默认为default版本。
-	
+
 * apps/controller
 
 	控制层，所有的页面业务逻辑在这里展现
@@ -109,16 +109,16 @@ nginx.conf 需要配置到nginx中
 
 	数据模型,本目录下的库是用户自己封装的相关类库（可以在这里写数据缓存）。
 	在此可以使用modules中封装的各个对应的模块来获取数据，也可直接使用 $GLOBALS['db']自己操作数据库
-	在controller中可以使用$this->model->load('文件名')来加载，返回实例。
+	在controller中可以使用$this->model->load('path/to/文件名')来加载，返回实例。路径相对于应用目录model文件夹
 
 * apps/view
 
-	模板 ，在controller中可以使用$this->view->load('文件名')来加载，返回实例。
-	
+	模板 ，在controller中可以使用$this->view->load('path/to/文件名')来加载，返回实例。路径相对于应用目录view文件夹
+
 * config.php
 
 	一些配置，用户可以根据需求修改该处配置,配置文件生命在了超级全局变量中，所以可以再任何地方通过 $GLOBALS['config']调用
-	
+
 * index.php
 
 	本应用的入口文件，系统应该将该文件作为入口文件

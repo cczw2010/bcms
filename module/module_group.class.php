@@ -1,34 +1,10 @@
 <?php
 /**
  * 用户组模块统一管理类,纯静态类，值得注意的是
- * 用户数据表中group的默认值 0为普通用户，-1代表匿名用户。这两个组是写死的，
  * 不能增删改，不入分组库
  */
 final class Module_Group{
-	const APPID = 3;
-	const APPNAME = '用户组模块';
 	const TNAME = 't_group';
-	const GROUP_SUPER = -1;
-	const GROUP_GENERAL = 0;
-	// 分组类型 0 管理员分组， 1 普通用户分组
-	const TYPE_USER = 1;
-	const TYPE_MANAGER = 0;
-	public static $types = array('管理员分组','用户分组');
-	/**
-	 * 判断是否管理员（注意超级管理员组GROUP_SUPER不在检测之列）
-	 * @param int $groupid  用户的分组id
-	 * @return 如果是自定义的管理员返回权限列表字符串，如果不是返回FALSE
-	 */
-	static public function isManager($groupid){
-		$groupid = intval($groupid);
-		if($groupid!=self::GROUP_GENERAL){
-			$ret = self::getGroup($groupid);
-			if ($ret['code']>0&&$ret['data']['types']==self::TYPE_MANAGER) {
-				return $ret['data']['rights'];
-			}
-		}
-		return 0;
-	}
 	/**
  	 * 根据id获取分组
  	 * @param  int $id 内容id

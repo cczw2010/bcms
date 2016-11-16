@@ -1,7 +1,7 @@
 <div class="tabbable">
 	<ul class="nav nav-tabs">
 		<li class="active">
-			<a data-toggle="tab" href="#ugrouplist">用户分组列表</a>
+			<a data-toggle="tab" href="#ugrouplist">管理员分组列表</a>
 		</li>
 		<li class="">
 			<a data-toggle="tab" href="#ugroupadd">添加新分组</a>
@@ -29,9 +29,9 @@
 													<td>'.$group['name'].'</td>
 													<td>'.$group['desc'].'</td>
 													<td class="">'.($id>0?
-															'<a class="green ajaxbtn" href="/manage/user/gedit/'.$group['id'].'">'.
+															'<a class="green ajaxbtn" href="/manage/manager/gedit/'.$group['id'].'">'.
 																'<i class="icon-pencil bigger-130"></i>'.
-															'</a> <a class="red ajaxbtn" href="/manage/user/gdel/'.$group['id'].'"  data-confirm="确认删除吗？如果该组下已经有了用户，其权限信息将丢失，请慎重！">'.
+															'</a> <a class="red ajaxbtn" href="/manage/manager/gdel/'.$group['id'].'"  data-confirm="确认删除吗？如果该组下已经有了用户，其权限信息将丢失，请慎重！">'.
 																'<i class="icon-trash bigger-130"></i>'.
 															'</a>':'').
 													'</td></tr>';
@@ -47,7 +47,7 @@
 			<div class="widget-box transparent">
 				<div class="widget-body">
 					<div class="widget-main no-padding">
-						<form action="/manage/user/gedit/">
+						<form action="/manage/manager/gedit/">
 						<table class="table table-bordered table-striped">
 							<tbody>
 								<tr>
@@ -58,6 +58,28 @@
 									<td>描述:</td>
 									<td>
 										<textarea name="desc" id="" cols="30" rows="5"  value=""></textarea>
+									</td>
+								</tr>
+								<tr>
+									<td>权限:</td>
+									<td>
+										<?php
+										foreach ($modules as $module => $methods) {
+										?>
+										<div class="rightbox">
+											<div class="right_title">
+												<input class="right_c ml10" type="checkbox" value="<?=$module; ?>"><?=$module; ?>
+											</div>
+											<ul class="clearfix">
+											<?php
+												foreach ($methods as $method=>$mname) {
+														$val = $module.'-'.$method;
+														echo '<li><input class="right_m ml10" type="checkbox" name="rights[]" value="'.$val.'">'.$mname.'</li>';
+													}
+											?>
+											</ul>
+										</div>
+										<?php	}?>
 									</td>
 								</tr>
 								<tr>

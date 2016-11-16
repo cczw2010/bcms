@@ -1,8 +1,6 @@
 <?php 
 // 敏感词验证过滤,目前注册部分使用了敏感词校验和文章内容使用了敏感词过滤 
  class Module_Sword{
- 	const APPID = 14;
-	const APPNAME = '验证过滤模块';
 	const TNAME = 't_sensitiveword';
 
 	// 获取验证过滤数据，带缓存

@@ -1,16 +1,14 @@
 <?php
 // 通知模块数据库记录类  未实验
 class Module_Notify{
-	const APPID = 19;
-	const APPNAME = '通知模块';
 	const TNAME = 't_notify';
 
 	public static $ObjTypes = array('article'=>'文章',	//收藏，喜欢，点赞，评论
-																	'product'=>'商品',//.....
-																	'comment'=>'评论',//点赞，反对，再评论
-																	'user'=>'用户', //关注，评论
-																	);
-	/**
+									'product'=>'商品',//.....
+									'comment'=>'评论',//点赞，反对，再评论
+									'user'=>'用户', //关注，评论
+									);
+/**
  	 * 根据id获取内容
  	 * @param  int $id 内容id
  	 * @return array

@@ -7,7 +7,7 @@ class Widget{
 	public function upload(){
 		$ret = array('code' =>-1 ,'msg'=>'' );
 		//管理员
-		$user = Module_User::getLoginUser(true);
+		$user = Module_Manager::getLoginUser();
 
 		if ($user) {
 			/****** 通用参数*******/
@@ -17,7 +17,7 @@ class Widget{
 			$objtype  = Uri::post('objtype');
 
 			// 生成实际上传地址
-			$ufolder = Module_User::getAlbumBase($user['id']);
+			$ufolder = Module_Manager::getAlbumBase($user['id']);
 			$uppath =BASEPATH.$GLOBALS['config']['uploadpath'].'/'.$ufolder.'/';
 			if (!empty($objtype)) {
 				$uppath.=$objtype;

@@ -34,9 +34,9 @@ $sconfig = require('../../../config.php');
 $spath = $sconfig['elfinder']['path'];
 $surl = $sconfig['elfinder']['url'];
 
-require('../../../module/module_user.class.php');
-$suser = Module_User::getLoginUser(true);
-$ufolder = Module_User::getAlbumBase($suser['id']);
+require('../../../module/module_manager.class.php');
+$suser = Module_Manager::getLoginUser();
+$ufolder = Module_Manager::getAlbumBase($suser['id']);
 $uppath = $spath.'/'.$ufolder.'/';
 if (is_dir($spath) && !file_exists($uppath)) {
 	// 创建每个用户自己的图片目录

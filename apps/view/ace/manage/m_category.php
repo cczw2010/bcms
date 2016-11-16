@@ -13,14 +13,14 @@
 			<a data-toggle="tab" data-target="#catelist">分类列表</a>
 		</li>
 		<li>
-			 <a class="ajaxbtn btn btn-success" href="/manage/category/edit/?<?php echo 'appid='.$appid; ?>" >添加新顶级分类</a>
+			 <a class="ajaxbtn btn btn-success" href="/manage/category/edit/?<?php echo 'moduleid='.$moduleid; ?>" >添加新顶级分类</a>
 		</li>
 	</ul>
 	<div class="tab-content">
 		<div id="catelist" class="widget-container-span ui-sortable tab-pane active">
 			<div class="widget-box transparent">
 				<div class="widget-header header-color-blue3" style="">
-					<form action="/manage/category/lists/?appid=<?php echo $appid;?>">
+					<form action="/manage/category/lists/?moduleid=<?php echo $moduleid;?>">
 					<label for="">父项id：</label>
 					<input class="input-sm" type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>">
 					<label for="">id：</label>
@@ -66,16 +66,16 @@
 											<td>'.$item['desc'].'</td>
 											<td>'.Module_Category::$statuss[$item['status']].'</td>
 											<td class="">
-												<a href="/manage/category/edit/?parentId='.$item['id'].'&appid='.$appid.'" class="ajaxbtn">添加子项</a>
+												<a href="/manage/category/edit/?parentId='.$item['id'].'&moduleid='.$moduleid.'" class="ajaxbtn">添加子项</a>
 												<a href="/manage/category/edit/'.$item['id'].'" class="ajaxbtn">编辑</a>
-												<a href="/manage/category/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</a>
+												<a href="/manage/category/del/?id='.$item['id'].'&moduleid='.$moduleid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</a>
 											</td></tr>';
 									}
 								}
 								?>
 								<tr><td colspan="6"><?=(isset($pages)?$pages:'');?></td></tr>
 							</tbody>
-						</table>	
+						</table>
 					</div>
 				</div>
 			</div>

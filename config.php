@@ -90,7 +90,11 @@ return array(
 		// 上传的文件是否重命名
 		'uploadRename' => true,
 	),
-
+	// 管理后台超级账号
+	'supermanager'=>array(
+			'username'=>'admin',
+			'password'=>'123456'
+		),
 	// 微信服务号配置,如果需要的话
 	'weixin'=>array(
 			'token'=>'',

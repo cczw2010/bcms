@@ -21,11 +21,9 @@
 		<tr>
 			<td>用户组：</td>
 			<td><select name="group" >
-				<?php if (isset($oitem)&&$oitem['types']==Module_User::TYPE_USER): ?>
-					<option value="<?php echo Module_Group::GROUP_GENERAL;?>">普通用户</option>
-				<?php endif ?>
+				<option value="0">无分组</option>
 				<?php
-					$cursid = isset($oitem)?$oitem['group']:Module_Group::GROUP_GENERAL; 
+					$cursid = isset($oitem)?$oitem['group']:0;
 					foreach ($groups as $group) {
 						echo '<option value="'.$group['id'].'" '.($cursid==$group['id']?'selected=true':'').' >'.$group['name'].'</option>';
 					}
@@ -44,7 +42,6 @@
 		<tr>
 			<td colspan="2" class="text-center">
 				<input type="hidden" name="id" value="<?php echo isset($oitem)?$oitem['id']:''; ?>">
-				<input type="hidden" name="types" value="<?php echo isset($oitem)?$oitem['types']:''; ?>">
 				<input type="button" name="submitbtn" class="submitbtn" value="提 交">
 			</td>
 		</tr>

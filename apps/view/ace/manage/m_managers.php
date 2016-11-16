@@ -21,7 +21,7 @@
 		<div id="managerlist" class="widget-container-span ui-sortable tab-pane active">
 			<div class="widget-box transparent">
 				<div class="widget-header header-color-blue3">
-					<form action="/manage/user/managers/">
+					<form action="/manage/manager/managers/">
 						<label class="" for="">状态：</label>
 						<select class="input-sm" name="status" id="">
 							<option value="-1" >全部</option>
@@ -29,8 +29,6 @@
 						</select>
 						<label class=""  for="">用户名：</label>
 						<input class="input-sm"  type="text" name="username" size="10" value="<?php echo isset($_REQUEST['username'])?$_REQUEST['username']:'' ?>">
-						<label class=""  for="">邮箱：</label>
-						<input class="input-sm"  type="text" name="email" size="10" value="<?php echo isset($_REQUEST['email'])?$_REQUEST['email']:'' ?>">
 						<input type="hidden" name="filterform" value="1">
 						<input class="btn btn-info btn-sm submitbtn"  type="button" value="提交">
 						</form>
@@ -61,14 +59,14 @@
 													<td>'.date('Y-m-d H:i',$user['lasttime']).'</td>
 													<td class="text-center">'.(Module_User::$statuss[$user['status']]).'</td>
 													<td class="">
-														<a href="/manage/user/medit/'.$user['id'].'/'.Module_User::TYPE_MANAGER.'" class="ajaxbtn">编辑</a>
-														<a href="/manage/user/del/'.$user['id'].'/'.Module_User::TYPE_MANAGER.'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</a>
+														<a href="/manage/manager/medit/'.$user['id'].'" class="ajaxbtn">编辑</a>
+														<a href="/manage/manager/del/'.$user['id'].'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</a>
 													</td></tr>';
 									}
 								?>
 								<tr><td colspan="10"><?=$pages;?></td></tr>
 							</tbody>
-						</table>	
+						</table>
 					</div>
 				</div>
 			</div>
@@ -78,7 +76,7 @@
 				<!-- <div class="widget-header header-color-blue3"></div> -->
 				<div class="widget-body">
 					<div class="widget-main no-padding">
-						<form action="/manage/user/medit/">
+						<form action="/manage/manager/medit/">
 						<table class="table table-striped table-bordered table-hover dataTable">
 							<tbody>
 								<tr>

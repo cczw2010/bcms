@@ -1,8 +1,6 @@
 <?php
 // log日志数据库记录类
 class Module_Log{
-	const APPID = 10;
-	const APPNAME = '日志模块';
 	const TNAME = 't_log';
 
 	/**
@@ -43,8 +41,6 @@ class Module_Log{
 		$ret = array('code'=> -1,'msg'=>'');
 		// 必填项，判断
 		$check = FormVerify::rule(
-			array(FormVerify::must($arrs['key']),'关键字不能为空'),
-			array(FormVerify::must($arrs['modulename']),'模块名称不能为空'),
 			array(FormVerify::must($arrs['message']),'消息不能为空')
 			);
 		if ($check!==true) {

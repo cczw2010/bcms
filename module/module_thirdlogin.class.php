@@ -6,8 +6,6 @@
  * 其他功能自动实现
  */
 final class Module_ThirdLogin{
-	const APPID = 13;
-	const APPNAME = '第三方登陆模块';
 	const TNAME = 't_app_user';	//第三方登陆用户关联表
 	const TAPPTOKEN = 't_app_token';  //第三方登陆授权信息表
 	const TAPPCFG = 't_app_config';	//第三方登陆配置表
@@ -15,7 +13,6 @@ final class Module_ThirdLogin{
 	const N_LOGINCFG = 'xm_applogincfg';	//session key  登陆配置
 	const N_LOGININFO = 'xm_applogininfo';	//session key  登陆返回的信息
 	/**************第三方登陆前端业务逻辑部分*************/
-	
 	// 根据第三方配置登陆app的key去登陆
 	static function gotoAppLogin($key){
 		// 先清空一下缓存
@@ -131,7 +128,7 @@ final class Module_ThirdLogin{
 						$info['token']= $token['access_token'];
 						$info['expires_in']=$token['expires_in'];
 						$info['refresh_token']=$token['refresh_token'];
-						
+
 						$umessage = $o->get('user/~me');
 						if ($umessage) {
 							$info['openid']= $umessage['uid'];
@@ -293,7 +290,7 @@ final class Module_ThirdLogin{
 	}
 	// 设置第三方登陆配置，(**自动刷新缓存)
 	static function setAppCfg($arrs,$id){
-		
+
 		$ret = array('code'=>-1,'msg'=>'');
 		if ($arrs['status']==1) {
 			$id = intval($id);
@@ -306,7 +303,7 @@ final class Module_ThirdLogin{
 				);
 			if ($check!==true) {
 				$ret['msg'] = $check;
-			}	
+			}
 		}
 		if (empty($ret['msg'])) {
 			$GLOBALS['db']->update(self::TAPPCFG,$arrs,array('id'=>$id));
@@ -410,7 +407,7 @@ final class Module_ThirdLogin{
 																					));
 		return $id;
 	}
-	
+
 	/*************************内部方法****************************/
 	// 清空第三方登陆过程中生成的所有缓存
 	private static function clearAppSession(){

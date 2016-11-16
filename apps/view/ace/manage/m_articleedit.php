@@ -69,7 +69,9 @@
 </form>
 <script>
 	$(function(){
-		initTinymce("#articlecontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
+		//可以将主站文章页的样式放在这里,例如
+		// initTinymce("#articlecontent",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
+		initTinymce("#articlecontent",false,true);
 		// 上传
 		var jsons = <?=isset($oitem)?json_encode($oitem['covers']):'[]';?>,
 			objtype = "<?=Module_Article::ATTACHTYPE;?>",idx=0;
@@ -88,5 +90,4 @@
 			});
 		}
 	});
-	
 </script>

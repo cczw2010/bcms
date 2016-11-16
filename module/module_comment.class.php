@@ -1,9 +1,7 @@
 <?php
-// 评论库，通过appid来判断评论的对象类型
+// 评论库，通过moduleid来判断评论的对象类型
 
 final class Module_Comment{
-	const APPID = 7;
-	const APPNAME = '评论模块';
 	const MINLEN = 5;		//最小评论数
 	const TNAME = 't_comment';
  	public static $statuss = array('屏蔽','正常');
@@ -47,8 +45,7 @@ final class Module_Comment{
 		// 必填项，判断
 		$check = FormVerify::rule(
 			array(FormVerify::must($arrs['message'],self::MINLEN),'内容长度不能小于'.self::MINLEN),
-			array(FormVerify::must($arrs['objid']),'评论对象不能为空'),
-			array(FormVerify::must($arrs['userid']),'评论用户不能为空')
+			array(FormVerify::must($arrs['objid']),'评论对象不能为空')
 			);
 		if ($check!==true) {
 			$ret['msg'] = $check;

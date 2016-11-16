@@ -27,7 +27,7 @@
 		<tr>
 			<td colspan="2" class="text-center">
 				<input type="hidden" name="id" value="<?php echo isset($oitem)?$oitem['id']:''; ?>">
-				<input type="hidden" name="appid" value="<?php echo isset($oitem)?$oitem['appid']:''; ?>">
+				<input type="hidden" name="moduleid" value="<?php echo isset($oitem)?$oitem['moduleid']:''; ?>">
 				<input type="hidden" name="userid" value="<?php echo isset($oitem)?$oitem['userid']:''; ?>">
 				<input type="hidden" name="objid" value="<?php echo isset($oitem)?$oitem['objid']:''; ?>">
 				<input type="button" name="submitbtn" class="submitbtn btn btn-info btn-sm" value="提 交">

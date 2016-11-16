@@ -1,4 +1,4 @@
-'<form action="/manage/user/medit/">
+'<form action="/manage/manager/medit/">
 	<table class="col-12 table table-bordered table-striped">
 	<thead>
 		<tr>

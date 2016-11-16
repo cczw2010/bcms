@@ -2,14 +2,14 @@
 /**
  * 用户模块统一管理类,纯静态类
  */
-final class Module_User{
-	const TNAME = 't_user';
+final class Module_Manager{
+	const TNAME = 't_manager';
 	const TADRESS = 't_user_address';
 	const TFRIEND = 't_follow';
 
-	const SESSION_KEY = '_s_user_';
+	const SESSION_KEY = '_s_manager_';
 
-	static public $statuss = array(0=>'锁定',1=>'正常',2=>'未完善');
+	static public $statuss = array(0=>'锁定',1=>'正常');
 	/**
 	 * 登录,并更新登录信息
 	 * @param  string $username 用户名
@@ -28,6 +28,7 @@ final class Module_User{
 					$ret['code'] = -2;
 					$ret['msg'] = '用户被锁定.';
 				}else{
+					// 缓存到session中
 					Helper::setSession(self::SESSION_KEY,$user);
 					// 更新最新登陆信息
 					$cip = Helper::getClientIp();
@@ -119,11 +120,11 @@ final class Module_User{
 	 */
 	static public function refreshLoginUser(){
 		if (!empty($_SESSION[self::SESSION_KEY])) {
-			$ret = Module_User::getUser($_SESSION[self::SESSION_KEY]['id']);
+			$ret = Module_Manager::getUser($_SESSION[self::SESSION_KEY]['id']);
 			if ($ret['code']>0) {
 				$_SESSION[self::SESSION_KEY] = $ret['data'];
 			}else{
-				Module_User::logout();
+				Module_Manager::logout();
 			}
 		}
 	}
@@ -213,67 +214,6 @@ final class Module_User{
 		}
 		return $ret;
 	}
-	/**
-	 * 获取用户的地址列表
-	 * @param  int $userid 用户id
-	 * @return array
-	 */
-	static public function getAdresss($userid){
-		return $GLOBALS['db']->select(self::TADRESS,array('userid'=>$userid),false,'order by isdefault desc,id desc',-1);
-	}
-	/**
-	 * 删除地址
-	 * @param  int $id  地址id
-	 * @return null
-	 */
-	static public function delAdress($id){
-		$GLOBALS['db']->delete(self::TADRESS,array('id'=>$uid));
-	}
-	/**
-	 * 编辑地址
-	 * @param array $arrs 编辑的数据键值对,不能包含id;
-	 * @param int $id 如果有id则为修改，否则为新增
-	 * @return 返回$id
-	 */
-	static public function setAdress($arrs,$id){
-		$ret = array('code'=> -1,'msg'=>'');
-		// 要判断必填
-		$check = FormVerify::rule(
-			array(FormVerify::len($arrs['name'],2),'收货人不能少于2个字符'),
-			array(FormVerify::must($arrs['province']),'省份不能为空'),
-			array(FormVerify::must($arrs['city']),'城市不能为空'),
-			array(FormVerify::must($arrs['area']),'地区不能为空'),
-			array(FormVerify::len($arrs['detail'],4),'请认真填写详细地址'),
-			array(FormVerify::must($arrs['mobile'])||FormVerify::must($arrs['phone']),'手机号码或者固定电话最少填写一个')
-			);
-		if ($check!==true) {
-			$ret['msg'] = $check;
-			return $ret;
-		}
-		if ($id>0) {
-			// 判断是否存在
-			$cnt = $GLOBALS['db']->result('select count(*) from '.self::TADRESS.' where id='.$id);
-			if ($cnt==0) {
-				$ret['msg'] = '要编辑的内容不存在';
-			}else{
-				//更新数据
-				$result = $GLOBALS['db']->update(self::TADRESS,$arrs,array('id'=>$id));
-				if (!$result) {
-					$ret['msg'] = '更新失败';
-				}
-			}
-		}else{
-			$id = $GLOBALS['db']->insert(self::TADRESS,$arrs);
-			if (empty($id)) {
-				$ret['msg'] = '新增失败';
-			}
-		}
-		if ($id>0 && empty($ret['msg'])) {
-			$ret['code'] = 1;
-			$ret['data'] = $id;
-		}
-		return $ret;
-	}
 	// 获取头像path和name
 	static function getUserAvatarPath($uid){
 	    $uid = sprintf("%09d", $uid);
@@ -316,130 +256,6 @@ final class Module_User{
 	}
 	// 获取用户网站上的相册目录名称
 	static public function getAlbumBase($uid){
-		return empty($uid)?'default':'album_'.$uid;
-	}
-	////////////////////////////////////////////关注部分
-	//判断是否关注
-	static public function isFollow($ouid,$fuid){
-		$cnt = $GLOBALS['db']->result('select count(*) from '.self::TFRIEND.' where uid='.$ouid.' and fuid='.$fuid);
-		return $cnt>0;
-	}
-	/**
-	 * 关注,逻辑会判断是否关注过，用户是否存在。
-	 * 该方法同步更新用户基本表关注数被关注数
-	 * @param $ouid  用户id
-	 * @param $fuid  目标用户id
-	 * @param string $nickname 给目标用户起的昵称，可为空
-	 */
-	static public function addFollow($ouid,$fuid,$nickname=''){
-		$ret = array('code'=>-1,'msg'=>'');
-		//参数检验
-		$check = FormVerify::rule(
-			array($ouid!=$fuid,'不能关注自己'),
-			array(FormVerify::must($ouid),'用户id不能为空'),
-			array(FormVerify::must($fuid),'目标用户不能为空')
-			);
-		if ($check!==true) {
-			$ret['msg'] = $check;
-			return $ret;
-		}
-		//判断是否关注过
-		if (self::isFollow($ouid,$fuid)) {
-			$ret['msg']= '您已经关注过';
-			return $ret;
-		}
-		//判断目标用户是否存在
-		$fuser = Module_User::getUser($fuid);
-		if ($fuser['code']<0) {
-			$ret['msg']= '目标用户不存在';
-			return $ret;
-		}
-		$fuser = $fuser['data'];
-		$params = array(
-				'uid'=>$ouid,
-				'fuid'=>$fuid,
-				'funame'=>empty($fuser['nickname'])?$fuser['username']:$fuser['nickname'],
-				'fnickname'=>$nickname,
-				'createdate'=>$_SERVER['REQUEST_TIME'],
-				'ip'=>Helper::getClientIp()
-			);
-		$id = $GLOBALS['db']->insert(self::TFRIEND,$params);
-		if ($id>0) {
-			//更新用户基本表关注数
-			Module_User::modifyUser($ouid,array('followingnum=followingnum+1'));
-			//更新用户基本表被关注数
-			Module_User::modifyUser($fuid,array('followednum=followednum+1'));
-			$ret['code'] = 1;
-			$ret['data'] = $id;
-		}else{
-			$ret['msg']='操作失败';
-		}
-		return $ret;
-	}
-	/**
-	 * 取消关注,逻辑会判断是否关注过
-	 * 该方法同步更新用户基本表关注数被关注数
-	 * @param $ouid  用户id
-	 * @param $fuid  目标用户id
-	 */
-	static public function delFollow($ouid,$fuid){
-		$ret = array('code'=>-1,'msg'=>'');
-		if (empty($ouid)||empty($fuid)) {
-			$ret['msg'] = '参数错误';
-			return $ret;
-		}
-		//判断是否关注过
-		if (!self::isFollow($ouid,$fuid)) {
-			$ret['msg']= '您并未关注过该用户';
-			return $ret;
-		}
-		$result = $GLOBALS['db']->delete(self::TFRIEND,array('uid'=>$ouid,'fuid'=>$fuid));
-		if ($result) {
-			//更新用户基本表关注数
-			Module_User::modifyUser($ouid,array('followingnum=followingnum-1'));
-			//更新用户基本表被关注数
-			Module_User::modifyUser($fuid,array('followednum=followednum-1'));
-			$ret['code'] = 1;
-		}else{
-			$ret['msg']='操作失败';
-		}
-		return $ret;
-	}
-	/**
-	 * 批量删除(取消)关注，该方法不会处理用户基本表中的关注被关注数
-	 * @param $conds 删除条件数组,不能为空,防止清空
-	 * @return array
-	 */
-	static public function delFollows($conds){
-		$ret = array('code'=>-1,'msg'=>'');
-		if (empty($conds)) {
-			$ret['msg'] = '条件不能为空';
-		}else{
-			$GLOBALS['db']->delete(self::TFRIEND,$conds);
-			$ret['code'] = 1;
-			$ret['data'] = $GLOBALS['db']->affectedRows();
-		}
-		return $ret;
-	}
-	/**
-	 * 获取关注(被关注)列表
-	 * @param  array	$cond 查询条件数组或者条件字符串（不带where）
-	 * @param  string $orderby 排序条件字符串
-	 * @param  int 		$page 页码（-1代表全部）
-	 * @param  int 		$psize 每页数量
-	 * @return array
-	 */
-	static public function getFollows($cond=array(),$orderby='',$page=1,$psize=10){
-		return $GLOBALS['db']->select(self::TFRIEND,$cond,'id',$orderby,$page,$psize);
-	}
-	/**
-	 * 获取关注(被关注)数量
-	 * @param  array	$cond 查询条件数组或者条件字符串（不带where）
-	 * @return 数量
-	 */
-	static public function getFollowsCnt($cond=array()){
-		$where = $GLOBALS['db']->buildWhere($cond);
-		$cnt = $GLOBALS['db']->result('select count(*) from '.self::TFRIEND.$where);
-		return $cnt==null?0:$cnt;
+		return empty($uid)?'manager/default':'manager/album_'.$uid;
 	}
 }

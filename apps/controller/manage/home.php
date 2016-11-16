@@ -2,22 +2,33 @@
 // controller
 Class Home{
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_Manager::getloginUser();
 		if (empty($this->loginuser)) {
-			// 直接设置前一个页面为当前页
-			Uri::setPrevPage();
-			Uri::build('manage/user','login',false,true);
+			if ($GLOBALS['cur_method']!='login') {
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
+				die();
+			}
+		}else{
+			if ($GLOBALS['cur_method']=='login') {
+				Uri::build('manage/home','index',false,true);
+			}
+			/////////////////// 切入权限管理模块,根据权限来展示树
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
+			}
+			$this->view->data(array('user'=>$this->loginuser));
 		}
-		/////////////////// 切入权限管理模块,根据权限来展示树
-		$this->rights = Module_Group::isManager($this->loginuser['group']);
-		if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-				// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-				showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
-		}
-		$this->view->data(array('user'=>$this->loginuser));
 	}
 
-	function index(){	
+	function index(){
 		//导航树
 		$datas['menuTree'] = array(
 				array('name'=>'系统管理','con'=>'setting','subs'=>array(
@@ -29,10 +40,9 @@ Class Home{
 																		'ugroup'=>'用户分组',
 																		'users'=>'用户列表',
 																		'edit'=>'新增用户')),
-				array('name'=>'管理员信息','con'=>'user','subs'=>array(
+				array('name'=>'管理员信息','con'=>'manager','subs'=>array(
 																		'mgroup'=>'管理员分组',
-																		'managers'=>'管理员列表',
-																		'ulogs'=>'登录日志')),
+																		'managers'=>'管理员列表')),
 				array('name'=>'内容管理','con'=>'article','subs'=>array(
 																		'lists'=>'文章列表',
 																		'edit'=>'新增文章',
@@ -58,7 +68,7 @@ Class Home{
 																		'menu'=>'菜单列表')),
 			);
 		//根据用户权限过滤一下
-		if ($this->loginuser['group']!=Module_Group::GROUP_SUPER) {
+		if ($this->loginuser['username']!= $GLOBALS['config']['supermanager']['username']) {
 			foreach ($datas['menuTree'] as $mkey=>&$submenus) {
 				foreach ($submenus['subs'] as $pkey => $pname) {
 					// if (preg_match('/'.$GLOBALS['cur_controller'].'-'.$GLOBALS['cur_method'].'($|,)/', $this->rights)==0) {

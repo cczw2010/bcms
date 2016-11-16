@@ -2,8 +2,6 @@
 // 订单类
 // 🐷暂时没有处理库存， 需要完善
 final class Module_Order{
-	const APPID = 9;
-	const APPNAME = '订单模块';
 	const TNAME ='t_order';
 	const TITEMNAME ='t_order_item';
 	const TSHIPPING ='t_shipping';

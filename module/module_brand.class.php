@@ -1,8 +1,6 @@
 <?php 
 // 品牌表
 final class Module_Brand{
-	const APPID = 11;
-	const APPNAME = '品牌模块';
 	const TNAME = 't_brand';
  	public static $statuss = array('不启用','启用');
 

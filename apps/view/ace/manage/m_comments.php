@@ -10,7 +10,7 @@
 	<?php endif ?>
 	<div class="widget-box transparent">
 		<div class="widget-header header-color-blue3">
-			<form action="/manage/comment/lists/?appid=<?php echo $appid;?>">
+			<form action="/manage/comment/lists/?moduleid=<?php echo $moduleid;?>">
 			<label for="">状态：</label>
 			<select name="status" id="">
 				<option value="-1" >全部</option>
@@ -36,6 +36,7 @@
 						<th>评分</th>
 						<th>内容</th>
 						<th>创建时间</th>
+						<th>更新时间</th>
 						<th>状态</th>
 						<th>操作</th>
 					</tr>
@@ -49,17 +50,18 @@
 									<td>'.$item['score'].'</td>
 									<td>'.mb_substr($item['message'],0,100).'...</td>
 									<td>'.date('Y-m-d H:i:s',$item['createdate']).'</td>
+									<td>'.date('Y-m-d H:i:s',$item['updatedate']).'</td>
 									<td>'.Module_Comment::$statuss[$item['status']].'</td>
 									<td>
-									<a href="/manage/comment/edit/'.$item['id'].'/'.$appid.'"  class="ajaxbtn">编辑</a>
-									<a href="/manage/comment/del/'.$item['id'].'/'.$appid.'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</a>
+									<a href="/manage/comment/edit/'.$item['id'].'/'.$moduleid.'"  class="ajaxbtn">编辑</a>
+									<a href="/manage/comment/del/'.$item['id'].'/'.$moduleid.'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</a>
 									</td>';
 						}
 					}
 					?>
-					<tr><td colspan="7" align="center"><?=(isset($pages)?$pages:'');?></td></tr>
+					<tr><td colspan="8" align="center"><?=(isset($pages)?$pages:'');?></td></tr>
 				</tbody>
-			</table>	
+			</table>
 		</div>
 	</div>
 </div>

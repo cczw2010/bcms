@@ -3,10 +3,10 @@
 	class Setting{
 		const ERRNAME = '_x_errmsg';
 		function __construct(){
-			$this->loginuser = Module_User::getloginUser(true);
+			$this->loginuser = Module_Manager::getloginUser();
 			if (empty($this->loginuser)) {
 				if ($GLOBALS['cur_method']!='login') {
-					$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+					$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
 					die();
 				}
 			}else{
@@ -14,10 +14,16 @@
 					Uri::build('manage/home','index',false,true);
 				}
 				/////////////////// 切入权限管理模块,根据权限来展示树
-				$this->rights = Module_Group::isManager($this->loginuser['group']);
-				if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-						showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+				if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+					$group = Module_Group::getGroup($this->loginuser['group']);
+					if ($group['code']==1) {
+							if(empty($group['data']['rights'])){
+								showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+							}
+							// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+					}else{
+						showMessage('管理员组信息错误!');
+					}
 				}
 				$this->view->data(array('user'=>$this->loginuser));
 			}
@@ -62,17 +68,13 @@
 				$conds['key'] = 'like "%'.$_REQUEST['key'].'%"';
 				$pageParams['key'] = $_REQUEST['key'];
 			}
-			if (!empty($_REQUEST['modulename'])) {
-				$conds['modulename'] = 'like "%'.$_REQUEST['modulename'].'%"';
-				$pageParams['modulename'] = $_REQUEST['modulename'];
-			}
 			if (!empty($_REQUEST['username'])) {
 				$conds['username'] = 'like "%'.$_REQUEST['username'].'%"';
 				$pageParams['username'] = $_REQUEST['username'];
 			}
-			if (!empty($_REQUEST['key'])) {
-				$conds['key'] = 'like "%'.$_REQUEST['key'].'%"';
-				$pageParams['key'] = $_REQUEST['key'];
+			if (!empty($_REQUEST['message'])) {
+				$conds['message'] = 'like "%'.$_REQUEST['message'].'%"';
+				$pageParams['message'] = $_REQUEST['message'];
 			}
 			if (!empty($_REQUEST['createdate'])) {
 				$conds[] = 'FROM_UNIXTIME(createdate,"%Y-%m-%d")="'.date('Y-m-d',strtotime($_REQUEST['createdate'])).'"';
@@ -80,7 +82,7 @@
 			}
 			// 检索
 			$datas['logs'] = Module_Log::getItems($conds,'order by id desc',$page,$psize);
-			$datas['pages'] = multiPages4Ace($page,$psize,$datas['logs']['total'],$pageParams,true);		
+			$datas['pages'] = multiPages4Ace($page,$psize,$datas['logs']['total'],$pageParams,true);
 			$this->view->load('manage/m_logs',$datas);
 		}
 		// 数据库备份

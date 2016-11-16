@@ -1,4 +1,4 @@
-<form action="/manage/user/gedit/">
+<form action="/manage/manager/gedit/">
 	<table class="col-12 table table-bordered table-striped">
 		<thead>
 			<tr>
@@ -14,6 +14,34 @@
 				<td>描述:</td>
 				<td>
 					<textarea name="desc" id="" cols="30" rows="5"><?php echo isset($group)?$group['desc']:''; ?></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>权限：</td>
+				<td>
+					<?php
+					foreach ($modules as $module => $methods) {
+					?>
+					<div class="rightbox">
+						<div class="right_title">
+							<input class="right_c ml10" type="checkbox" value="<?=$module; ?>"><?=$module; ?>
+						</div>
+						<ul class="clearfix">
+						<?php
+							foreach ($methods as $method=>$mname) {
+									$val = $module.'-'.$method;
+									if (isset($group) && !empty($group['rights'])) {
+										$checked = preg_match('/'.$val.'(,|$)/',$group['rights']);
+										// dump('/'.$val.'(,|$)/',$val,$checked);
+									}else{
+										$checked = false;
+									}
+									echo '<li><input '.($checked?'checked="true"':'').' class="right_m ml10" type="checkbox" name="rights[]" value="'.$val.'">'.$mname.'</li>';
+							}
+						?>
+						</ul>
+					</div>
+					<?php	}?>
 				</td>
 			</tr>
 			<tr>

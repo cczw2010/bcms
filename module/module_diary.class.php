@@ -3,8 +3,6 @@
  * 手记模块统一处理类,纯静态类
  */
 final class Module_Diary{
-	const APPID = 20;
-	const APPNAME = '手记模块';
 	const TNAME = 't_diary';
 	const MINTITLE = 3;
 

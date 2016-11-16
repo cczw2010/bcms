@@ -1,13 +1,11 @@
 <?php
 /**
  * 分类模块统一管理类  v2.0
- * 通过appid来判断分类的对象类型
+ * 通过moduleid来判断分类的对象类型
  * 数据库操作类用了本系统的db.class.php,如果集成到其他环境，可以根据需要修改相应的数据库操作类
  * 本类要求分类表中包含, id,parentId,depth,path,weight（权重，同级排序） 字段
  */
 final class Module_Category{
-	const APPID = 1;
-	const APPNAME = '分类模块';
 	const TNAME ='t_category';
  	public static $statuss = array('不启用','启用');
  //数据处理部分==============================
@@ -195,7 +193,7 @@ final class Module_Category{
 			if ($depth>0) {
 				$where.=' and depth<='.($_depth+$depth);
 			}
-			$where.=' order by appid,_order';
+			$where.=' order by moduleid,_order';
 
 			// 获取总数
 	 		$cnt = $GLOBALS['db']->result('select count(*) as num,concat(path,",",id) as _order from '.self::TNAME.$where);
@@ -240,16 +238,16 @@ final class Module_Category{
 		return $ret;
 	}
 	/**
-	 * 根据appid获取数据列表数据,封装的getChilds
-	 * @param int $appid  数据的模块标示
+	 * 根据moduleid获取数据列表数据,封装的getChilds
+	 * @param string $moduleid  数据的模块标示
 	 * @param int $pid 父类id
 	 * @param int $depth 获取深度，默认0是所有
 	 * @param array $cond 条件
 	 * @param int $page 页码，-1代表所有数据，不分页
 	 * @param int $psize 每页数量
 	 */
-	static public function getChildsByApp($appid,$pid=0,$depth=0,$cond=array(),$page=1,$psize=20){
-		$cond['appid'] = $appid;
+	static public function getChildsByApp($moduleid,$pid=0,$depth=0,$cond=array(),$page=1,$psize=20){
+		$cond['moduleid'] = $moduleid;
 		return self::getChilds($pid,$depth,$cond,$page,$psize);
 	}
 	/**
@@ -262,7 +260,7 @@ final class Module_Category{
 	static public function getChildsOptions($datas,$selectid=0,$pIndent=3){
 		$tree = '';
 		$selectid = empty($selectid)?0:intval($selectid);
-		
+
 		if (!empty($datas)) {
 			$fItem = current($datas);
 			$baseDepth = $fItem['depth']; // 第一个分类的depth为基准depth,默认1

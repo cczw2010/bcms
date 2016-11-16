@@ -4,8 +4,6 @@
  * 如果是图片附件将生成c240,c120,p240,p120前缀的4种缩略图(c正方形，p等比)
  */
 final class Module_Attach{
-	const APPID = 6;
-	const APPNAME = '附件模块';
 	const TNAME = 't_attach';
  	public static $statuss = array('不启用','启用');
 

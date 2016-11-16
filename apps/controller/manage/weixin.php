@@ -5,10 +5,10 @@ Class Weixin{
 	private $wxobj=null;
 	private $wxmodel=null;
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_Manager::getloginUser();
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
-				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
 				die();
 			}
 		}else{
@@ -16,10 +16,16 @@ Class Weixin{
 				Uri::build('manage/home','index',false,true);
 			}
 			/////////////////// 切入权限管理模块,根据权限来展示树
-			$this->rights = Module_Group::isManager($this->loginuser['group']);
-			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
 			}
 			$this->view->data(array('user'=>$this->loginuser));
 		}

@@ -5,8 +5,6 @@
  * 本类要求数据表中包含, id,parentId,depth,path,weight（权重，同级排序） 字段
  */
 final class Module_Area{
-	const APPID = 18;
-	const APPNAME = '省市区模块';
 	const TNAME ='t_citys';
 
  	public static $statuss = array('不启用','启用');
@@ -195,7 +193,7 @@ final class Module_Area{
 			if ($depth>0) {
 				$where.=' and depth<='.($_depth+$depth);
 			}
-			$where.=' order by appid,_order';
+			$where.=' order by moduleid,_order';
 
 			// 获取总数
 	 		$cnt = $GLOBALS['db']->result('select count(*) as num,concat(path,",",id) as _order from '.self::TNAME.$where);
@@ -240,16 +238,16 @@ final class Module_Area{
 		return $ret;
 	}
 	/**
-	 * 根据appid获取数据列表数据,封装的getChilds
-	 * @param int $appid  数据的模块标示
+	 * 根据moduleid获取数据列表数据,封装的getChilds
+	 * @param string $moduleid  数据的模块标示
 	 * @param int $pid 父类id
 	 * @param int $depth 获取深度，默认0是所有
 	 * @param array $cond 条件
 	 * @param int $page 页码，-1代表所有数据，不分页
 	 * @param int $psize 每页数量
 	 */
-	static public function getChildsByApp($appid,$pid=0,$depth=0,$cond=array(),$page=1,$psize=20){
-		$cond['appid'] = $appid;
+	static public function getChildsByApp($moduleid,$pid=0,$depth=0,$cond=array(),$page=1,$psize=20){
+		$cond['moduleid'] = $moduleid;
 		return self::getChilds($pid,$depth,$cond,$page,$psize);
 	}
 	/**

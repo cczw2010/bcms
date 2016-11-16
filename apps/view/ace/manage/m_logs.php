@@ -15,10 +15,8 @@
 				<form action="/manage/setting/logs/">
 				<label for="">用户名：</label>
 				<input class="input-sm" type="text" name="username" value="<?php echo isset($_REQUEST['username'])?$_REQUEST['username']:'' ?>">
-				<label for="">模块：</label>
-				<input class="input-sm" type="text" name="modulename" value="<?php echo isset($_REQUEST['modulename'])?$_REQUEST['modulename']:'' ?>">
 				<label for="">关键字：</label>
-				<input class="input-sm" type="text" name="key" value="<?php echo isset($_REQUEST['key'])?$_REQUEST['key']:'' ?>">
+				<input class="input-sm" type="text" name="message" value="<?php echo isset($_REQUEST['message'])?$_REQUEST['message']:'' ?>">
 				<label for="">时间：</label>
 				<input class="date-picker-mlogs input-sm" data-date-format="yyyy-mm-dd" type="text" id="createdate" name="createdate" value="<?php echo isset($_REQUEST['createdate'])?$_REQUEST['createdate']:'' ?>">
 				<i class="icon-calendar bigger-110"></i>
@@ -33,9 +31,6 @@
 						<thead>
 							<tr>
 								<th width="80">用户</th>
-								<th width="100">ip</th>
-								<th width="100">模块</th>
-								<th width="80">关键字</th>
 								<th width="">日志</th>
 								<th class="sorting" width="150">创建时间</th>
 							</tr>
@@ -44,9 +39,6 @@
 							<?php
 								foreach ($logs['list'] as $log) {
 									echo '<td>'.$log['username'].'</td>
-												<td>'.$log['ip'].'</td>
-												<td>'.$log['modulename'].'</td>
-												<td>'.$log['key'].'</td>
 												<td>'.$log['message'].'</td>
 												<td>'.date('Y-m-d H:i',$log['createdate']).'</td></tr>';
 								}

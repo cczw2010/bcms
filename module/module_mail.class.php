@@ -5,8 +5,6 @@
  * 使用方法直接实例化之后，调用phpmailer的实际接口
  */
 final class Module_Mail{
- 	const APPID = 15;
-	const APPNAME = '邮件模块';
 	const TNAME = 't_mail_config';
 	const CACHEKEY = 'xm_mailcfg';
 	/**

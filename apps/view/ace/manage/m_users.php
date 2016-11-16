@@ -54,8 +54,8 @@
 												<td class="text-center">'.(Module_User::$statuss[$user['status']]).'</td>
 												<td class="">
 													<a href="/manage/user/address/?id='.$user['id'].'" class="ajaxbtn">地址列表</a>
-													<a href="/manage/user/edit/'.$user['id'].'/'.Module_User::TYPE_USER.'" class="ajaxbtn">编辑</a>
-													<a href="/manage/user/del/'.$user['id'].'/'.Module_User::TYPE_USER.'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</a>
+													<a href="/manage/user/edit/'.$user['id'].'" class="ajaxbtn">编辑</a>
+													<a href="/manage/user/del/'.$user['id'].'" data-confirm="确认删除吗？该操作不可恢复，并且该用户的所有关联信息将失效，请慎重！" class="ajaxbtn">删除</a>
 												</td></tr>';
 								}
 							?>

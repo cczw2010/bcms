@@ -81,13 +81,13 @@
 							</a>
 							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 								<li>
-									<a class="ajaxbtn" href="<?php echo Uri::build('manage/user','repass');?>">
+									<a class="ajaxbtn" href="<?php echo Uri::build('manage/manager','repass');?>">
 										<i class="icon-cog"></i>修改密码
 									</a>
 								</li>
 								<li class="divider"></li>
 								<li>
-									<a href="<?php echo Uri::build('manage/user','logout'); ?>">
+									<a href="<?php echo Uri::build('manage/manager','logout'); ?>">
 										<i class="icon-off"></i>退出
 									</a>
 								</li>
