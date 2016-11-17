@@ -1014,7 +1014,7 @@ CREATE TABLE `t_user` (
   `mobile` varchar(20) DEFAULT '' COMMENT '手机',
   `sex` int(11) DEFAULT NULL COMMENT '性别  1男 2女 3人妖',
   `uuid` varchar(20) DEFAULT '' COMMENT '可以给每个用户生成一个唯一的uuid,方便客户端等地方验证，预留',
-  `status` int(11) DEFAULT '1' COMMENT '状态，-1锁定，1正常，2未完善信息',
+  `status` int(11) DEFAULT '1' COMMENT '默认状态，0锁定，1正常，2未完善信息',
   `logincount` int(11) DEFAULT '0' COMMENT '登录次数记录',
   `addtime` int(11) DEFAULT '0' COMMENT '注册时间',
   `lasttime` int(11) DEFAULT '0' COMMENT '最后登录时间',
@@ -1022,7 +1022,6 @@ CREATE TABLE `t_user` (
   `lastip` varchar(20) DEFAULT '' COMMENT '最后登录ip',
   `befrom` varchar(64) DEFAULT '' COMMENT '访问来源',
   `group` int(11) DEFAULT '0' COMMENT '用户分组',
-  `types` int(11) DEFAULT '1' COMMENT '1用户 0管理员',
   `rank` int(11) DEFAULT '0' COMMENT '等级',
   `credit` int(11) DEFAULT '0' COMMENT '积分',
   `experience` int(11) DEFAULT '0' COMMENT '经验值',
@@ -1090,4 +1089,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-17 13:50:20
+-- Dump completed on 2016-11-17 15:17:29
