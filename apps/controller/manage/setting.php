@@ -133,7 +133,7 @@
 		// 区域管理
 		public function citys(){
 			Uri::setPrevPage();
-			Uri::redirect('/manage/city/lists/?appid=0');
+			Uri::redirect('/manage/city/lists/?moduleid=0');
 		}
 		// 敏感词
 		public function verify(){
@@ -165,14 +165,14 @@
 			if (!empty($_POST['id'])) {
 				$id = Uri::post('id');
 				$ret = Module_Payment::setItem(array('name'=>Uri::post('name'),
-																				'key'=>Uri::post('key'),
-																				'appid'=>Uri::post('appid'),
-																				'appkey'=>Uri::post('appkey'),
-																				'appaccount'=>Uri::post('appaccount'),
-																				'notifyurl'=>Uri::post('notifyurl'),
-																				'returnurl'=>Uri::post('returnurl'),
-																				'status'=>Uri::post('status',0),
-																				'desc'=>Uri::post('desc')),$id);
+													'key'=>Uri::post('key'),
+													'appid'=>Uri::post('appid'),
+													'appkey'=>Uri::post('appkey'),
+													'appaccount'=>Uri::post('appaccount'),
+													'notifyurl'=>Uri::post('notifyurl'),
+													'returnurl'=>Uri::post('returnurl'),
+													'status'=>Uri::post('status',0),
+													'desc'=>Uri::post('desc')),$id);
 				die(json_encode($ret));
 			}
 			$key = Uri::get('key');

@@ -32,7 +32,7 @@
 		<tr>
 			<td colspan="2" class="ccenter">
 				<input type="hidden" name="id" value="<?php echo isset($item)?$item['id']:''; ?>">
-				<input type="hidden" name="appid" value="<?php echo isset($appid)?$appid:0; ?>">
+				<input type="hidden" name="moduleid" value="<?php echo isset($moduleid)?$moduleid:0; ?>">
 				<input type="hidden" name="parentId" value="<?php echo isset($parentId)?$parentId:0; ?>">
 				<input type="button" name="submitbtn" class="submitbtn" value="提 交">
 			</td>

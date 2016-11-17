@@ -1,18 +1,18 @@
 <div class="row">
 	<?php
 	if (!empty($errmsg)) {
-		echo	'<div class="alert alert-info">'.$errmsg.'</div>';
+		echo	'<div class="alert alert-danger">'.$errmsg.'</div>';
 	}
 	?>
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" data-target="#citylist">区域列表</a></li>
 
-		<li class=""><a class="ajaxbtn btn btn-success" href="/manage/city/edit/?appid=<?php echo $appid; ?>" >添加新顶级区域</a>
+		<li class=""><a class="ajaxbtn btn btn-success" href="/manage/city/edit/?moduleid=<?php echo $moduleid; ?>" >添加新顶级区域</a>
 	</ul>
 	<div class="tab-content">
 		<div class="widget-container-span ui-sortable tab-pane active" id="citylist">
 			<div class="widget-header header-color-blue3">
-				<form action="/manage/city/lists/?appid=<?php echo $appid; ?>">
+				<form action="/manage/city/lists/?moduleid=<?php echo $moduleid; ?>">
 				<label class="" for="">父项id：</label>
 				<input type="text" name="parentId" size="10" value="<?php echo isset($filter['parentId'])?$filter['parentId']:'' ?>">
 				<label class=""  for="">id：</label>
@@ -59,9 +59,9 @@
 									<td>'.$item['desc'].'</td>
 									<td>'.Module_Area::$statuss[$item['status']].'</td>
 									<td class="">
-										<a href="/manage/city/edit/?parentId='.$item['id'].'&appid='.$appid.'" class="ajaxbtn">添加子项</a>
+										<a href="/manage/city/edit/?parentId='.$item['id'].'&moduleid='.$moduleid.'" class="ajaxbtn">添加子项</a>
 										<a href="/manage/city/edit/'.$item['id'].'" class="ajaxbtn">编辑</a>
-										<a href="/manage/city/del/?id='.$item['id'].'&appid='.$appid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</a>
+										<a href="/manage/city/del/?id='.$item['id'].'&moduleid='.$moduleid.'"  class="ajaxbtn" data-confirm="确认删除吗？该操作不可恢复，并且其下所有子项将一并删除！同时如果已有其他资源关联到本项，请慎重！">删除</a>
 									</td></tr>';
 							}
 						}
