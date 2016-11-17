@@ -63,20 +63,23 @@ Class Weixin{
 					if (empty($v)) {
 						continue;
 					}
-					$item = array('name'=>$v,"type"=>$mtype[$k]);
-					switch ($item["type"]) {
-						case 'view':
-							$_k = 'url';
-							break;
-						case 'media_id':
-						case 'view_limited':
-							$_k = 'media_id';
-							break;
-						default:
-							$_k = 'key';
-							break;
+					$item = array('name'=>$v);
+					if (!empty($mtype[$k])) {
+						$item['type'] = $mtype[$k];
+						switch ($item["type"]) {
+							case 'view':
+								$_k = 'url';
+								break;
+							case 'media_id':
+							case 'view_limited':
+								$_k = 'media_id';
+								break;
+							default:
+								$_k = 'key';
+								break;
+						}
+						$item[$_k] = $mval[$k];
 					}
-					$item[$_k] = $mval[$k];
 					// 一级菜单
 					if ($mdepth[$k]==0) {
 						$menudata[++$midx] = $item;
