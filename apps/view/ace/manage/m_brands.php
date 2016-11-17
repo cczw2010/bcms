@@ -16,8 +16,8 @@
 					<label class="" for="">状态：</label>
 					<select name="status" id="">
 						<option value="-1" >全部</option>
-						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>>发布</option>
-						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>>未发布</option>
+						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>><?php echo Module_Brand::$statuss[1] ?></option>
+						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>><?php echo Module_Brand::$statuss[0] ?></option>
 					</select>
 					<label class=""  for="">品牌名称：</label>
 					<input type="text" name="name" size="10" value="<?php echo isset($filter['name'])?$filter['name']:'' ?>">
@@ -35,7 +35,7 @@
 								<th width="120">logo</th>
 								<th width="120">官网</th>
 								<th width="">简介</th>
-								<th width="40">状态</th>
+								<th width="80">状态</th>
 								<th width="100">操作</th>
 							</tr>
 						</thead>
@@ -49,7 +49,7 @@
 											<td>'.(!empty($item['logo'])?'<img src="'.$item['logo'].'" width="80" >':'').'</td>
 											<td>'.$item['site'].'</td>
 											<td>'.mb_substr($item['desc'],0,50).'...</td>
-											<td>'.Module_Article::$statuss[$item['status']].'</td>
+											<td>'.Module_Brand::$statuss[$item['status']].'</td>
 											<td>
 											<a href="/manage/product/brandedit/'.$item['id'].'"  class="ajaxbtn">编辑</a href>
 											<a href="/manage/product/branddel/'.$item['id'].'" data-confirm="确认删除吗？该操作不可恢复!" class="ajaxbtn">删除</a href>

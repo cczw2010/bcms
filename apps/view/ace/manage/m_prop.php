@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="alert alert-info">tips:此处处理<?=$appname?>模块的所有附加属性! 未完成!!!!!!!</div>
+	<div class="alert alert-info">tips:此处处理模块的所有附加属性! 未完成!!!!!!!</div>
 	<?php
 	if (!empty($errmsg)) {
 		echo '<div class="error error-info">'.$errmsg.'</div>';
@@ -73,7 +73,7 @@
 					<tr>
 						<td colspan="2" class="ccenter">
 							<input type="hidden" name="id" value="">
-							<input type="hidden" name="appid" value="<?=$appid;?>">
+							<input type="hidden" name="moduleid" value="<?=$moduleid;?>">
 							<input type="button" name="submitbtn" class="submitbtn btn btn-info" value="提 交">
 						</td>
 					</tr>

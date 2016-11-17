@@ -3,24 +3,30 @@
 	class Order{
 		const ERRNAME = '_x_errmsg';
 		function __construct(){
-			$this->loginuser = Module_User::getloginUser(true);
-			if (empty($this->loginuser)) {
-				if ($GLOBALS['cur_method']!='login') {
-					$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
-					die();
-				}
-			}else{
-				if ($GLOBALS['cur_method']=='login') {
-					Uri::build('manage/home','index',false,true);
-				}
-				/////////////////// 切入权限管理模块,根据权限来展示树
-				$this->rights = Module_Group::isManager($this->loginuser['group']);
-				if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-						showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
-				}
-				$this->view->data(array('user'=>$this->loginuser));
+			$this->loginuser = Module_Manager::getloginUser();
+		if (empty($this->loginuser)) {
+			if ($GLOBALS['cur_method']!='login') {
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
+				die();
 			}
+		}else{
+			if ($GLOBALS['cur_method']=='login') {
+				Uri::build('manage/home','index',false,true);
+			}
+			/////////////////// 切入权限管理模块,根据权限来展示树
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
+			}
+			$this->view->data(array('user'=>$this->loginuser));
+		}
 		}
 		// 获取订单列表
 		public function lists(){
@@ -48,7 +54,7 @@
 				$conds[] = 'FROM_UNIXTIME(createdate,"%Y-%m-%d")="'.date('Y-m-d',strtotime($_REQUEST['createdate'])).'"';
 				$pageParams['createdate'] = $_REQUEST['createdate'];
 			}
-			$datas = array('appid'=>Module_Order::APPID);
+			$datas = array();
 			$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 			$datas['filter'] = $pageParams;
 			$datas['items'] = Module_Order::getItems($conds,'order by id desc',$page,$psize);
@@ -88,11 +94,7 @@
 						die(json_encode($ret));
 					}else{
 						// 添加日志
-						Module_log::setItem(array('modulename'=>Module_Order::APPNAME,
-								'moduleid'=>Module_Order::APPID,
-								'key'=>($id==0?'新增':'更新'),
-								'message'=>'订单更新,操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Order::TNAME
-								));
+						Module_log::setItem(array('message'=>'订单更新,操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Order::TNAME));
 					}
 					Uri::build('manage/order','lists',false,true);
 				}else{
@@ -124,11 +126,7 @@
 			}
 			// 添加日志
 			if ($ret['code']>0) {
-				Module_log::setItem(array('modulename'=>Module_Order::APPNAME,
-						'moduleid'=>Module_Order::APPID,
-						'key'=>'删除',
-						'message'=>'删除订单。操作id '.$params[0].';操作库:'.Module_Order::TNAME
-						));
+				Module_log::setItem(array('message'=>'删除订单。操作id '.$params[0].';操作库:'.Module_Order::TNAME));
 			}
 			// 不管删除成功与否直接跳转
 			Uri::redirect(Uri::getPrevPage());

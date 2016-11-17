@@ -2,7 +2,6 @@
 // 属性模块
 class Module_Prop{
 	const TNAME = 't_prop';
-	const TPITEM = 't_prop_item';
  	public static $statuss = array('不启用','启用');
 
  	/**

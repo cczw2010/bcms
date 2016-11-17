@@ -50,6 +50,7 @@
 		<link rel="stylesheet" type="text/css" href="/datas/uploadify/uploadify.css">
 		<script src="/datas/tinymce/tinymce.jquery.min.js"></script>
 		<script src="/datas/uploadify/jquery.uploadify.min.js"></script>
+		<script src="/static/dist/js/micro-templating.min.js"></script>
 		<script src="/static/dist/js/main.min.js"></script>
 	</head>
 	<body>

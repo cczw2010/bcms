@@ -1,10 +1,4 @@
 <style>
-	.isspecs #mulispec{
-		display:block;
-	}
-	.isspecs #singlespec{
-		display:none;
-	}
 	#mulispec li{
 		float:left;
 		margin-left:5px;
@@ -17,8 +11,8 @@
 		padding:50px 20px;
 	}
 </style>
-<div class="alert alert-info">
-	tips:商品应尽量挂在最底层分类上, 逻辑未写完,啥时候用到再说
+<div class="alert alert-danger">
+	tips:商品应尽量挂在最底层分类上,逻辑未写完,正在修改库存为多sku,啥时候用到再继续!
 </div>
 <form action="/manage/product/edit/">
 <table class="table table-striped table-bordered table-hover dataTable" border="0" cellpadding="10" cellspacing="1" width="1000" >
@@ -56,23 +50,8 @@
 		</tr>
 		<tr>
 			<td>库存：</td>
-			<td id="skuboxwrap" class="<?=(isset($oitem) && $oitem['isskus']==1)?'isskus':'';?> ">
-			<div>
-				是否多库存:<input id="checkskus" class="mr20" <?=(isset($oitem) && $oitem['isskus']==1)?'checked="checked"':'';?> type="checkbox"  name="isskus" value="1" >
-			</div>
-			<hr>
-			<div id="singlespec">
-				<div>
-					市价*：<input required="true" type="text" size="10" name="oprice" value="<?=oprice?>">
-				</div>
-				<div>
-					售价*：<input required="true" type="text" size="10" name="price" value="<?=price?>">
-				</div>
-				<div>
-					库存*：<input required="true" type="text" size="10" name="quantity" value="<?=quantity?>">
-				</div>
-			</div>
-			<ul id="mulispec" class="clearfix hidden">
+			<td id="skuboxwrap">
+			<ul id="mulispec" class="clearfix">
 				<li id="addspec" class="ccenter">
 					<input type="button" value="+新增" />
 				</li>
@@ -163,18 +142,6 @@
 		}
 		// 空数据模板
 		var datatpl = {specname:'',id:'',oprice:'',price:'',quantity:'',status:1};
-		//事件绑定
-		$('#checkskus').on('click',function(){
-			if (this.checked) {
-				$('#skuboxwrap').addClass('isspecs');
-				$('#singlespec').find('input').attr('disabled',true);
-				$('#mulispec').find('input').attr('disabled',false);
-			}else{
-				$('#skuboxwrap').removeClass('isspecs');
-				$('#singlespec').find('input').attr('disabled',false);
-				$('#mulispec').find('input').attr('disabled',true);
-			}
-		});
 		// 添加新规格项
 		$('#addspec').on('click',function(){
 			var html = tmpl('specitem_tmpl',datatpl);

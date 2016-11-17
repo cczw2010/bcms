@@ -2,11 +2,12 @@
 // 商品管理类
 class Product{
 	const ERRNAME = '_x_errmsg';
+	const MODULEID = 'product';
 	function __construct(){
-		$this->loginuser = Module_User::getloginUser(true);
+		$this->loginuser = Module_Manager::getloginUser();
 		if (empty($this->loginuser)) {
 			if ($GLOBALS['cur_method']!='login') {
-				$this->view->load('manage/m_redirect',array('url'=>'/manage/user/login'));
+				$this->view->load('manage/m_redirect',array('url'=>'/manage/manager/login'));
 				die();
 			}
 		}else{
@@ -14,10 +15,16 @@ class Product{
 				Uri::build('manage/home','index',false,true);
 			}
 			/////////////////// 切入权限管理模块,根据权限来展示树
-			$this->rights = Module_Group::isManager($this->loginuser['group']);
-			if ($this->loginuser['group']!= Module_Group::GROUP_SUPER && $this->rights===false) {
-					// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
-					showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+			if ($this->loginuser['username']!=$GLOBALS['config']['supermanager']['username']) {
+				$group = Module_Group::getGroup($this->loginuser['group']);
+				if ($group['code']==1) {
+						if(empty($group['data']['rights'])){
+							showMessage('对不起，您没有权限进行该操作！请与权限管理员联系');
+						}
+						// throw new Exception('对不起，您没有权限进行该操作！请与管理员联系', 1);
+				}else{
+					showMessage('管理员组信息错误!');
+				}
 			}
 			$this->view->data(array('user'=>$this->loginuser));
 		}
@@ -40,12 +47,11 @@ class Product{
 			$conds['status'] = $_REQUEST['status'];
 			$pageParams['status'] = $_REQUEST['status'];
 		}
-		
 		$datas = array();
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$datas['items'] = Module_Brand::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);
 		// 分类
 		Uri::setPrevPage();
 
@@ -75,11 +81,7 @@ class Product{
 				die(json_encode($ret));
 			}else{
 				// 添加日志
-				Module_log::setItem(array('modulename'=>Module_Brand::APPNAME,
-						'moduleid'=>Module_Brand::APPID,
-						'key'=>($id==0?'新增':'更新'),
-						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Brand::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Brand::TNAME));
 			}
 			Uri::build('manage/product','brands',false,true);
 		}
@@ -106,11 +108,7 @@ class Product{
 			$ret = Module_Brand::delItem($params[0]);
 			// 添加日志
 			if ($ret['code']>0) {
-				Module_log::setItem(array('modulename'=>Module_Brand::APPNAME,
-						'moduleid'=>Module_Brand::APPID,
-						'key'=>'删除',
-						'message'=>'操作id '.$params[0].';操作库:'.Module_Brand::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.$params[0].';操作库:'.Module_Brand::TNAME));
 			}
 		}
 		// 不管删除成功与否直接跳转
@@ -152,14 +150,13 @@ class Product{
 			$conds['ishot'] = $_REQUEST['ishot'];
 			$pageParams['ishot'] = $_REQUEST['ishot'];
 		}
-		
-		$datas = array('appid'=>Module_Product::APPID);
+		$datas = array();
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['filter'] = $pageParams;
 		$datas['items'] = Module_Product::getItems($conds,'order by id desc',$page,$psize);
-		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);		
+		$datas['pages'] = multiPages($page,$psize,$datas['items']['total'],$pageParams,true);
 		// 分类
-		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Product::APPID),-1);
+		$cates = Module_Category::getChilds(0,0,array('moduleid'=>self::MODULEID),-1);
 		$cateid = isset($_REQUEST['cateid'])?$_REQUEST['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($cates['data']['items'],$cateid);
 		Uri::setPrevPage();
@@ -174,8 +171,8 @@ class Product{
 		// 表单提交
 		if (isset($_POST['id'])) {
 
-			echo json_encode($_POST);
-			die();
+			// echo json_encode($_POST);
+			// die();
 			$id = Uri::post('id',0);
 			$t = time();
 			$attrs = array(
@@ -186,10 +183,6 @@ class Product{
 					'summary' => Uri::post('summary'),
 					'content' => $_POST['content'],
 					'tags' => Uri::post('tags'),
-					'quantity' => Uri::post('quantity',0),
-					'maxbuy' => Uri::post('maxbuy',0),
-					'oprice' => Uri::post('oprice',0),
-					'price' => Uri::post('price',0),
 					'ishot' => Uri::post('ishot',0),
 					'status' => Uri::post('status',0),
 					'updatedate'=>$t,
@@ -197,20 +190,19 @@ class Product{
 				);
 			// 必填项，判断
 			$check = FormVerify::rule(
-				array(FormVerify::len($arrs['title'],self::MINTITLE),'标题长度不能小于'.self::MINTITLE),
-				array(FormVerify::must($arrs['content']),'商品详情不能为空'),
-				array(FormVerify::must($arrs['brandid']),'品牌不能为空'),
-				array(FormVerify::must($arrs['cateid']),'分类不能为空')
+				array(FormVerify::len($attrs['title'],Module_Product::MINTITLE),'标题长度不能小于'.Module_Product::MINTITLE),
+				array(FormVerify::must($attrs['content']),'商品详情不能为空'),
+				array(FormVerify::must($attrs['brandid']),'品牌不能为空'),
+				array(FormVerify::must($attrs['cateid']),'分类不能为空')
 				);
 			if ($check!==true) {
 				$ret['msg'] = $check;
 				die(json_encode($ret));
 			}
 			if($id == 0){
-				$SUSER = Module_User::getloginUser(true);
+				$SUSER = Module_Manager::getloginUser();
 				$attrs['userid']  = $SUSER['id'];
 				$attrs['username']  = $SUSER['username'];
-				$attrs['sales']  = 0;
 				$attrs['createdate']  = $t;
 			}
 
@@ -231,11 +223,7 @@ class Product{
 					}
 				}
 				// 添加日志
-				Module_log::setItem(array('modulename'=>Module_Product::APPNAME,
-						'moduleid'=>Module_Product::APPID,
-						'key'=>($id==0?'新增':'更新'),
-						'message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Product::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.($id==0?$ret['data']:$id).';操作库:'.Module_Product::TNAME));
 			}
 			Uri::build('manage/product','lists',false,true);
 		}
@@ -253,7 +241,7 @@ class Product{
 			}
 		}
 		// 分类
-		$cates = Module_Category::getChilds(0,0,array('appid'=>Module_Product::APPID));
+		$cates = Module_Category::getChilds(0,0,array('moduleid'=>self::MODULEID));
 		$datas['cates'] = $cates['data']['items'];
 		$cateid = isset($datas['oitem'])?$datas['oitem']['cateid']:0;
 		$datas['options'] = Module_Category::getChildsOptions($datas['cates'],$cateid);
@@ -272,11 +260,7 @@ class Product{
 			$ret = Module_Product::delItem($params[0]);
 			// 添加日志
 			if ($ret['code']>0) {
-				Module_log::setItem(array('modulename'=>Module_Product::APPNAME,
-						'moduleid'=>Module_Product::APPID,
-						'key'=>'删除',
-						'message'=>'操作id '.$params[0].';操作库:'.Module_Product::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.$params[0].';操作库:'.Module_Product::TNAME));
 			}
 		}
 		// 不管删除成功与否直接跳转
@@ -285,20 +269,19 @@ class Product{
 	// 文章分类管理
 	public function cate(){
 		Uri::setPrevPage();
-		Uri::redirect('/manage/category/lists/?appid='.Module_Product::APPID);
+		Uri::redirect('/manage/category/lists/?moduleid='.self::MODULEID);
 	}
-	// 
+	//
 	public function comm(){
 		Uri::setPrevPage();
-		Uri::redirect('/manage/comment/lists/?appid='.Module_Product::APPID);
+		Uri::redirect('/manage/comment/lists/?moduleid='.self::MODULEID);
 	}
 	// 商品属性管理
 	public function prop(){
-		$datas = array('appid'=>Module_Product::APPID);
+		$datas = array('moduleid'=>self::MODULEID);
 		$props = Module_Prop::getItems($datas,false,-1);
 		$datas['errmsg'] = Helper::getSession(self::ERRNAME,true);
 		$datas['props'] = $props['list'];
-		$datas['appname']=Module_Product::APPNAME;
 		Uri::setPrevPage();
 		$this->view->load('manage/m_prop',$datas);
 	}
@@ -307,21 +290,17 @@ class Product{
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
-			$appid = Uri::post('appid',0);
+			$moduleid = Uri::post('moduleid',0);
 			$ret = Module_Prop::setItem(array('name'=>Uri::post('name'),
-																		'vals'=>Uri::post('vals'),
-																		'status'=>Uri::post('status'),
-																		'appid'=>$appid,
-																		'desc'=>Uri::post('desc'),),$id);
+								'vals'=>Uri::post('vals'),
+								'status'=>Uri::post('status'),
+								'moduleid'=>$moduleid,
+								'desc'=>Uri::post('desc'),),$id);
 			if ($ret['code']<0) {
 				Helper::setSession(self::ERRNAME,$ret['msg']);
 			}else{
 				// 添加日志
-				Module_log::setItem(array('modulename'=>Module_Prop::APPNAME,
-						'moduleid'=>Module_Prop::APPID,
-						'key'=>($id==0?'新增':'更新'),
-						'message'=>'操作id '.($id==0?$ret['data']:$id).';分类对应模块APPID '.$appid.';操作库:'.Module_Prop::TNAME
-						));
+				Module_log::setItem(array('message'=>'操作id '.($id==0?$ret['data']:$id).';分类对应模块moduleid '.$moduleid.';操作库:'.Module_Prop::TNAME));
 			}
 			Uri::redirect(Uri::getPrevPage());
 		}
@@ -345,19 +324,13 @@ class Product{
 		$params = Uri::getParams();
 		$params = $params['params'];
 		if (count($params)>0) {
-			$cnt = $GLOBALS['db']->result('select count(*) as cnt from '.Module_Prop::TPITEM.' where propid ='.$params[0]);
-			if ($cnt>0) {
-				Helper::setSession(self::ERRNAME,'该属性被其他模块使用着，不能直接删除。');
-			}else{
-				$ret = Module_Prop::delItem($params[0]);
-				// 添加日志
-				if ($ret['code']>0) {
-					Module_log::setItem(array('modulename'=>Module_Prop::APPNAME,
-							'moduleid'=>Module_Prop::APPID,
-							'key'=>'删除',
-							'message'=>'操作id '.$params[0].$appid.';操作库:'.Module_Prop::TNAME
-							));
-				}
+
+			// 检查占用情况, 不能直接删除???!!! doing
+
+			$ret = Module_Prop::delItem($params[0]);
+			// 添加日志
+			if ($ret['code']>0) {
+				Module_log::setItem(array('message'=>'操作id '.$params[0].',模块id '.$moduleid.';操作库:'.Module_Prop::TNAME));
 			}
 		}
 		// 不管删除成功与否直接跳转

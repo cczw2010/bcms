@@ -30,8 +30,8 @@
 					<label for="">状态：</label>
 					<select class="input-sm"  name="status" id="">
 						<option value="-1" >全部</option>
-						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>>正常</option>
-						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>>锁定</option>
+						<option value="1" <?php if(isset($filter['status'])&&($filter['status']==1)){echo 'selected';} ?>><?php echo Module_Category::$statuss[1] ?></option>
+						<option value="0" <?php if(isset($filter['status'])&&($filter['status']==0)){echo 'selected';} ?>><?php echo Module_Category::$statuss[0] ?></option>
 					</select>
 					<input type="hidden" name="filterform" value="1">
 					<input class="submitbtn btn btn-info btn-sm"  type="button" value="提 交">

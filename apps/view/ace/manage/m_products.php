@@ -51,9 +51,6 @@
 							<tr>
 								<th width="50">id</th>
 								<th width="">商品名称</th>
-								<th width="40">库存</th>
-								<th width="40">售价</th>
-								<th width="40">已售</th>
 								<th width="40">浏览</th>
 								<th width="40">评论</th>
 								<th width="40">收藏</th>
@@ -70,9 +67,6 @@
 								foreach ($items['list'] as $id => $item) {
 									echo '<tr><td>'.$id.'</td>
 											<td>'.$item['title'].'</td>
-											<td>'.$item['quantity'].'</td>
-											<td>'.$item['price'].'</td>
-											<td>'.$item['sales'].'</td>
 											<td>'.$item['viewnum'].'</td>
 											<td>'.$item['comnum'].'</td>
 											<td>'.$item['favnum'].'</td>

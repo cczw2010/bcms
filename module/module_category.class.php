@@ -276,7 +276,8 @@ final class Module_Category{
 					$prefix= implode($prefix);
 					$prefix.='└';
 				}
-				$tree.= '<option '.$selected.' value="'.$item['id'].'">'.$prefix.$item['name'].'</option>';
+				$suffix = $item['status']==0?'('.self::$statuss[0].')':'';
+				$tree.= '<option '.$selected.' value="'.$item['id'].'">'.$prefix.$item['name'].$suffix.'</option>';
 			}
 		}
 		return $tree;
