@@ -41,7 +41,7 @@ Class Core_App{
 			if (empty($page404)) {
 				throw new Exception('controller文件【'.$c.'】中不包含【'.$m.'】方法。请检查！');
 			}else{
-				include_once(BASEPATH.DIRECTORY_SEPARATOR.$page404);
+				include_once(BASEPATH.DIRECTORY_SEPARATOR.$page404);die();
 			}
 		}
 	}
@@ -58,7 +58,12 @@ Class Core_App{
 			}
 			throw new Exception('文件中的类不符合规则，请检查：'.$path);
 		}
-		throw new Exception('文件不存在，请检查：'.$path);
+		$page404 = $GLOBALS['config']['page404'];
+		if (empty($page404)) {
+			throw new Exception('文件不存在，请检查：'.$path);
+		}else{
+			include_once(BASEPATH.DIRECTORY_SEPARATOR.$page404);die();
+		}
 	}
 	/**
 		*将某方法集成到当前实例的方法
