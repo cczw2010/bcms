@@ -37,7 +37,12 @@ Class Core_App{
 			$method = $refc->getMethod($m);
 			return $method->invoke($instance);
 		}else{
-			throw new Exception('controller文件【'.$c.'】中不包含【'.$m.'】方法。请检查！');
+			$page404 = $GLOBALS['config']['page404'];
+			if (empty($page404)) {
+				throw new Exception('controller文件【'.$c.'】中不包含【'.$m.'】方法。请检查！');
+			}else{
+				include_once(BASEPATH.DIRECTORY_SEPARATOR.$page404);
+			}
 		}
 	}
 	/**

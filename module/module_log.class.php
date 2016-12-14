@@ -32,12 +32,12 @@ class Module_Log{
 	}
 
 	/**
-	 * 新增日志 不可编辑
+	 * 管理员新增日志 不可编辑， 不可用于用户，用户请用文本日志
 	 * @param array $arrs 编辑的键值对,不能包含id;
 	 * @param boolean $ismanager 是否管理员日志;
 	 * @return 返回$id
 	 */
-	static public function setItem($arrs,$ismanager=true){
+	static public function setItem($arrs){
 		$ret = array('code'=> -1,'msg'=>'');
 		// 必填项，判断
 		$check = FormVerify::rule(
@@ -48,7 +48,7 @@ class Module_Log{
 			return $ret;
 		}
 		if (!isset($arrs['userid'])) {
-			$user = Module_User::getLoginUser($ismanager);
+			$user = Module_Manager::getLoginUser();
 			if (!empty($user)) {
 				$arrs['userid'] = $user['id'];
 				$arrs['username'] = $user['username'];
