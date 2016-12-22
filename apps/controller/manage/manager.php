@@ -286,7 +286,6 @@ class Manager{
 						'product-cate'=>'商品分类',
 						'product-comm'=>'商品评论管理',
 						'order-lists'=>'订单列表',
-						'setting-citys'=>'区域管理',
 						'setting-verify'=>'敏感词汇',
 						'setting-thirdlogincfg'=>'第三方登陆配置',
 						'setting-payment'=>'支付配置',

@@ -57,7 +57,6 @@ Class Home{
 				array('name'=>'订单管理','con'=>'order','subs'=>array(
 																		'lists'=>'订单列表')),
 				array('name'=>'高级扩展','con'=>'setting','subs'=>array(
-																		'citys'=>'区域管理',
 																		'verify'=>'敏感词汇',
 																		'thirdlogincfg'=>'第三方登陆',
 																		'payment'=>'支付管理')),
