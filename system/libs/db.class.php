@@ -45,6 +45,8 @@ interface Db{
 	//将整个结果集转为关联数组返回
 	//$index 每行数据都将以$index列的值为索引，如fetch_all('id'),那么所有的数据都将以id为索引,默认数字索引
 	public function fetchAll($result,$index='');
+	//为select查询操作设定返回key,支持链式操作,执行之后即释放
+	public function keys($keyarray);
 	/*---------------------------------------------------------------------------------
 	作 用 	：根据传入的字段数组，在表中选择数据    
 	参 数 	：$conds(条件字段数组||字符串)  ,键值中可以直接写入><!=like等值 ，

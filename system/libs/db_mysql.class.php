@@ -23,6 +23,7 @@ class Db_mysql implements db{
 	private $db_pass;
 	private $db_name;
 	private $cache_group;
+	private $keys = null;
 
 	function __construct($config=array()){
 		if (isset(self::$instance)) {
@@ -95,11 +96,11 @@ class Db_mysql implements db{
 	}
 	public function query($sql){
 		$this->sql=$sql;
-		$this->result=mysql_query($sql);
+		$this->result=@mysql_query($sql);
 		if ($this->result!==false) {
 			return $this->result;
 		}
-		throw new Exception("sql语句运行错误，请检查:".$sql);
+		// throw new Exception("sql语句运行错误，请检查:".$sql);
 		return false;
 	}
 	public function seek($result,$pos=0){
@@ -124,6 +125,12 @@ class Db_mysql implements db{
 	public function numRows($result){
 		$result = !empty($result)?$result:$this->result;
 		return mysql_num_rows($result);
+	}
+	public function keys($keyarray){
+		if (!empty($keyarray)) {
+			$this->keys = implode(',',$keyarray);
+		}
+		return self::$instance;
 	}
 	public function fetchArray($result){
 		return mysql_fetch_assoc($result);
@@ -182,7 +189,9 @@ class Db_mysql implements db{
  		}
  		// 如果没有超过最大值
  		if ($cnt>$vs['start']) {
- 			$sql='select * from '.$table.$where.' '.$vs['orderby'].$limit;
+ 			$keys = empty($this->keys)?'*':$this->keys;
+ 			$this->keys = null;
+ 			$sql='select '.$keys.' from '.$table.$where.' '.$vs['orderby'].$limit;
 	 		$result=$this->query($sql);
 	 		$vs['list'] = $this->fetchAll($result,$index);
 	 		$vs['pcnt'] = count($vs['list']);

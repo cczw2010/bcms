@@ -23,7 +23,7 @@ final class Module_Comment{
 		return $ret;
 	}
 	/**
-	 * 获取附件列表
+	 * 获取列表
 	 * @param  array	$cond 查询条件
 	 * @param  string $orderby 排序条件字符串
 	 * @param  int 		$page 页码（-1代表全部）
@@ -35,7 +35,7 @@ final class Module_Comment{
 	}
 
 	/**
-	 * （编辑|新增）附件
+	 * （编辑|新增）
 	 * @param array $arrs 编辑的键值对,不能包含id;
 	 * @param int $id 如果有id则为修改，否则为新增
 	 * @return 返回$id
@@ -77,7 +77,7 @@ final class Module_Comment{
 	}
 	/**
  	 * 删除内容
- 	 * @param  int $id 附件id
+ 	 * @param  int $id id
  	 * @return array
  	 */
 	static public function delItem($id){
@@ -94,7 +94,7 @@ final class Module_Comment{
 	}
 
 	/**
-	 * 批量删除附件
+	 * 批量删除
 	 * @param  array $cond 条件
 	 * @return array
 	 */
