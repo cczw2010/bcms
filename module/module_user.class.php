@@ -227,7 +227,7 @@ final class Module_User{
 	 * @return null
 	 */
 	static public function delAdress($id){
-		$GLOBALS['db']->delete(self::TADRESS,array('id'=>$uid));
+		$GLOBALS['db']->delete(self::TADRESS,array('id'=>$id));
 	}
 	/**
 	 * 编辑地址
