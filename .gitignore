@@ -1,5 +1,6 @@
 cache/*
 upfiles/*
+logs/*
 backup/*
 !backup/bcms-all*.sql
 node_modules/

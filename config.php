@@ -36,6 +36,7 @@ return array(
 		'pass'		=> '12345678',
 		'dbname'	=> 'bcms',
 		'group'		=>'db',		//缓存分组
+		'charset'	=>'utf8',
 	),
 
 	// 缓存配置,default代表默认的缓存,如果为true,则可以通过 $GLOBALS['cache']来访问。都不设置default默认第一个
@@ -98,11 +99,12 @@ return array(
 			'password'=>'123456'
 		),
 	// 微信服务号配置,如果需要的话
+	// 
 	'weixin'=>array(
 			'token'=>'',
 			'encodingaeskey'=>'',
 			'appid'=>'',
-			'appsecret'=>'',
+			'appsecret'=>'9P_PhaLApEbpxVE47t3OXa5F_bNIjKV8TmgLqrgKCUE',
 			),
 );
 
