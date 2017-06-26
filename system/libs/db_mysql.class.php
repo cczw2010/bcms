@@ -39,7 +39,7 @@ class Db_mysql implements db{
 		$this->db_user=isset($config['user'])?$config['user']:'admin';
 		$this->db_pass=isset($config['pass'])?$config['pass']:'';
 		$this->db_name=isset($config['dbname'])?$config['dbname']:'';
-		$this->db_charset=isset($config['charse'])?$config['charse']:'utf8';
+		$this->db_charset=isset($config['charset'])?$config['charset']:'utf8';
 		$this->cache_group=isset($config['group'])?$config['group']:'db';
 		//建立连接
 		$this->connect();
