@@ -9,6 +9,7 @@
 		pass=>,			 （*）密码
 		dbname=>,		  默认库
 		group=>,		  缓存组
+		charset=>,		  字符集，默认utf8
  	)
 */
 
@@ -22,6 +23,7 @@ class Db_mysql implements db{
 	private $db_user;
 	private $db_pass;
 	private $db_name;
+	private $db_charset;
 	private $cache_group;
 	private $keys = null;
 
@@ -37,11 +39,12 @@ class Db_mysql implements db{
 		$this->db_user=isset($config['user'])?$config['user']:'admin';
 		$this->db_pass=isset($config['pass'])?$config['pass']:'';
 		$this->db_name=isset($config['dbname'])?$config['dbname']:'';
+		$this->db_charset=isset($config['charset'])?$config['charset']:'utf8';
 		$this->cache_group=isset($config['group'])?$config['group']:'db';
 		//建立连接
 		$this->connect();
 		//设置编码 （考虑换成其他方式）
-		$this->query('set names utf8');
+		$this->query('set names '.$this->db_charset);
 		self::$instance=$this;
 	}
 	public function connect(){

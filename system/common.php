@@ -65,13 +65,17 @@ function dump(){
  * @param $word 要写入日志里的文本内容 默认值：空值
  */
 function logs($file,$word='') {
-	if (!empty($file) && file_exists($file)) {
-		$fp = fopen($file,"a");
+	if (!empty($file)) {
+		$fp = fopen($file,"a+");
 		flock($fp, LOCK_EX) ;
-		fwrite($fp,"时间:".strftime("%Y%m%d%H%M%S",time())."\n".$word."\n");
+		fwrite($fp,strftime("%Y%m%d%H%M%S",time())."\t".$word."\n");
 		flock($fp, LOCK_UN);
 		fclose($fp);
 	}
+}
+//按日期分组日志文件名
+function getLogFile($prefix='log_'){
+	return BASEPATH.'/logs/'.$prefix.date('Y-m-d').'.lg';
 }
 /**
  * 显示消息，中断代码执行，支持跳转

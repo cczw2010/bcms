@@ -70,7 +70,6 @@ class User{
 		// 表单提交
 		if (isset($_POST['id'])) {
 			$id = Uri::post('id',0);
-			// $types = Uri::post('types',Module_User::TYPE_USER);
 			$username = Uri::post('username');
 			if(mb_strlen($username)>0){
 				$attrs = array('email'=>Uri::post('email'),
