@@ -104,7 +104,7 @@ return array(
 			'token'=>'',
 			'encodingaeskey'=>'',
 			'appid'=>'',
-			'appsecret'=>'9P_PhaLApEbpxVE47t3OXa5F_bNIjKV8TmgLqrgKCUE',
+			'appsecret'=>'',
 			),
 );
 
