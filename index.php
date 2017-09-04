@@ -10,10 +10,6 @@ define('SYSDIR', BASEPATH.DIRECTORY_SEPARATOR.'system');
 mb_internal_encoding('UTF-8');
 // 打开短标签支持
 ini_set('short_open_tag','1');
-// 启动session
-if (!isset($_SESSION)) {
-	session_start();
-}
 // 加载通用基础函数
 require(SYSDIR.DIRECTORY_SEPARATOR.'common.php');
 // 程序入口

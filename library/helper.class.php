@@ -97,6 +97,12 @@ class Helper{
 	//设置session过期时间
 	//$ttl 过期时间（秒）  $path 路径
 	static public function setSessionTTL($ttl = 3600, $path = '/') {
-      setCookie(session_name(), session_id(), time() + $ttl, $path);
-  }
+		ini_set("session.gc_maxlifetime",$ttl);
+    	// ini_set("session.gc_divisor",1);
+		// 启动session
+		if (!isset($_SESSION)) {
+			session_start();
+		}
+		setCookie(session_name(), session_id(), time() + $ttl, $path);
+	}
 }
