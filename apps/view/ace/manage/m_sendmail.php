@@ -41,18 +41,29 @@
 <script>
 	$(function(){
 		initTinymce("#mailbody",'/static/dist/css/common.min.css,/static/dist/css/main.min.css',true);
-		addUpload('#addattach',{
-			objtype:'mail',
-			fileexts:'*.*',
-			showoname:true,
-			replacepic : '/static/dist/img/attach.jpg',
-			uploadurl:"/manage/widget/upload"
-			},function(dom,json){
-				if (json.code>0) {
-					$(dom).find('.uploadify_showname').append('<br>('+json.data.osize+'M)')
-				}else{
-					alert(json.msg);
-				}
-			});
+		// 上传
+		var setting = {
+				queueID: 'addattach',
+				fileObjName: 'file',
+				// uploadLimit:10,
+				queueSizeLimit: 0,
+				formData: {
+					'objtype': 'mail',
+				},
+				uploadScript: '/manage/widget/upload/'
+			},
+			params={
+				callback:function (error, file, data) {
+					if (error) {
+						alert(error)
+						return false;
+					}
+					console.log(file, data);
+				},
+				// btnWraper:'#btnwrap', 
+				canSort:true,
+			};
+		// console.log(jsons);
+		var supload = new SUplodiFive(setting,params);
 	});
 </script>

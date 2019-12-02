@@ -98,8 +98,13 @@ return array(
 			'username'=>'admin',
 			'password'=>'123456'
 		),
+	//语言配置   第一个是默认
+	'langs'=>array(
+			'en'=>'English',
+			'zh'=>'中文',
+			'jp'=>'日本語'
+		),
 	// 微信服务号配置,如果需要的话
-	// 
 	'weixin'=>array(
 			'token'=>'',
 			'encodingaeskey'=>'',
