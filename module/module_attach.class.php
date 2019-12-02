@@ -94,13 +94,9 @@ final class Module_Attach{
 			// 如果是图片并且需要生成缩略图
 			if($resize&&isset($arrs['owidth'])){
 				$c240 = SImage::csize($fileurl,240);
-				$c120 = SImage::csize($fileurl,120);
 				$p240 = SImage::psize($fileurl,240);
-				$p120 = SImage::psize($fileurl,120);
 				SFile::move($c240,$arrs['fpath'].'/c240_'.$arrs['fname']);
-				SFile::move($c120,$arrs['fpath'].'/c120_'.$arrs['fname']);
 				SFile::move($p240,$arrs['fpath'].'/p240_'.$arrs['fname']);
-				SFile::move($p120,$arrs['fpath'].'/p120_'.$arrs['fname']);
 			}
 			$ret['code'] = 1;
 			$ret['data'] = $id;
@@ -136,5 +132,54 @@ final class Module_Attach{
 		$ret['code'] = 1;
 		$ret['data'] = $GLOBALS['db']->affectedRows();
 		return $ret;
+	}
+
+	// 批量处理某一objtype,objid的删除，新增，变更
+	// 并按照当前数组顺序插入orderidx
+	static function setPics($objtype,$objid,$ids=array(),$paths=array(),$names=array(),$descs=array(),$linkss=array()){
+		$attachs = Module_Attach::getItems(array('objid'=>$objid,'objtype'=>$objtype),false,-1);
+		$attachs = $attachs['list'];
+		$attachids = array_keys($attachs);
+		// 不在$ids数组中的成品图是要删除的
+		$dels = array();
+		foreach ($attachs as $attachid => $attach) {
+			if (!in_array($attachid, $ids)) {
+				$dels[]=$attachid;
+			}
+		}
+		// 遍历当前ids，不为空的修改，为空的新增
+		$order = 0;
+		foreach ($ids as $idx=>$id) {
+			$arrs = array(
+				'objtype'=>$objtype,
+				'objid'=>$objid,
+				'orderid'=>++$order,
+				'lastdate'=>$_SERVER['REQUEST_TIME']
+				);
+			if (!empty($paths[$idx])) {
+				$arrs['fpath'] = $paths[$idx];
+				$arrs['fname'] = $names[$idx];
+				$arrs['desc'] = $descs[$idx];
+				$arrs['links'] = $linkss[$idx];
+				if (empty($id)) {
+					// 新增
+					$arrs['createdate'] = $_SERVER['REQUEST_TIME'];
+					$arrs['status'] = 1;
+					$id=0;
+				}
+				$ret = Module_Attach::setItem($arrs,$id,false);
+				if ($ret['code']<0) {
+					return false;
+				}
+			}elseif(!empty($id)){
+				// 路径为空是要删除的
+				$dels[]=$id;
+			}
+		}
+		// 删除
+		if (!empty($dels)) {
+			Module_Attach::delItems(array('id'=>'in ('.implode(',', $dels).')'));
+		}
+		return true;
 	}
 }

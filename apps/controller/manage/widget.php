@@ -23,19 +23,16 @@ class Widget{
 				$uppath.=$objtype;
 			}
 			// 上传
-			$up = new SUpload($fiedname,$uppath);
-			if($up->upload()){
-				$filepath = $up->filePath();
-				$fpath = Uri::path2url($up -> UpFilePath());
-    		$fname = $up -> UpFile();
-				// $fileurl = Uri::path2url($filepath);
-				// $ret['data'] = $fileurl;
+			$up = new FileUpload();
+			$up->set('path',$uppath);
+			$up->set('maxsize',1024*1024*10); //10M
+			if($up->upload($fiedname)){
 				$ret['data'] = array(
-					'fpath' => $fpath,
-					'fname' => $fname,
-					'oname'=>$up->getName(),
-					'osize'=>round($up->getSize('M'),2),
-					'oext'=>$up->getExt(),
+					'fpath' => Uri::path2url($uppath),
+					'fname' => $up->getFileName(),
+					'oname'=>$up->getOriginName(),
+					'osize'=>$up->getFileType(),
+					'oext'=>$up->getFileType(),
 					);
 				//根据对象类型来进行对应的操作
 				// switch ($objtype) {
@@ -44,7 +41,7 @@ class Widget{
 					$ret['code'] = 1;
 				}
 			}else{
-  			$ret['msg'] = '上传失败！请重试';
+  			$ret['msg'] = '上传失败！请重试'.$up->getErrorMsg();
 			}
 		}else{
 			$ret['msg'] = '请先登录！';

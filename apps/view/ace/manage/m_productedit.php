@@ -125,21 +125,31 @@
 		// 上传
 		var jsons = <?=isset($oitem)?json_encode($oitem['covers']):'[]';?>,
 			objtype = "<?=Module_Product::ATTACHTYPE;?>",idx=0;
-		for(var k in jsons){
-			idx++;
-			addUpload('#coverarea',{
-				objtype:objtype,
-				json:jsons[k],
-				uploadurl:"/manage/widget/upload"
-			});
-		}
-		if (idx==0) {
-			addUpload('#coverarea',{
-				objtype:objtype,
-				fileexts:'*.*',
-				uploadurl:"/manage/widget/upload"
-			});
-		}
+			setting = {
+				queueID: 'coverarea',
+				fileObjName: 'file',
+				// uploadLimit:10,
+				queueSizeLimit: 0,
+				formData: {
+					'objtype': objtype,
+				},
+				uploadScript: '/manage/widget/upload/'
+			},
+			params={
+				callback:function (error, file, data) {
+					if (error) {
+						alert(error)
+						return false;
+					}
+					console.log(file, data);
+				},
+				// btnWraper:'#btnwrap', 
+				canSort:true,
+			};
+		// console.log(jsons);
+		var supload = new SUplodiFive(setting,params);
+		supload.prepare(jsons);
+
 		// 空数据模板
 		var datatpl = {specname:'',id:'',oprice:'',price:'',quantity:'',status:1};
 		// 添加新规格项

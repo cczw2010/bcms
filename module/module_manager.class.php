@@ -256,6 +256,7 @@ final class Module_Manager{
 	}
 	// 获取用户网站上的相册目录名称
 	static public function getAlbumBase($uid){
-		return empty($uid)?'manager/default':'manager/album_'.$uid;
+		// return empty($uid)?'manager/default':'manager/album_'.$uid;
+		return empty($uid)?'manager_default':'manager_'.$uid;
 	}
 }

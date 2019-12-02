@@ -126,7 +126,7 @@ Class Uri{
 	 */
 	static function redirect($uri = '', $method = 'location', $http_response_code = 302)
 	{
-		$uri=strlen($uri)>0?$uri:$this->buildUrl();
+		// $uri=strlen($uri)>0?$uri:$this->buildUrl();
 		switch($method)
 		{
 			case 'refresh': header("Refresh:0;url=".$uri);

@@ -1,6 +1,6 @@
 <?php
 /*
-	mysql 数据库访问操作类  by awen
+	mysql 数据库访问操作类 
 	配置文件:
 	array(
 		host=>127.0.0.1, （*）地址
@@ -8,12 +8,11 @@
 		user=>,			 （*）用户
 		pass=>,			 （*）密码
 		dbname=>,		  默认库
-		group=>,		  缓存组
-		charset=>,		  字符集，默认utf8
+		ttl=>,		  	//默认缓存时间秒,0代表永不过期,-1不缓存
  	)
 */
 
-class Db_mysql implements db{
+class Db_mysql implements Db{
 	private static $instance;
 	private $dbconn;
 	private $result;
@@ -23,9 +22,8 @@ class Db_mysql implements db{
 	private $db_user;
 	private $db_pass;
 	private $db_name;
-	private $db_charset;
-	private $cache_group;
 	private $keys = null;
+
 
 	function __construct($config=array()){
 		if (isset(self::$instance)) {
@@ -39,42 +37,34 @@ class Db_mysql implements db{
 		$this->db_user=isset($config['user'])?$config['user']:'admin';
 		$this->db_pass=isset($config['pass'])?$config['pass']:'';
 		$this->db_name=isset($config['dbname'])?$config['dbname']:'';
-		$this->db_charset=isset($config['charset'])?$config['charset']:'utf8';
-		$this->cache_group=isset($config['group'])?$config['group']:'db';
 		//建立连接
 		$this->connect();
 		//设置编码 （考虑换成其他方式）
-		$this->query('set names '.$this->db_charset);
+		$this->query('set names utf8');
 		self::$instance=$this;
 	}
 	public function connect(){
 		if(!isset($this->dbconn)){
-			$this->dbconn = @mysql_connect($this->db_host.':'.$this->db_port,$this->db_user,$this->db_pass);
+			$this->dbconn = mysqli_connect($this->db_host.':'.$this->db_port,$this->db_user,$this->db_pass,$this->db_name);
 			if (!$this->dbconn){
-				throw new Exception('数据库服务器连接错误: ' . mysql_error());
-			}else{
-				if (strlen($this->db_name)>0) {
-					if (!$this->selectDB($this->db_name)) {
-						throw new Exception('数据库连接错误: ' . mysql_error());
-					}
-				}
+				throw new Exception('数据库连接错误: ' . mysqli_error($this->dbconn));
 			}
 		}
 	}
 	public function close(){
 		if(isset($this->dbconn)){
-			if(!@mysql_close($this->dbconn)){
-				throw new Exception('关闭数据库连接失败: ' . mysql_error());
+			if(!@mysqli_close($this->dbconn)){
+				throw new Exception('关闭数据库连接失败: ' . mysqli_error($this->dbconn));
 			};
 		}
 	}
-	public function selectDB($dbname){
+	public function selectDb($dbname){
 		if(isset($this->dbconn)){
-			return !!mysql_select_db($dbname,$this->dbconn);
+			return !!mysqli_select_db($dbname,$this->dbconn);
 		}
 		return false;
 	}
-	public function createDB($dbname){  
+	public function createDb($dbname){  
 		return $this->query('create database '.$dbname);  
 	}
 	public function getDBInfo(){
@@ -89,45 +79,45 @@ class Db_mysql implements db{
 		
 		return $ret;
 	}
-	public function getTableInfo($tablename){
+	public function get_table_info($tablename){
 		$result = $this->query('SHOW COLUMNS from '.$tablename);
 		$ret = $this->fetchAll($result);
 		return $ret;	
 	}
-	public function getLastSql(){
+	public function getlastsql(){
 		return $this->sql;
 	}
 	public function query($sql){
 		$this->sql=$sql;
-		$this->result=@mysql_query($sql);
+		$this->result=mysqli_query($this->dbconn,$sql);
 		if ($this->result!==false) {
 			return $this->result;
 		}
-		// throw new Exception("sql语句运行错误，请检查:".$sql);
+		throw new Exception("sql语句运行错误，请检查:".$sql);
 		return false;
 	}
 	public function seek($result,$pos=0){
 		$max=$this->numRows($result);
 		if ($max>0&&$max>$pos) {
-			mysql_data_seek($result,$pos);
+			mysqli_data_seek($result,$pos);
 		}
 	}
-	public function getConn(){
+	public function getconn(){
 		return $this->dbconn;
 	}
 	public function free($result){
-		$result = !empty($result)?$result:$this->result;
-		mysql_free_result($result);
+		$result = !empty($result)?$this->result:$result;
+		mysqli_free_result($result);
 	}
  	public function affectedRows(){
-		return mysql_affected_rows();
+		return mysqli_affected_rows($this->dbconn);
 	}
 	public function insertId(){
-		return mysql_insert_id();
+		return mysqli_insert_id($this->dbconn);
 	}
 	public function numRows($result){
 		$result = !empty($result)?$result:$this->result;
-		return mysql_num_rows($result);
+		return mysqli_num_rows($result);
 	}
 	public function keys($keyarray){
 		if (!empty($keyarray)) {
@@ -136,10 +126,10 @@ class Db_mysql implements db{
 		return self::$instance;
 	}
 	public function fetchArray($result){
-		return mysql_fetch_assoc($result);
+		return mysqli_fetch_assoc($result);
 	}
 	public function fetchAssoc($result){
-		return mysql_fetch_row($result);
+		return mysqli_fetch_row($result);
 	}
  	public function fetchAll($result,$index=''){
  		$ret=array();
@@ -156,17 +146,9 @@ class Db_mysql implements db{
  		}
  		return $ret;
  	}
-	/**
-	 * 简化select
-	 * @param  string  				$table   表名
-	 * @param  array|string   $cond    条件数组,或者条件字符串
-	 * @param  string  				$index   返回结果数组的key索引字段，默认自动数字索引
-	 * @param  string  				$orderby 排序方式
-	 * @param  integer 				$page    页码如果该值设为-1则表示全部不分页
-	 * @param  integer 				$psize   每页大小
-	 * @return array					结果数组
-	 */
- 	public function select($table,$cond='',$index='',$orderby='',$page=1,$psize=20){
+	/*简化select*/
+ 	// $page 页码如果该值设为-1则表示全部不分页，$psize=每页大小
+ 	public function select($table,$cond=array(),$index='',$orderby='',$page=1,$psize=20){
  		$vs = array('list'=>array(),'pcnt'=>0);
  		$where = '';
  		if (isset($cond)) {
@@ -190,9 +172,11 @@ class Db_mysql implements db{
  			$vs['psize'] = $cnt;
 			$limit = '';
  		}
+ 		
  		// 如果没有超过最大值
  		if ($cnt>$vs['start']) {
- 			$keys = empty($this->keys)?'*':$this->keys;
+
+			$keys = empty($this->keys)?'*':$this->keys;
  			$this->keys = null;
  			$sql='select '.$keys.' from '.$table.$where.' '.$vs['orderby'].$limit;
 	 		$result=$this->query($sql);
@@ -201,61 +185,6 @@ class Db_mysql implements db{
  		}
  		return $vs;
  	}
-
- /**
- * 封装的带缓存(使用默认的缓存)的db的select方法,只比select多一个ttl参数
- * @param  string  				$table   表名
- * @param  array|string   $cond    条件数组,或者条件字符串
- * @param  string  				$index   返回结果数组的key索引字段，默认自动数字索引
- * @param  string  				$orderby 排序方式
- * @param  integer 				$page    页码如果该值设为-1则表示全部不分页
- * @param  integer 				$psize   每页大小
- * @param  integer				$ttl	 	缓存时间（秒），	默认0不缓存，
- * @return array					结果数组
- */
-	public function selectCache($table,$cond='',$index='',$orderby='',$page=1,$psize=20,$ttl=0){
-		$data=false;
-		$cachekey;
-		if ($ttl>0) {
-			$_cond = $this->buildWhere($cond);
-			$cachekey = $_cond.'-'.$index.'-'.$orderby.'-'.$page.'-'.$psize;
-			$cachekey = $table.'-'.md5($cachekey);
-
-			$data = $GLOBALS['cache']->get($this->cache_group,$cachekey);
-			if ($data) {
-				return $data;
-			}
-		}
-		$data = $this->select($table,$cond,$index,$orderby,$page,$psize);
-		if ($ttl>0) {
-			$GLOBALS['cache']->set($this->cache_group,$cachekey,$data,$ttl);
-		}
-		return $data;
-	}
-	/**
-	 * 获取数据，带缓存
-	 * @param  string 	$sql 		sql语句
- 	 * @param  integer	$ttl	 	缓存时间（秒），	默认0不缓存，
- 	 * @return array					结果数组
-	 */
-	public function getData($sql,$ttl){
-		$data=false;
-		$cachekey;
-		if ($ttl>0) {
-			$cachekey = md5($sql);
-			$data = $GLOBALS['cache']->get($this->cache_group,$cachekey);
-			if ($data) {
-				return $data;
-			}
-		}
-		$query = $this->query($sql);
-		$data = $this->fetchAll($query);
-		if ($ttl>0) {
-			$GLOBALS['cache']->set($this->cache_group,$cachekey,$data,$ttl);
-		}
-		return $data;
-	}
-
  	/**
  	 * 返回结果集中某行某列的值
  	 * @param  string|mysqlquery $query mysql字符串或者查询的query结果
@@ -265,23 +194,25 @@ class Db_mysql implements db{
  	 */
  	public function result($query, $row = 0, $field = 0) {
 		if (is_string($query)){
-			$query = $this->query($query);
-		}
-		if ($query) {
-			// 数据量大时效率较低，不过基本是为了取聚合的结果的 就无所谓了
-			return mysql_result($query, $row, $field);
+			$result = $this->query($query);
 		}else{
-			return null;
+			$result = $query;
 		}
+		if ($result) {
+			// 数据量大时效率较低，不过基本是为了取聚合的结果的 就无所谓了
+			$result->data_seek($row);
+			$datarow = $this->fetchArray($result);
+			if(is_numeric($field)){
+				return array_values($datarow)[$field];
+			}else{
+				return $datarow[$field];
+			}
+		}
+		return null;
 	}
-	/**
-	 * 简化insert
-	 * @param  string 	$table 表名
-	 * @param  string 	$arr   插入的数据
-	 * @return int|boolean        成功返回插入生成的索引id,失败false
-	 */
+	/*简化insert*/
  	public function insert($table,$arr){
-		$sql = 'INSERT INTO `'.$table.'`';  
+		$sql = 'INSERT IGNORE INTO `'.$table.'`';  
 		if(!is_array($arr)||empty($arr)){  
 			throw new Exception("mysql->insert: 请输入参数数组！");  
 		}else{  
@@ -299,13 +230,7 @@ class Db_mysql implements db{
 			return false;
 		}
  	}
- 	/**
- 	 * 简化的update
-   * @param  string 				$table 表名
-	 * @param  array 					$arr   数据数组，可以为key-value方式，也可以没有key直接字符串 如 ’name="test"‘|"name"=>"test"
- 	 * @param  array|string   $cond  条件数组，或者条件字符串(不带where)
- 	 * @return boolean
- 	 */
+ 	//简化的update  
 	public function update($table,$arr,$cond=''){  
 		$sql = 'UPDATE `'.$table.'` SET ';  
 		if(!is_array($arr)||empty($arr)){  
@@ -329,12 +254,12 @@ class Db_mysql implements db{
 		return $this->query($sql);  
 	}
 	public function getLastErr(){
-		return mysql_error();
+		return mysqli_error($this->conn);
 	}
 	public function buildWhere($cond){
 		$where="";
-		if (isset($cond)) {
-			if (is_array($cond) && !empty($cond)) {
+		if (!empty($cond)) {
+			if (is_array($cond)) {
 			 	$where=" where ";
 			 	for ($i=0,$l=count($cond); $i < $l; $i++) {
 			 		$key = key($cond);
@@ -352,7 +277,7 @@ class Db_mysql implements db{
 			 		$where.=($i==$l-1)?'':' and';
 			 		next($cond);
 			 	}  
-    	}elseif (is_string($cond) && !empty($cond)) {
+    	}elseif (is_string($cond)) {
     		$where=" where ".$cond;
     	}
 		}

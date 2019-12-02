@@ -47,11 +47,11 @@
 		 window.jQuery || document.write("<script src='/datas/ace1.2/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
 		</script>
 		<![endif]-->
-		<link rel="stylesheet" type="text/css" href="/datas/uploadify/uploadify.css">
+		<link rel="stylesheet" type="text/css" href="/datas/uploadifive/uploadifive.css">
 		<script src="/datas/tinymce/tinymce.jquery.min.js"></script>
-		<script src="/datas/uploadify/jquery.uploadify.min.js"></script>
+		<script src="/datas/uploadifive/jquery.uploadifive.js"></script>
 		<script src="/static/dist/js/micro-templating.min.js"></script>
-		<script src="/static/dist/js/main.min.js"></script>
+		<script src="/static/dist/js/main.js"></script>
 	</head>
 	<body>
 		<div class="navbar navbar-default" id="navbar">

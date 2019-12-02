@@ -13,13 +13,13 @@ final class Module_Origin{
 	 */
 	static public function getItem($id){
 		$query = $GLOBALS['db']->query('select * from '.self::TNAME.' where id='.$id);
-		return $GLOBALS['db']->fetchArray($query)) {
+		return $GLOBALS['db']->fetchArray($query);
 	}
 	/**
 	 * 检查某类是不是别类的直系子类
 	 */
 	static public function isChild($id,$pid=0){
-		return $GLOBALS['db']->result('select count(*) from '.self::TNAME.' where id='.$id.' and parentid = '.$pid;
+		return $GLOBALS['db']->result('select count(*) from '.self::TNAME.' where id='.$id.' and parentid = '.$pid);
 	}
 	/**
 	 * 获取符合条件的所有对象（cache）

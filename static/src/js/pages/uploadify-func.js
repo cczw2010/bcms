@@ -41,7 +41,7 @@ function addUpload(wraper,cfg,callback) {
     fileexts = cfg.fileexts||picexts;
     getholderpic = function(data){
         // 整理显示的图片（如果有）
-        var replacepic =  '',index,fext,
+        var replacepic =  cfg.replacepic||'',index,fext,
             fpath ='',
             fname ='';
         if (data) {
