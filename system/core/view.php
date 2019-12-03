@@ -22,9 +22,21 @@ Class Core_View{
 	}
 	// 根据配置$defaut的默认加载类
 	function load($name,$datas=array()){
-		$path = $this->viewPath.$name.$this->ext;
+		// 加载模板语言包 
+		$langPath = BASEPATH.DIRECTORY_SEPARATOR.'langs'.DIRECTORY_SEPARATOR.$name.'_'.$GLOBALS['lang'].'.json';
+		if(file_exists($langPath)){
+			$json_string = file_get_contents($langPath);
+			$json_data = json_decode($json_string, true);
+			$this->data(array("lang"=>$json_data));
+		}else{
+			if($GLOBALS['config']['debug']){
+				var_dump('The lang file is no exits :'.$langPath);
+			}
+		}
 		// 合并变量数组
 		$this->data($datas);
+		// 加载模板
+		$path = $this->viewPath.$name.$this->ext;
 		$this->__load($path);
 	}
 	// 更换模板版本
@@ -68,5 +80,10 @@ Class Core_View{
 	// template模板实现
 	private function load_template($file,$datas){
 		
+	}
+
+	// 加载语言包
+	private function _loadLang(){
+
 	}
 }

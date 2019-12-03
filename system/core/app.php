@@ -11,13 +11,23 @@ Class Core_App{
 		self::resolveConfig($GLOBALS['config']);
 		Uri::init();
 		$params = Uri::getParams();
+
+		// 根据域名自动设置或者获取语言
+		$hostparts = explode(".",$_SERVER['HTTP_HOST']);
+		if(array_key_exists($hostparts[0],$GLOBALS['config']['langs'])){
+			$GLOBALS['lang'] = $hostparts[0];
+		}else{
+			$GLOBALS['lang'] = key($GLOBALS['config']['langs']);
+		}
+		
 		// dump($params);die();
 		$GLOBALS['cur_cpath'] = $subpath = $params[Uri::key_p];
 		$GLOBALS['cur_controller'] = $c = $params[Uri::key_c];
 		$GLOBALS['cur_method'] = $m = $params[Uri::key_m];
 		//查找是否存在缓存静态文件，如果存在直接返回静态页面，无需继续执行程序
 		//该处正在设计，请注意一些交互性比较强的页面，或者数据更新比较快的页面不建议做成静态的。
-		//building.........
+		//todo.........
+		
 		
 
 		// 生成实际的controller实例

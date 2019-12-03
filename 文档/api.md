@@ -19,6 +19,10 @@
 
 		$GLOBALS['config']
 
+* 语言
+
+		$GLOBALS['LANG']
+
 * 应用路径
 
 		$GLOBALS['path_app']
